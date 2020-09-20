@@ -11,8 +11,7 @@ import 'controller.dart';
 //TODO: GET HOUR - from datetime (var hour = DateTime.now().hour;) don't duplicate from get_icon.dart
 
 class ControllerUpdate extends GetxController {
-  final Controller c = Get.find();
-  final ControllerForecast cf = Get.find();
+  Controller c = Get.find();
 
   // VAR USED FOR GETX VARIABLES THAT CHANGE WITHIN UPDATE DATA METHOD
   var day = 'Tuesday'.obs;
@@ -70,11 +69,11 @@ class ControllerUpdate extends GetxController {
 
     // COLLECT AND CONVERT MISC TIME VARIABLES FROM WEATHER.DART //////////////////////////
     int _getLastUpdated = weatherData['dt']; // INT
-    lastUpdate.value = cf.getReadableTime(_getLastUpdated);
+    lastUpdate.value = getReadableTime(_getLastUpdated);
     int _getSunrise = weatherData['sys']['sunrise'];
-    sunrise.value = cf.getReadableTime(_getSunrise);
+    sunrise.value = getReadableTime(_getSunrise);
     int _getSunset = weatherData['sys']['sunset'];
-    sunset.value = cf.getReadableTime(_getSunset);
+    sunset.value = getReadableTime(_getSunset);
 
     // UPDATE CONDITION VARIABLES FROM WEATHER.DART /////////////////////////////////////////
     temperature.value = weatherData['main']['temp']; // DOUBLE
@@ -153,6 +152,11 @@ class ControllerUpdate extends GetxController {
   }
 
 // MISC FUNCTIONS CAN BE CALLED FROM ANYWHERE /////////////////////////////////////////////
+// Example: 12:42 PM
+  String getReadableTime(var time) {
+    var result = DateTime.fromMillisecondsSinceEpoch(time * 1000);
+    return DateFormat.jm().format(result);
+  }
 
 // CONVERTS ANGLE IN RADIANS TO TEXT DIRECTION
   String getWindDirection(int angle) {
@@ -325,6 +329,25 @@ class ControllerUpdate extends GetxController {
           ],
         ),
       );
+    }
+  }
+
+  // UPDATES SENTENCE AT BOTTOM OF MAP DEPENDING UPON MAP LAYER
+  String updateLegendData() {
+    if (c.mapLayer.value == 'clouds') {
+      return 'In ${city.value} the cloud cover is $clouds%';
+    } else if (c.mapLayer.value == 'wind') {
+      return 'In ${city.value} the wind speed is ${windSpeed.value.toInt()} ${c.speedUnits.value}.  ${gustingWind()}';
+    } else if (c.mapLayer.value == 'precipitation') {
+      return 'In ${city.value}, there has been ${rain1hr.value.toInt()} mm of rain in the last hour';
+    } else if (c.mapLayer.value == 'snow') {
+      return 'In ${city.value}, there has been ${snow1hr.value.toInt()} mm of snow in the last hour';
+    } else if (c.mapLayer.value == 'pressure') {
+      return 'In ${city.value} the pressure is ${pressureHg.value} inHg';
+    } else if (c.mapLayer.value == 'temp') {
+      return 'In ${city.value} the temperature is ${temperature.value.toInt()}${c.temperatureUnits.value}';
+    } else {
+      return '';
     }
   }
 }

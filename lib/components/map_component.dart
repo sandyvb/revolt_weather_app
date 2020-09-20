@@ -210,7 +210,7 @@ class _MapComponentState extends State<MapComponent> {
                       Flexible(
                         child: Obx(
                           () => Text(
-                            c.updateLegendData(),
+                            cc.updateLegendData(),
                             style: kUpdateLegendText,
                           ),
                         ),

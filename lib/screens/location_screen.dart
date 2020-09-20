@@ -2,7 +2,6 @@ import 'dart:async'; // FOR TIMER
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:revolt_weather_app/controllers/controller.dart';
-import 'package:revolt_weather_app/controllers/controller_forecast.dart';
 import 'package:revolt_weather_app/controllers/controller_update.dart';
 import 'package:revolt_weather_app/screens/city_screen.dart';
 import 'package:revolt_weather_app/screens/glance_screen.dart';
@@ -23,23 +22,6 @@ class LocationScreen extends StatefulWidget {
 class _LocationScreenState extends State<LocationScreen> {
   final Controller c = Get.find();
   final ControllerUpdate cc = Get.find();
-
-  // TODO: GET WORLD TIME - https://www.bigdatacloud.com/time-zone-apis/timezone-by-location-api
-  // KEEP TIME CURRENT \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-  CurrentTime currentTime = CurrentTime();
-  Timer _timer;
-
-  @override
-  void initState() {
-    _timer = Timer.periodic(Duration(seconds: 5), (Timer t) => currentTime.getTime());
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
-  }
 
   // GET LOCATION WEATHER (COORDINATES) THEN UPDATE weatherData \\\\\\\\\\\\\\\\\\
   void refresh() async {
@@ -127,15 +109,16 @@ class _LocationScreenState extends State<LocationScreen> {
                   ),
                   SizedBox(height: 10.0),
                   // DATE & TIME
-                  Obx(
-                    () => Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text('${cc.day.value.toUpperCase()}', style: kHeadingText),
-                        Text('${cc.date.value.toUpperCase()}', style: kHeadingText),
-                        Text('${currentTime.getTime()}', style: kHeadingText),
-                      ],
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text('${cc.day.value.toUpperCase()}', style: kHeadingText),
+                      Text('${cc.date.value.toUpperCase()}', style: kHeadingText),
+                      Text(
+                        '${Timer.periodic(Duration(seconds: 1), (Timer t) => CurrentTime().getTime())}',
+                        style: kHeadingText,
+                      ),
+                    ],
                   ),
                   // DIVIDER
                   Padding(
@@ -253,9 +236,9 @@ class _LocationScreenState extends State<LocationScreen> {
                                 padding: const EdgeInsets.only(bottom: 30.0),
                                 child: Obx(
                                   () => SleekCircularSlider(
-                                    min: -10.0,
+                                    min: c.isMetric.value ? -23.3333 : -10.0,
                                     max: c.isMetric.value ? 65.5556 : 150.0,
-                                    initialValue: cc.temperature.value,
+                                    initialValue: cc.temperature.value.toDouble(),
                                     appearance: CircularSliderAppearance(
                                       size: 190.0,
                                       startAngle: 0.0,
@@ -323,6 +306,7 @@ class _LocationScreenState extends State<LocationScreen> {
                                           Padding(
                                             padding: const EdgeInsets.only(bottom: 10.0),
                                             child: smallSleekCircularSlider(
+                                              min: 0,
                                               max: c.isMetric.value ? 65.5556 : 150.0,
                                               initialValue: cc.windSpeed.value.toDouble(),
                                               modifier: windTextModifier,

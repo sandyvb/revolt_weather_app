@@ -92,12 +92,13 @@ double getMaxPower() {
 
 // SMALL SLEEK CIRCULAR SLIDER \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 SleekCircularSlider smallSleekCircularSlider({
-  double max,
-  double initialValue,
+  double min: -20.0,
+  double max = 1000,
+  double initialValue = 0,
   var modifier,
   var colors,
   String bottomLabelText,
-  double size,
+  double size = 50.0,
   var mainLabelStyle,
 }) {
   // BUG FIX FOR SLIDER
@@ -105,7 +106,7 @@ SleekCircularSlider smallSleekCircularSlider({
     initialValue = max / 2;
   }
   return SleekCircularSlider(
-    min: -20.0,
+    min: min,
     max: max,
     initialValue: initialValue,
     appearance: CircularSliderAppearance(

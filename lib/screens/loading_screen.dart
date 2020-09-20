@@ -8,9 +8,9 @@ import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'location_screen.dart';
 
 class LoadingScreen extends StatelessWidget {
-  final Controller c = Get.find();
-  final ControllerUpdate cc = Get.find();
-  final ControllerForecast cf = Get.find();
+  final Controller c = Get.put(Controller());
+  final ControllerUpdate cc = Get.put(ControllerUpdate());
+  final ControllerForecast cf = Get.put(ControllerForecast());
 
   // GET USER'S LOCATION FROM DEVICE
   void getLocationData() async {

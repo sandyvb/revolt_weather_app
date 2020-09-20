@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:revolt_weather_app/controllers/controller_forecast.dart';
-import 'package:revolt_weather_app/controllers/controller_update.dart';
-import 'package:revolt_weather_app/controllers/controller.dart';
 import 'package:revolt_weather_app/screens/loading_screen.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  final Controller c = Get.put(Controller());
-  final ControllerUpdate cc = Get.put(ControllerUpdate());
-  final ControllerForecast cf = Get.put(ControllerForecast());
-
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(

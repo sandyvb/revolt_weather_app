@@ -1,11 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'controller_update.dart';
+import 'dart:async'; // FOR TIMER
+import 'package:revolt_weather_app/services/current_time.dart';
 
 class Controller extends GetxController {
-  final ControllerUpdate cc = Get.find();
-
   var isMetric = false.obs;
   var altitude = 0.0.obs; // in meters
   var altitudeUnits = 'ft'.obs;
@@ -34,7 +33,7 @@ class Controller extends GetxController {
     }
   }
 
-  // UPDATED FOR MAP \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+  // UPDATEs FOR MAP \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
   // UPDATES MIN AND MAX OF LEGEND VALUED DEPENDING UPON UNITS
   void updateLegendMinMax() {
     if (mapLayer.value == 'clouds') {
@@ -77,25 +76,6 @@ class Controller extends GetxController {
       return [0.0, 0.05, 0.08, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0];
     } else {
       return [];
-    }
-  }
-
-  // UPDATES SENTENCE AT BOTTOM OF MAP DEPENDING UPON MAP LAYER
-  String updateLegendData() {
-    if (mapLayer.value == 'clouds') {
-      return 'In ${cc.city.value} the cloud cover is ${cc.clouds}%';
-    } else if (mapLayer.value == 'wind') {
-      return 'In ${cc.city.value} the wind speed is ${cc.windSpeed.value.toInt()} ${speedUnits.value}.  ${cc.gustingWind()}';
-    } else if (mapLayer.value == 'precipitation') {
-      return 'In ${cc.city.value}, there has been ${cc.rain1hr.value.toInt()} mm of rain in the last hour';
-    } else if (mapLayer.value == 'snow') {
-      return 'In ${cc.city.value}, there has been ${cc.snow1hr.value.toInt()} mm of snow in the last hour';
-    } else if (mapLayer.value == 'pressure') {
-      return 'In ${cc.city.value} the pressure is ${cc.pressureHg.value} inHg';
-    } else if (mapLayer.value == 'temp') {
-      return 'In ${cc.city.value} the temperature is ${cc.temperature.value.toInt()}${temperatureUnits.value}';
-    } else {
-      return '';
     }
   }
 

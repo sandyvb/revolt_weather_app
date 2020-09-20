@@ -58,7 +58,7 @@ class ControllerForecast extends GetxController {
     // GATHER ALL DATA
     currentGetDt.value = weatherData['current']['dt']; // INT
     getSunrise.value = weatherData['current']['sunrise']; // INT
-    currentSunrise.value = getReadableTime(getSunrise); // STRING
+    currentSunrise.value = getReadableTime(getSunrise.value); // STRING
     getSunset.value = weatherData['current']['sunset']; // INT
     currentSunset.value = getReadableTime(getSunset.value); // STRING
     currentTemp.value = weatherData['current']['temp']; // VAR - INT or DOUBLE

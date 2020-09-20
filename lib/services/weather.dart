@@ -19,9 +19,9 @@ const forecastURL = 'https://api.openweathermap.org/data/2.5/onecall';
 const altitudeURL = 'https://api.opentopodata.org/v1/test-dataset?locations';
 
 class WeatherModel {
-  final Controller c = Get.find();
-  final ControllerUpdate cc = Get.find();
-  final ControllerForecast cf = Get.find();
+  Controller c = Get.find();
+  ControllerUpdate cc = Get.find();
+  ControllerForecast cf = Get.find();
 
   void getSnackbar() {
     Get.snackbar(
