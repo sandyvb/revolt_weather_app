@@ -100,6 +100,8 @@ SleekCircularSlider smallSleekCircularSlider({
   String bottomLabelText,
   double size = 50.0,
   var mainLabelStyle,
+  double startAngle = 0.0,
+  double angleRange = 360.0,
 }) {
   // BUG FIX FOR SLIDER
   if (initialValue < -20.0 || initialValue > max || initialValue == null) {
@@ -111,8 +113,8 @@ SleekCircularSlider smallSleekCircularSlider({
     initialValue: initialValue,
     appearance: CircularSliderAppearance(
       size: size,
-      startAngle: 0.0,
-      angleRange: 360.0,
+      startAngle: startAngle,
+      angleRange: angleRange,
       customColors: CustomSliderColors(
         trackColor: kHr,
         progressBarColors: colors,
