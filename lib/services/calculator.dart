@@ -1,11 +1,11 @@
 import 'dart:math';
 import 'package:get/get.dart';
 import 'package:revolt_weather_app/controllers/controller.dart';
-import 'package:revolt_weather_app/controllers/controller_update.dart';
+import 'package:revolt_weather_app/controllers/controller_forecast.dart';
 
 class Calculator {
-  final ControllerUpdate cc = Get.find();
   final Controller c = Get.find();
+  final ControllerForecast cf = Get.find();
 
   // VARIABLES
   double temp;
@@ -19,22 +19,17 @@ class Calculator {
   double rh;
   double ro;
 
-  // RETURNS AIR DENSITY
-  double getDensity() {
-    return ro;
-  }
-
   // RETURNS REVOLT POWER
   double calculate() {
     // CONVERSIONS
     if (c.isMetric.value) {
-      temp = cc.temperature.value; // C
-      dew = cc.dewpoint.value; // C
-      ws = cc.windSpeed.value; // m/s
+      temp = cf.currentTemp.value.toDouble(); // C (error if I remove toDouble() ???)
+      dew = cf.currentDewpoint.value; // C
+      ws = cf.currentWindSpeed.value; // m/s
     } else {
-      temp = (cc.temperature.value - 32) * 5 / 9; // F to C
-      dew = (cc.dewpoint.value - 32) * 5 / 9; // F to C
-      ws = cc.windSpeed.value / 2.237;
+      temp = (cf.currentTemp.value - 32) * 5 / 9; // F to C
+      dew = (cf.currentDewpoint.value - 32) * 5 / 9; // F to C
+      ws = cf.currentWindSpeed.value / 2.237;
     }
 
     // CALCULATIONS
@@ -45,11 +40,16 @@ class Calculator {
     st = 217 * ps / (temp + 273.15);
     st0 = 217 * ps0 / (dew + 273.15);
     rh = 100 * st0 / st;
-    ro = (cc.pressure.value * 100 - 0.003796 * rh * ps) * 0.0034848 / (temp + 273.15); // in [kg/m^3]
+    ro = (cf.currentPressure.value * 100 - 0.003796 * rh * ps) * 0.0034848 / (temp + 273.15); // in [kg/m^3]
 
     // RETURN POWER
     double power = ro * pow(ws, 3) * 0.2125; // in W
     // RETURN MAXIMUM OF 200
     return (power > 200) ? 200 : power;
+  }
+
+  // RETURNS AIR DENSITY
+  double getDensity() {
+    return ro;
   }
 }

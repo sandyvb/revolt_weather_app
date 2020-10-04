@@ -1,145 +1,115 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:revolt_weather_app/components/blue_box.dart';
 import 'package:revolt_weather_app/components/get_icon.dart';
+import 'package:revolt_weather_app/components/glance_box.dart';
+import 'package:revolt_weather_app/components/gradientDivider.dart';
 import 'package:revolt_weather_app/components/map_component.dart';
 import 'package:revolt_weather_app/components/revolt_container.dart';
 import 'package:revolt_weather_app/controllers/controller.dart';
 import 'package:revolt_weather_app/controllers/controller_forecast.dart';
+import 'package:revolt_weather_app/controllers/controller_glance.dart';
 import 'package:revolt_weather_app/controllers/controller_update.dart';
 import 'package:revolt_weather_app/screens/city_screen.dart';
 import 'package:revolt_weather_app/screens/forecast_screen.dart';
-import 'package:revolt_weather_app/services/current_time.dart';
 import 'package:revolt_weather_app/services/weather.dart';
 import 'package:revolt_weather_app/utilities/constants.dart';
 import 'package:revolt_weather_app/screens/location_screen.dart';
-import 'dart:async'; // FOR TIMER
 
-class GlanceScreen extends StatefulWidget {
-  @override
-  _GlanceScreenState createState() => _GlanceScreenState();
-}
-
-class _GlanceScreenState extends State<GlanceScreen> {
+class GlanceScreen extends StatelessWidget {
   final Controller c = Get.find();
-  final ControllerUpdate cc = Get.find();
+  final ControllerUpdate cu = Get.find();
   final ControllerForecast cf = Get.find();
+  final ControllerGlance cg = Get.put(ControllerGlance());
 
-  CurrentTime currentTime = CurrentTime();
-  Timer _timer;
-
-  @override
-  void initState() {
-    _timer = Timer.periodic(Duration(seconds: 5), (Timer t) => currentTime.getTime());
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
-  }
-
-  // TODO: add maps - https://pub.dev/packages/flutter_webview_plugin
-  // TODO: from https://openweathermap.org/api/weathermaps
   // TODO: add email, messaging, phone calls from - https://pub.dev/packages/url_launcher
-  // TODO: add forecast - 5 or 7 day - https://openweathermap.org/api
-  // TODO: figure out sliders - https://pub.dev/packages/flutter_animation_progress_bar
-  // TODO: or - https://pub.dev/packages/flutter_rounded_progress_bar
 
   @override
   Widget build(BuildContext context) {
+    // SCAFFOLD IN CONTROLLER GLANCE
     return Scaffold(
-      // BACKGROUND GRADIENT / BODY \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+      floatingActionButton: Obx(() => cf.isWeatherEvent(EdgeInsets.only(top: 92.0))),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
       body: Container(
         constraints: BoxConstraints.expand(),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(15.0)),
-          gradient: LinearGradient(
-            colors: [
-              Color(0xFF37394B),
-              Color(0xFF292B38),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            tileMode: TileMode.clamp,
-          ),
-        ),
+        decoration: kGradientBackgroundDecoration,
         // BODY
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            // HEADER BACKGROUND GRADIENT
+            // HEADER BACKGROUND GRADIENT IN CONTROLLER GLANCE
             Container(
-              padding: EdgeInsets.fromLTRB(0, 35.0, 0, 17.0),
-              decoration: BoxDecoration(
-                color: kTopColor,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(15.0),
-                  bottomRight: Radius.circular(15.0),
+                padding: EdgeInsets.fromLTRB(0, 35.0, 0, 17.0),
+                decoration: BoxDecoration(
+                  boxShadow: kBoxShadowDown,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(15.0),
+                    bottomRight: Radius.circular(15.0),
+                  ),
+                  gradient: kBlueGradientDiagonal,
                 ),
-                gradient: LinearGradient(
-                  colors: [
-                    Color(0xFF709EFE),
-                    Color(0xFF5C47E0),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  tileMode: TileMode.clamp,
-                ),
-              ),
-              // BODY
-              child: Column(
-                children: [
-                  // HEADER
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      // BACK BUTTON
-                      FlatButton(
-                        onPressed: () => Get.to(LocationScreen()),
-                        child: getIconString('back'),
-                      ),
-                      // PAGE TITLE
-                      Text('At a Glance', style: kGreetingText),
-                      // SWITCH UNITS
-                      Padding(
-                        padding: const EdgeInsets.only(right: 20.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            // OBX SWITCH
-                            Obx(
-                              () => Switch(
-                                activeColor: kActiveColor,
-                                value: c.isMetric.value,
-                                onChanged: (value) async {
-                                  c.isMetric.value = value;
-                                  c.updateUnits();
-                                  await WeatherModel().getCityWeather();
-                                },
-                              ),
-                            ),
-                            // SWITCH LABEL
-                            Text('C°'),
-                          ],
+                // BODY
+                child: Column(
+                  children: [
+                    // HEADER
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        // BACK BUTTON
+                        FlatButton(
+                          onPressed: () => Get.back(),
+                          child: getIconString('back', color: Colors.white),
                         ),
+                        // PAGE TITLE
+                        Text('At a Glance',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 25.0,
+                              letterSpacing: 1,
+                              color: Colors.white,
+                            )),
+                        // SWITCH UNITS
+                        Padding(
+                          padding: const EdgeInsets.only(right: 20.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              // OBX SWITCH
+                              Obx(
+                                () => Switch(
+                                  inactiveThumbColor: Colors.white,
+                                  activeColor: kSwitchColor,
+                                  value: c.isMetric.value,
+                                  onChanged: (value) async {
+                                    c.isMetric.value = value;
+                                    c.updateUnits();
+                                    await WeatherModel().getCityWeather();
+                                  },
+                                ),
+                              ),
+                              // SWITCH LABEL
+                              Text('C°'),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 14.0),
+                    // DATE & TIME
+                    Obx(
+                      () => Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text('${cf.day.value.toUpperCase()}', style: kHeadingTextWhite),
+                          Text('${cf.date.value.toUpperCase()}', style: kHeadingTextWhite),
+                          Text('${c.theTime.value}', style: kHeadingTextWhite),
+                        ],
                       ),
-                    ],
-                  ),
-                  SizedBox(height: 14.0),
-                  // DATE & TIME
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text('${cc.day.value.toUpperCase()}', style: kHeadingTextWhite),
-                      Text('${cc.date.value.toUpperCase()}', style: kHeadingTextWhite),
-                      Text('${currentTime.getTime()}', style: kHeadingTextWhite),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+                    ),
+                  ],
+                )),
             // START SCROLLABLE DATA
             Expanded(
               child: ListView(
@@ -150,229 +120,144 @@ class _GlanceScreenState extends State<GlanceScreen> {
                   Container(
                     margin: EdgeInsets.fromLTRB(20.0, 0, 20.0, 10.0),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         // CITY / LAST UPDATED
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // CITY
-                            SizedBox(
-                              width: 185.0,
-                              child: Text(
-                                '${cc.city.value.toUpperCase()}${cc.country.value}',
-                                style: kHeadingTextLarge,
-                                overflow: TextOverflow.ellipsis,
+                        Expanded(
+                          flex: 9,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // CITY
+                              Obx(
+                                () => Text(
+                                  '${cu.city.value.toUpperCase()}${cu.country.value}',
+                                  style: kHeadingTextLarge,
+                                  maxLines: 3,
+                                ),
                               ),
-                            ),
-                            // LAST UPDATED
-                            Text('last updated: ${cc.lastUpdate.value}', style: kSubHeadingText),
-                          ],
+                              // LAST UPDATED
+                              FittedBox(
+                                fit: BoxFit.cover,
+                                child: Obx(
+                                  () => Text(
+                                    'last update: ${cf.lastUpdate.value}',
+                                    style: kSubHeadingText,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        // HOME BUTTON / NEW CITY BUTTON / FORECAST BUTTON
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            // HOME BUTTON
-                            IconButton(
-                              icon: getIconString('home', 25.0, kLighterBlue),
-                              onPressed: () => Get.to(LocationScreen()),
-                            ),
-                            // CITY BUTTON
-                            IconButton(
-                              icon: getIconString('city'),
-                              onPressed: () {
-                                c.prevScreen.value = 'detailScreen';
-                                Get.to(CityScreen());
-                              },
-                            ),
-                            // FORECAST BUTTON
-                            IconButton(
-                              icon: getIconString('forecast'),
-                              onPressed: () => Get.to(ForecastScreen()),
-                            ),
-                          ],
+                        // HOME BUTTON
+                        Expanded(
+                          flex: 2,
+                          child: IconButton(
+                            icon: getIconString('home', size: 25.0),
+                            onPressed: () => Get.to(LocationScreen()),
+                          ),
+                        ),
+                        // CITY BUTTON
+                        Expanded(
+                          flex: 2,
+                          child: IconButton(
+                            icon: getIconString('city'),
+                            onPressed: () {
+                              c.prevScreen.value = 'glance';
+                              Get.to(CityScreen());
+                            },
+                          ),
+                        ),
+                        // FORECAST BUTTON
+                        Expanded(
+                          flex: 2,
+                          child: IconButton(
+                            icon: getIconString('forecast'),
+                            onPressed: () => Get.to(ForecastScreen()),
+                          ),
                         ),
                       ],
                     ),
                   ),
                   // DIVIDER
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20.0, 0, 20.0, 5.0),
-                    child: SizedBox(
-                      height: 2.0,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [kHr, Color(0xFF5988F9), kHr],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            tileMode: TileMode.clamp,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  gradientDivider(padding: EdgeInsets.fromLTRB(20.0, 0, 20.0, 5.0)),
                   // BLUE BOXES / BUTTONS
                   Padding(
-                    padding: const EdgeInsets.only(top: 20.0, bottom: 10.0),
+                    padding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 0),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         // BLUE BOX - TEMPERATURE
-                        Container(
-                          width: 110,
-                          decoration: BoxDecoration(
-                            color: kTopColor,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(15.0),
-                            ),
-                            gradient: LinearGradient(
-                              colors: [
-                                Color(0xFF709EFE),
-                                Color(0xFF5C47E0),
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              tileMode: TileMode.clamp,
-                            ),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+                        smBlueBox(
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                // BLUE BOX / TEMPERATURE
-                                getIconString('thermometer'),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text('Temp'),
-                                    Text(
-                                      '${cc.temperature.value.toInt()} ${c.temperatureUnits.value}',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0),
+                              child: getIconString('thermometer', color: Colors.white),
                             ),
-                          ),
-                        ),
+                            Obx(
+                              () => Text(
+                                '${cf.currentTemp.value.toInt()}${c.temperatureUnits.value}',
+                                style: kOxygenWhite,
+                              ),
+                            ),
+                          ],
+                        )),
                         // BLUE BOX - WIND
-                        Container(
-                          width: 110,
-                          decoration: BoxDecoration(
-                            color: kTopColor,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(15.0),
-                            ),
-                            gradient: LinearGradient(
-                              colors: [
-                                Color(0xFF709EFE),
-                                Color(0xFF5C47E0),
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              tileMode: TileMode.clamp,
-                            ),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                getIconString('wind'),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text('Wind'),
-                                    Text(
-                                      '${cc.windSpeed.value.round()} ${c.speedUnits.value}',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ],
+                        smBlueBox(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 5.0, right: 5.0),
+                                child: getWindIcon(cf.currentWindDeg.value, color: Colors.white),
+                              ),
+                              Obx(
+                                () => FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    '${cf.currentWindSpeed.value.round()} ${c.speedUnits.value}',
+                                    style: kOxygenWhite,
+                                  ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                         // BLUE BOX - CONDITION
-                        Container(
-                          width: 110,
-                          decoration: BoxDecoration(
-                            color: kTopColor,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(15.0),
-                            ),
-                            gradient: LinearGradient(
-                              colors: [
-                                Color(0xFF709EFE),
-                                Color(0xFF5C47E0),
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              tileMode: TileMode.clamp,
-                            ),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                getIconInt(cc.id.value),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text('Currently'),
-                                    Text(
-                                      '${cc.main.value}',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ],
+                        smBlueBox(
+                            child: Obx(
+                          () => Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 9.0, right: 8.0),
+                                child: getIconInt(cf.currentWeatherId.value, color: Colors.white),
+                              ),
+                              FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  '${cf.currentWeatherMain.value}',
+                                  style: kOxygenWhite,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        )
+                        )),
                       ],
                     ),
                   ),
+                  // RAIN CONTAINER (ONLY IF THERE IS RAIN)
+                  Obx(() => cg.getRainContainer()),
+                  // SNOW CONTAINER (ONLY IF THERE IS SNOW)
+                  Obx(() => cg.getSnowContainer()),
                   // REVOLT POWER
                   RevoltContainer(),
                   // DIVIDER
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20.0, 0, 20.0, 10.0),
-                    child: SizedBox(
-                      height: 2.0,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [kHr, Color(0xFF5988F9), kHr],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            tileMode: TileMode.clamp,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  // DETAIL CARDS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
-                  // RAIN CONTAINER (ONLY IF THERE IS RAIN)
-                  Container(
-                    child: cc.getRainContainer(),
-                  ),
-                  // SNOW CONTAINER (ONLY IF THERE IS SNOW)
-                  Container(
-                    child: cc.getSnowContainer(),
-                  ),
+                  gradientDivider(padding: EdgeInsets.fromLTRB(20.0, 0, 20.0, 10.0)),
                   // TODAY / TOMORROW / NEXT DAY
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
@@ -380,171 +265,74 @@ class _GlanceScreenState extends State<GlanceScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         // TODAY
-                        Expanded(
-                          child: Container(
-                            margin: EdgeInsets.only(right: 10.0),
-                            padding: EdgeInsets.all(10.0),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(15.0),
-                              ),
-                              gradient: LinearGradient(
-                                colors: [
-                                  Color(0xFF5F6380),
-                                  Color(0xFF383B4F),
-                                ],
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                tileMode: TileMode.clamp,
-                              ),
-                            ),
-                            child: Column(
-                              children: [
-                                Text('TODAY'),
-                                Text('${cf.daily[0]['temp']['max'].toInt()}${c.temperatureUnits.value}'),
-                                Text('status bar'),
-                                Text('${cf.daily[0]['temp']['min'].toInt()}${c.temperatureUnits.value}'),
-                                getIconInt(cf.daily[0]['weather'][0]['id']),
-                                Text('${cf.daily[0]['weather'][0]['main']}'),
-                                Row(
-                                  children: [
-                                    getIconString('raindrop'),
-                                    Text('${cf.daily[0]['pop']}%'),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    getWindIcon(cf.daily[0]['wind_deg']),
-                                    Text('${cf.daily[0]['wind_speed'].toInt()}${c.speedUnits.value}'),
-                                  ],
-                                ),
-                              ],
-                            ),
+                        Obx(
+                          () => glanceBox(
+                            day: 'TODAY',
+                            highTemp: cf.daily[0]['temp']['max'],
+                            lowTemp: cf.daily[0]['temp']['min'],
+                            iconId: cf.currentWeatherId.value,
+                            main: cf.currentWeatherMain.value,
+                            pop: cf.daily[0]['pop'].toStringAsFixed(1),
+                            windAngle: cf.currentWindDeg.value,
+                            windSpeed: cf.currentWindSpeed.value.round(),
                           ),
                         ),
                         // TOMORROW
-                        Expanded(
-                          child: Container(
-                            padding: EdgeInsets.all(10.0),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(15.0),
-                              ),
-                              gradient: LinearGradient(
-                                colors: [
-                                  Color(0xFF5F6380),
-                                  Color(0xFF383B4F),
-                                ],
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                tileMode: TileMode.clamp,
-                              ),
-                            ),
-                            child: Column(
-                              children: [
-                                Text('TOMORROW'),
-                                Text('${cf.daily[1]['temp']['max'].toInt()}${c.temperatureUnits.value}'),
-                                Text('status bar'),
-                                Text('${cf.daily[1]['temp']['min'].toInt()}${c.temperatureUnits.value}'),
-                                getIconInt(cf.daily[1]['weather'][0]['id']),
-                                Text('${cf.daily[1]['weather'][0]['main']}'),
-                                Row(
-                                  children: [
-                                    getIconString('raindrop'),
-                                    Text('${cf.daily[1]['pop']}%'),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    getWindIcon(cf.daily[1]['wind_deg']),
-                                    Text('${cf.daily[1]['wind_speed'].toInt()}${c.speedUnits.value}'),
-                                  ],
-                                ),
-                              ],
-                            ),
+                        Obx(
+                          () => glanceBox(
+                            day: 'TOMORROW',
+                            highTemp: cf.daily[1]['temp']['max'],
+                            lowTemp: cf.daily[1]['temp']['min'],
+                            iconId: cf.daily[1]['weather'][0]['id'],
+                            main: cf.daily[1]['weather'][0]['main'],
+                            pop: cf.daily[1]['pop'].toStringAsFixed(1),
+                            windAngle: cf.daily[1]['wind_deg'],
+                            windSpeed: cf.daily[1]['wind_speed'],
                           ),
                         ),
                         // THE NEXT DAY
-                        Expanded(
-                          child: Container(
-                            margin: EdgeInsets.only(left: 10.0),
-                            padding: EdgeInsets.all(10.0),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(15.0),
-                              ),
-                              gradient: LinearGradient(
-                                colors: [
-                                  Color(0xFF5F6380),
-                                  Color(0xFF383B4F),
-                                ],
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                tileMode: TileMode.clamp,
-                              ),
-                            ),
-                            child: Column(
-                              children: [
-                                Text('${cf.getWeekDay(cf.daily[2]['dt'])}'),
-                                Text('${cf.daily[2]['temp']['max'].toInt()}${c.temperatureUnits.value}'),
-                                Text('status bar'),
-                                Text('${cf.daily[2]['temp']['min'].toInt()}${c.temperatureUnits.value}'),
-                                getIconInt(cf.daily[2]['weather'][0]['id']),
-                                Text('${cf.daily[2]['weather'][0]['main']}'),
-                                Row(
-                                  children: [
-                                    getIconString('raindrop'),
-                                    Text('${cf.daily[2]['pop']}%'),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    getWindIcon(cf.daily[2]['wind_deg']),
-                                    Text('${cf.daily[2]['wind_speed'].toInt()}${c.speedUnits.value}'),
-                                  ],
-                                ),
-                              ],
-                            ),
+                        Obx(
+                          () => glanceBox(
+                            day: '${cf.getWeekDay(cf.daily[2]['dt'])}',
+                            highTemp: cf.daily[2]['temp']['max'],
+                            lowTemp: cf.daily[2]['temp']['min'],
+                            iconId: cf.daily[2]['weather'][0]['id'],
+                            main: cf.daily[2]['weather'][0]['main'],
+                            pop: cf.daily[2]['pop'].toStringAsFixed(1),
+                            windAngle: cf.daily[2]['wind_deg'],
+                            windSpeed: cf.daily[2]['wind_speed'],
                           ),
                         ),
                       ],
                     ),
                   ),
-                  // GET EXTENDED FORECAST BUTTON
-                  GestureDetector(
-                    onTap: () => Get.to(ForecastScreen()),
-                    child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                      padding: EdgeInsets.all(20.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(8.0),
-                        ),
-                        gradient: LinearGradient(
-                          colors: [
-                            Color(0xFF5F6380),
-                            Color(0xFF383B4F),
-                          ],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                          tileMode: TileMode.clamp,
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('GET EXTENDED FORECAST'),
-                          getIconString('forecast'),
-                        ],
-                      ),
-                    ),
-                  ),
-
                   // MAP
                   Container(
                     height: 400.0,
                     margin: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 15.0),
                     child: MapComponent(),
+                  ),
+                  // GET EXTENDED FORECAST BUTTON
+                  GestureDetector(
+                    onTap: () => Get.to(ForecastScreen()),
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 30.0),
+                      padding: EdgeInsets.all(20.0),
+                      decoration: BoxDecoration(
+                        boxShadow: kBoxShadowDD,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(15.0),
+                        ),
+                        gradient: kBlueGradientHorizontal,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text('GET EXTENDED FORECAST'),
+                          getIconString('forecast', color: Colors.white),
+                        ],
+                      ),
+                    ),
                   ),
                 ],
               ),

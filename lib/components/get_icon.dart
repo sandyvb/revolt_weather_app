@@ -17,89 +17,29 @@ import 'dart:math';
 // GET HOUR TO DETERMINE IF IT'S DAY OR NIGHT
 var hour = DateTime.now().hour;
 
-// RETURNS A GENERAL ICON GIVEN AN INT
-Icon getIconInt(int code, [double size, Color color]) {
-  if (code == 801) {
-    return Icon(WeatherIcons.wi_cloud, size: size, color: color);
-  } else if (code >= 802 && code <= 804) {
-    return Icon(WeatherIcons.wi_cloudy, size: size, color: color);
-  } else if (code == 800 && hour < 5 && hour > 21) {
-    return Icon(WeatherIcons.wi_night_clear, size: size, color: color);
-  } else if (code == 800) {
-    return Icon(WeatherIcons.wi_day_sunny, size: size, color: color);
-  } else if (code == 701) {
-    return Icon(WeatherIcons.wi_sprinkle, size: size, color: color);
-  } else if (code == 711) {
-    return Icon(WeatherIcons.wi_smoke, size: size, color: color);
-  } else if (code == 721) {
-    return Icon(WeatherIcons.wi_day_haze, size: size, color: color);
-  } else if (code == 731) {
-    return Icon(WeatherIcons.wi_sandstorm, size: size, color: color);
-  } else if (code == 741) {
-    return Icon(WeatherIcons.wi_fog, size: size, color: color);
-  } else if (code == 751) {
-    return Icon(WeatherIcons.wi_sandstorm, size: size, color: color);
-  } else if (code == 761) {
-    return Icon(WeatherIcons.wi_dust, size: size, color: color);
-  } else if (code == 762) {
-    return Icon(WeatherIcons.wi_volcano, size: size, color: color);
-  } else if (code == 771) {
-    return Icon(WeatherIcons.wi_cloudy_gusts, size: size, color: color);
-  } else if (code == 781) {
-    return Icon(WeatherIcons.wi_tornado, size: size, color: color);
-  } else if (code >= 600 && code <= 602) {
-    return Icon(WeatherIcons.wi_snow, size: size, color: color);
-  } else if (code >= 611 && code <= 613) {
-    return Icon(WeatherIcons.wi_sleet, size: size, color: color);
-  } else if (code >= 615 && code <= 622) {
-    return Icon(WeatherIcons.wi_rain_mix, size: size, color: color);
-  } else if (code == 500 || code == 520) {
-    return Icon(WeatherIcons.wi_sprinkle, size: size, color: color);
-  } else if (code >= 501 && code <= 504) {
-    return Icon(WeatherIcons.wi_rain, size: size, color: color);
-  } else if (code == 511) {
-    return Icon(WeatherIcons.wi_sleet, size: size, color: color);
-  } else if (code >= 521 && code <= 531) {
-    return Icon(WeatherIcons.wi_showers, size: size, color: color);
-  } else if (code >= 300 && code <= 321) {
-    return Icon(WeatherIcons.wi_sprinkle, size: size, color: color);
-  } else if (code == 200 || code == 201 || code == 230 || code == 231 || code == 232) {
-    return Icon(WeatherIcons.wi_storm_showers, size: size, color: color);
-  } else if (code == 202) {
-    return Icon(WeatherIcons.wi_thunderstorm, size: size, color: color);
-  } else if (code == 210 || code == 211 || code == 212 || code == 221) {
-    return Icon(WeatherIcons.wi_lightning, size: size, color: color);
-  } else {
-    return Icon(WeatherIcons.wi_na, size: size, color: color);
-  }
+// RETURNS DIRECTIONAL ARROW GIVEN A RADIAN ANGLE
+Widget getWindIcon(var angle, {double size, Color color = kLighterBlue}) {
+  angle = angle * pi / 180;
+  return Transform.rotate(
+    angle: angle,
+    child: Icon(SimpleLineIcons.arrow_down_circle, size: size, color: color),
+  );
 }
 
 // RETURNS AN ICON GIVEN A STRING
-Widget getIconString(String code, [double size, Color color]) {
-  if (code == 'location') {
-    return Icon(
-      Entypo.location_pin,
-      color: Color(0xFF697EF5),
-      size: 30.0,
-    );
+Widget getIconString(String code, {double size = 27.0, Color color = kLighterBlue}) {
+  if (code == 'revolt') {
+    return ImageIcon(AssetImage('images/greenBolt.png'), size: size, color: color);
+  } else if (code == 'location') {
+    return Icon(Entypo.location_pin, size: size, color: color);
+  } else if (code == 'alert') {
+    return Icon(MaterialCommunityIcons.alert_circle_outline, size: size, color: color);
   } else if (code == 'add') {
-    return Icon(
-      Entypo.plus,
-      color: Color(0xFF697EF5),
-      size: 30.0,
-    );
+    return Icon(Entypo.plus, size: size, color: color);
   } else if (code == 'city') {
-    return Icon(
-      MaterialCommunityIcons.city_variant_outline,
-      color: kLighterBlue,
-      size: size,
-    );
+    return Icon(MaterialCommunityIcons.city_variant_outline, size: size, color: color);
   } else if (code == 'question') {
-    return Icon(
-      MaterialCommunityIcons.map_marker_question_outline,
-      color: Colors.red,
-      size: 40.0,
-    );
+    return Icon(MaterialCommunityIcons.map_marker_question_outline, size: size, color: color);
   } else if (code == 'fullscreen') {
     return Icon(MaterialIcons.fullscreen, size: size, color: color);
   } else if (code == 'home') {
@@ -107,11 +47,7 @@ Widget getIconString(String code, [double size, Color color]) {
   } else if (code == 'fullscreenExit') {
     return Icon(MaterialIcons.fullscreen_exit, size: size, color: color);
   } else if (code == 'forecast') {
-    return Icon(
-      Foundation.graph_bar,
-      color: kLighterBlue,
-      size: 27.0,
-    );
+    return Icon(Foundation.graph_bar, size: size, color: color);
   } else if (code == 'visibility') {
     return Icon(MaterialIcons.visibility, size: size, color: color);
   } else if (code == 'thermometer') {
@@ -147,122 +83,146 @@ Widget getIconString(String code, [double size, Color color]) {
   } else if (code == 'cold') {
     return Icon(WeatherIcons.wi_snowflake_cold, size: size, color: color);
   } else if (code == 'refreshBottom') {
-    return Icon(
-      FontAwesome.refresh,
-      color: kLighterBlue,
-      size: size,
-    );
+    return Icon(FontAwesome.refresh, size: size, color: color);
   } else if (code == 'refresh') {
     return Icon(FontAwesome.refresh, size: size, color: color);
   } else if (code == 'refresh_cloud') {
-    return Icon(WeatherIcons.wi_cloud_refresh, size: 30.0, color: color);
+    return Icon(WeatherIcons.wi_cloud_refresh, size: size, color: color);
   } else if (code == 'back') {
-    return Icon(Ionicons.ios_arrow_back, size: 30.0, color: color);
-  } else if (code == 'details') {
-    return Icon(
-      MaterialCommunityIcons.page_next_outline,
-      size: 30.0,
-      color: kLighterBlue,
-    );
+    return Icon(Ionicons.ios_arrow_back, size: size, color: color);
+  } else if (code == 'glance') {
+    return Icon(MaterialCommunityIcons.eye_circle_outline, size: size, color: color);
+  } else if (code == 'latitude') {
+    return Icon(MaterialCommunityIcons.latitude, size: size, color: color);
+  } else if (code == 'longitude') {
+    return Icon(MaterialCommunityIcons.longitude, size: size, color: color);
+  } else if (code == 'altitude') {
+    return Icon(MaterialCommunityIcons.slope_uphill, size: size, color: color);
   } else {
     return Icon(WeatherIcons.wi_na, size: size, color: color);
   }
 }
 
-// RETURNS DIRECTIONAL ARROW GIVEN A RADIAN ANGLE
-Widget getWindIcon(var angle, [double size, Color color]) {
-  angle = angle * pi / 180;
-  return Transform.rotate(
-    angle: angle,
-    child: Icon(SimpleLineIcons.arrow_up_circle, size: size, color: color),
-  );
-}
-
 // RETURNS A DAY OR NIGHT ICON GIVEN AN INT
-Icon getIconIntDayOrNight(int code, [double size, String dayOrNight, Color color]) {
-  if (code == 801 && dayOrNight == 'day') {
-    return Icon(WeatherIcons.wi_day_cloudy, size: size, color: color);
-  } else if (code == 801 && dayOrNight == 'night') {
-    return Icon(WeatherIcons.wi_night_alt_cloudy, size: size, color: color);
-  } else if (code >= 802 && code <= 804 && dayOrNight == 'day') {
-    return Icon(WeatherIcons.wi_day_cloudy, size: size, color: color);
-  } else if (code >= 802 && code <= 804 && dayOrNight == 'night') {
-    return Icon(WeatherIcons.wi_night_alt_cloudy, size: size, color: color);
-  } else if (code == 800 && dayOrNight == 'day') {
-    return Icon(WeatherIcons.wi_day_sunny, size: size, color: color);
-  } else if (code == 800 && dayOrNight == 'night') {
-    return Icon(WeatherIcons.wi_night_clear, size: size, color: color);
-  } else if (code == 701 && dayOrNight == 'day') {
-    return Icon(WeatherIcons.wi_day_sprinkle, size: size, color: color);
-  } else if (code == 701 && dayOrNight == 'night') {
-    return Icon(WeatherIcons.wi_night_alt_sprinkle, size: size, color: color);
+Icon getIconInt(int code, {double size, Color color = kLighterBlue, String dayOrNight}) {
+  if (code == 801 || code == 802 || code == 803 || code == 804) {
+    return dayOrNight == 'day'
+        ? Icon(WeatherIcons.wi_day_cloudy, size: size, color: color)
+        : dayOrNight == 'night' ? Icon(WeatherIcons.wi_night_alt_cloudy, size: size, color: color) : Icon(WeatherIcons.wi_cloudy, size: size, color: color);
+  } else if (code == 800) {
+    return dayOrNight == 'day'
+        ? Icon(WeatherIcons.wi_day_sunny, size: size, color: color)
+        : dayOrNight == 'night' ? Icon(WeatherIcons.wi_night_clear, size: size, color: color) : Icon(WeatherIcons.wi_day_sunny, size: size, color: color);
+  } else if (code == 701) {
+    return dayOrNight == 'day'
+        ? Icon(WeatherIcons.wi_day_sprinkle, size: size, color: color)
+        : dayOrNight == 'night' ? Icon(WeatherIcons.wi_night_alt_sprinkle, size: size, color: color) : Icon(WeatherIcons.wi_sprinkle, size: size, color: color);
   } else if (code == 711) {
     return Icon(WeatherIcons.wi_smoke, size: size, color: color);
   } else if (code == 721) {
     return Icon(WeatherIcons.wi_day_haze, size: size, color: color);
   } else if (code == 731) {
     return Icon(WeatherIcons.wi_sandstorm, size: size, color: color);
-  } else if (code == 741 && dayOrNight == 'day') {
-    return Icon(WeatherIcons.wi_day_fog, size: size, color: color);
-  } else if (code == 741 && dayOrNight == 'night') {
-    return Icon(WeatherIcons.wi_night_fog, size: size, color: color);
+  } else if (code == 741) {
+    return dayOrNight == 'day'
+        ? Icon(WeatherIcons.wi_day_fog, size: size, color: color)
+        : dayOrNight == 'night' ? Icon(WeatherIcons.wi_night_fog, size: size, color: color) : Icon(WeatherIcons.wi_fog, size: size, color: color);
   } else if (code == 751) {
     return Icon(WeatherIcons.wi_sandstorm, size: size, color: color);
   } else if (code == 761) {
     return Icon(WeatherIcons.wi_dust, size: size, color: color);
   } else if (code == 762) {
     return Icon(WeatherIcons.wi_volcano, size: size, color: color);
-  } else if (code == 771 && dayOrNight == 'day') {
-    return Icon(WeatherIcons.wi_day_cloudy_gusts, size: size, color: color);
-  } else if (code == 771 && dayOrNight == 'night') {
-    return Icon(WeatherIcons.wi_night_alt_cloudy_gusts, size: size, color: color);
+  } else if (code == 771) {
+    return dayOrNight == 'day'
+        ? Icon(WeatherIcons.wi_day_cloudy_gusts, size: size, color: color)
+        : dayOrNight == 'night' ? Icon(WeatherIcons.wi_night_alt_cloudy_gusts, size: size, color: color) : Icon(WeatherIcons.wi_cloudy_gusts, size: size, color: color);
   } else if (code == 781) {
     return Icon(WeatherIcons.wi_tornado, size: size, color: color);
-  } else if (code >= 600 && code <= 602 && dayOrNight == 'day') {
-    return Icon(WeatherIcons.wi_day_snow, size: size, color: color);
-  } else if (code >= 600 && code <= 602 && dayOrNight == 'night') {
-    return Icon(WeatherIcons.wi_night_alt_snow, size: size, color: color);
-  } else if (code >= 611 && code <= 613 && dayOrNight == 'day') {
-    return Icon(WeatherIcons.wi_day_sleet, size: size, color: color);
-  } else if (code >= 611 && code <= 613 && dayOrNight == 'night') {
-    return Icon(WeatherIcons.wi_night_alt_sleet, size: size, color: color);
-  } else if (code >= 615 && code <= 622 && dayOrNight == 'day') {
-    return Icon(WeatherIcons.wi_day_rain_mix, size: size, color: color);
-  } else if (code >= 615 && code <= 622 && dayOrNight == 'night') {
-    return Icon(WeatherIcons.wi_night_alt_rain_mix, size: size, color: color);
-  } else if (code == 500 || code == 520 && dayOrNight == 'day') {
-    return Icon(WeatherIcons.wi_day_sprinkle, size: size, color: color);
-  } else if (code == 500 || code == 520 && dayOrNight == 'night') {
-    return Icon(WeatherIcons.wi_night_alt_sprinkle, size: size, color: color);
-  } else if (code >= 501 && code <= 504 && dayOrNight == 'day') {
-    return Icon(WeatherIcons.wi_day_rain, size: size, color: color);
-  } else if (code >= 501 && code <= 504 && dayOrNight == 'night') {
-    return Icon(WeatherIcons.wi_night_alt_rain, size: size, color: color);
-  } else if (code == 511 && dayOrNight == 'day') {
-    return Icon(WeatherIcons.wi_day_sleet, size: size, color: color);
-  } else if (code == 511 && dayOrNight == 'night') {
-    return Icon(WeatherIcons.wi_night_alt_sleet, size: size, color: color);
-  } else if (code >= 521 && code <= 531 && dayOrNight == 'day') {
-    return Icon(WeatherIcons.wi_day_showers, size: size, color: color);
-  } else if (code >= 521 && code <= 531 && dayOrNight == 'night') {
-    return Icon(WeatherIcons.wi_night_alt_showers, size: size, color: color);
-  } else if (code >= 300 && code <= 321 && dayOrNight == 'day') {
-    return Icon(WeatherIcons.wi_day_sprinkle, size: size, color: color);
-  } else if (code >= 300 && code <= 321 && dayOrNight == 'night') {
-    return Icon(WeatherIcons.wi_night_alt_sprinkle, size: size, color: color);
-  } else if (code == 200 || code == 201 || code == 230 || code == 231 || code == 232 && dayOrNight == 'day') {
-    return Icon(WeatherIcons.wi_day_storm_showers, size: size, color: color);
-  } else if (code == 200 || code == 201 || code == 230 || code == 231 || code == 232 && dayOrNight == 'night') {
-    return Icon(WeatherIcons.wi_night_alt_storm_showers, size: size, color: color);
-  } else if (code == 202 && dayOrNight == 'day') {
-    return Icon(WeatherIcons.wi_day_thunderstorm, size: size, color: color);
-  } else if (code == 202 && dayOrNight == 'night') {
-    return Icon(WeatherIcons.wi_night_alt_thunderstorm, size: size, color: color);
-  } else if (code == 210 || code == 211 || code == 212 || code == 221 && dayOrNight == 'day') {
-    return Icon(WeatherIcons.wi_day_lightning, size: size, color: color);
-  } else if (code == 210 || code == 211 || code == 212 || code == 221 && dayOrNight == 'night') {
-    return Icon(WeatherIcons.wi_night_alt_lightning, size: size, color: color);
+  } else if (code == 600) {
+    return dayOrNight == 'day'
+        ? Icon(WeatherIcons.wi_day_snow, size: size, color: color)
+        : dayOrNight == 'night' ? Icon(WeatherIcons.wi_night_alt_snow, size: size, color: color) : Icon(WeatherIcons.wi_snow, size: size, color: color);
+  } else if (code == 611 || code == 612 || code == 613) {
+    return dayOrNight == 'day'
+        ? Icon(WeatherIcons.wi_day_sleet, size: size, color: color)
+        : dayOrNight == 'night' ? Icon(WeatherIcons.wi_night_alt_sleet, size: size, color: color) : Icon(WeatherIcons.wi_sleet, size: size, color: color);
+  } else if (code == 615 || code == 616 || code == 620 || code == 621 || code == 622) {
+    return dayOrNight == 'day'
+        ? Icon(WeatherIcons.wi_day_rain_mix, size: size, color: color)
+        : dayOrNight == 'night' ? Icon(WeatherIcons.wi_night_alt_rain_mix) : Icon(WeatherIcons.wi_rain_mix, size: size, color: color);
+  } else if (code == 500 || code == 520) {
+    return dayOrNight == 'day'
+        ? Icon(WeatherIcons.wi_day_sprinkle, size: size, color: color)
+        : dayOrNight == 'night' ? Icon(WeatherIcons.wi_night_alt_sprinkle, size: size, color: color) : Icon(WeatherIcons.wi_sprinkle, size: size, color: color);
+  } else if (code == 501 || code == 502 || code == 503 || code == 504) {
+    return dayOrNight == 'day'
+        ? Icon(WeatherIcons.wi_day_rain, size: size, color: color)
+        : dayOrNight == 'night' ? Icon(WeatherIcons.wi_night_alt_rain, size: size, color: color) : Icon(WeatherIcons.wi_rain, size: size, color: color);
+  } else if (code == 511) {
+    return dayOrNight == 'day'
+        ? Icon(WeatherIcons.wi_day_sleet, size: size, color: color)
+        : dayOrNight == 'night' ? Icon(WeatherIcons.wi_night_alt_sleet, size: size, color: color) : Icon(WeatherIcons.wi_sleet, size: size, color: color);
+  } else if (code == 521 || code == 522 || code == 531) {
+    return dayOrNight == 'day'
+        ? Icon(WeatherIcons.wi_day_showers, size: size, color: color)
+        : dayOrNight == 'night' ? Icon(WeatherIcons.wi_night_alt_showers, size: size, color: color) : Icon(WeatherIcons.wi_showers, size: size, color: color);
+  } else if (code == 300 || code == 301 || code == 302 || code == 310 || code == 311 || code == 312 || code == 313 || code == 314 || code == 321) {
+    return dayOrNight == 'day'
+        ? Icon(WeatherIcons.wi_day_sprinkle, size: size, color: color)
+        : dayOrNight == 'night' ? Icon(WeatherIcons.wi_night_alt_sprinkle, size: size, color: color) : Icon(WeatherIcons.wi_sprinkle, size: size, color: color);
+  } else if (code == 200 || code == 201 || code == 230 || code == 231 || code == 232) {
+    return dayOrNight == 'day'
+        ? Icon(WeatherIcons.wi_day_storm_showers, size: size, color: color)
+        : dayOrNight == 'night' ? Icon(WeatherIcons.wi_night_alt_storm_showers, size: size, color: color) : Icon(WeatherIcons.wi_storm_showers, size: size, color: color);
+  } else if (code == 202) {
+    return dayOrNight == 'day'
+        ? Icon(WeatherIcons.wi_day_thunderstorm)
+        : dayOrNight == 'night' ? Icon(WeatherIcons.wi_night_alt_thunderstorm, size: size, color: color) : Icon(WeatherIcons.wi_thunderstorm, size: size, color: color);
+  } else if (code == 210 || code == 211 || code == 212 || code == 221) {
+    return dayOrNight == 'day'
+        ? Icon(WeatherIcons.wi_day_lightning, size: size, color: color)
+        : dayOrNight == 'night' ? Icon(WeatherIcons.wi_night_alt_lightning, size: size, color: color) : Icon(WeatherIcons.wi_lightning, size: size, color: color);
   } else {
     return Icon(WeatherIcons.wi_na, size: size, color: color);
+  }
+}
+
+// CONVERTS ANGLE IN RADIANS TO TEXT DIRECTION
+String getWindDirection(int angle) {
+  if (angle < 15 || angle > 340) {
+    return 'N';
+  } else if (angle >= 15 && angle <= 30) {
+    return 'N/NE';
+  } else if (angle > 30 && angle < 50) {
+    return 'NE';
+  } else if (angle >= 50 && angle <= 70) {
+    return 'E/NE';
+  } else if (angle > 70 && angle < 100) {
+    return 'E';
+  } else if (angle >= 100 && angle <= 120) {
+    return 'E/SE';
+  } else if (angle > 120 && angle < 140) {
+    return 'SE';
+  } else if (angle >= 140 && angle <= 170) {
+    return 'S/SE';
+  } else if (angle > 170 && angle < 190) {
+    return 'S';
+  } else if (angle >= 190 && angle <= 210) {
+    return 'S/SW';
+  } else if (angle > 210 && angle < 230) {
+    return 'SW';
+  } else if (angle >= 230 && angle <= 250) {
+    return 'W/SW';
+  } else if (angle > 250 && angle < 280) {
+    return 'W';
+  } else if (angle >= 280 && angle <= 300) {
+    return 'W/NW';
+  } else if (angle > 300 && angle < 320) {
+    return 'NW';
+  } else if (angle >= 320 && angle <= 340) {
+    return 'N/NW';
+  } else {
+    return 'problem locating wind direction';
   }
 }

@@ -1,72 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:revolt_weather_app/components/get_icon.dart';
+import 'package:revolt_weather_app/components/gradientDivider.dart';
 import 'package:revolt_weather_app/controllers/controller.dart';
+import 'package:revolt_weather_app/controllers/controller_current.dart';
+import 'package:revolt_weather_app/controllers/controller_daily.dart';
 import 'package:revolt_weather_app/controllers/controller_forecast.dart';
+import 'package:revolt_weather_app/controllers/controller_hourly.dart';
+import 'package:revolt_weather_app/controllers/controller_minutely.dart';
 import 'package:revolt_weather_app/controllers/controller_update.dart';
 import 'package:revolt_weather_app/screens/city_screen.dart';
 import 'package:revolt_weather_app/screens/glance_screen.dart';
 import 'package:revolt_weather_app/screens/location_screen.dart';
 import 'package:revolt_weather_app/services/weather.dart';
 import 'package:revolt_weather_app/utilities/constants.dart';
-import 'package:revolt_weather_app/services/current_time.dart';
-import 'dart:async'; // FOR TIMER
 
 // HORIZONTAL SCROLL - https://stackoverflow.com/questions/49153087/flutter-scrolling-to-a-widget-in-listview
 
-class ForecastScreen extends StatefulWidget {
-  @override
-  _ForecastScreenState createState() => _ForecastScreenState();
-}
-
-class _ForecastScreenState extends State<ForecastScreen> {
-  final ControllerUpdate cc = Get.find();
-  final ControllerForecast cf = Get.find();
+class ForecastScreen extends StatelessWidget {
   final Controller c = Get.find();
-
-  CurrentTime currentTime = CurrentTime();
-  Timer _timer;
-  List<bool> isSelected = [true, false, false, false];
-  String selectedForecast;
-
-  @override
-  void initState() {
-    selectedForecast = 'current';
-    _timer = Timer.periodic(Duration(seconds: 5), (Timer t) => currentTime.getTime());
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
-  }
-
-  void refresh() async {
-    await WeatherModel().getForecast();
-  }
+  final ControllerUpdate cu = Get.find();
+  final ControllerForecast cf = Get.find();
+  final ControllerCurrent cc = Get.put(ControllerCurrent());
+  final ControllerDaily cd = Get.put(ControllerDaily());
+  final ControllerHourly ch = Get.put(ControllerHourly());
+  final ControllerMinutely cm = Get.put(ControllerMinutely());
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      // TO AVOID OVER FLOW ADD RESIZE TO AVOID BOTTOM PADDING
+    return Scaffold(
       resizeToAvoidBottomPadding: false,
+      floatingActionButton: Obx(() => cf.isWeatherEvent(EdgeInsets.only(top: 170.0))),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
       body: Container(
         constraints: BoxConstraints.expand(),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(15.0)),
-          gradient: LinearGradient(
-            colors: [
-              Color(0xFF37394B),
-              Color(0xFF292B38),
-              Color(0xFF222536),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            tileMode: TileMode.clamp,
-          ),
-        ),
-        // HEADER / BODY
+        decoration: kGradientBackgroundDecoration,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -75,16 +43,8 @@ class _ForecastScreenState extends State<ForecastScreen> {
               padding: EdgeInsets.only(top: 35.0),
               decoration: BoxDecoration(
                 color: Color(0xFF3B3C4E),
-                boxShadow: [
-                  BoxShadow(
-                    color: kBlack.withOpacity(0.8),
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                    offset: Offset(0, 3), // changes position of shadow
-                  ),
-                ],
+                boxShadow: kBoxShadowDown,
               ),
-              // BACK / REFRESH / GREETING / UNITS / DATE / TIME / DIVIDER
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -95,10 +55,22 @@ class _ForecastScreenState extends State<ForecastScreen> {
                     children: <Widget>[
                       FlatButton(
                         onPressed: () => Get.back(),
-                        child: getIconString('back'),
+                        child: getIconString('back', color: Colors.white),
                       ),
                       // GREETING
-                      Text('${cf.greeting.value}', style: kGreetingText),
+                      Obx(
+                        () => Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 10.0),
+                            child: FittedBox(
+                              child: Text(
+                                '${cf.greetingSelectedForecast.value}',
+                                style: kGreetingText,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                       // UNITS
                       Padding(
                         padding: const EdgeInsets.only(right: 20.0),
@@ -107,7 +79,8 @@ class _ForecastScreenState extends State<ForecastScreen> {
                           children: [
                             Obx(
                               () => Switch(
-                                activeColor: kActiveColor,
+                                inactiveThumbColor: Colors.white,
+                                activeColor: kSwitchColor,
                                 value: c.isMetric.value,
                                 onChanged: (value) async {
                                   c.isMetric.value = value;
@@ -124,86 +97,60 @@ class _ForecastScreenState extends State<ForecastScreen> {
                   ),
                   SizedBox(height: 10.0),
                   // DATE & TIME
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text('${cf.day.value.toUpperCase()}', style: kHeadingText),
-                      Text('${cf.date.value.toUpperCase()}', style: kHeadingText),
-                      Text('${currentTime.getTime()}', style: kHeadingText),
-                    ],
-                  ),
+                  Obx(() => Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text('${cf.day.value.toUpperCase()}', style: kHeadingText),
+                          Text('${cf.date.value.toUpperCase()}', style: kHeadingText),
+                          Text('${c.theTime.value}', style: kHeadingText),
+                        ],
+                      )),
                   // DIVIDER
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15.0, 13.0, 15.0, 0.0),
-                    child: SizedBox(
-                      height: 2.0,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [kHr, Color(0xFF5988F9), kHr],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            tileMode: TileMode.clamp,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  gradientDivider(padding: EdgeInsets.fromLTRB(15.0, 13.0, 15.0, 0)),
                   // SELECT FORECAST - CURRENT / MINUTELY / HOURLY / DAILY BUTTONS
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20.0),
-                    child: ToggleButtons(
-                      constraints: BoxConstraints.expand(width: 90.0, height: 40.0),
-                      fillColor: kLightestBlue,
-                      selectedColor: Colors.white,
-                      color: Colors.white54,
-                      highlightColor: kHr,
-                      borderColor: kLightestBlue,
-                      borderWidth: 2.0,
-                      borderRadius: BorderRadius.circular(25),
-                      textStyle: kToggleButtonText,
-                      children: <Widget>[
-                        // Icon(Icons.format_bold),
-                        Text(' CURRENT'),
-                        Text('DAILY'),
-                        Text('HOURLY'),
-                        Text('MINUTELY '),
-                      ],
-                      isSelected: isSelected,
-                      onPressed: (int index) {
-                        setState(() {
-                          for (int indexBtn = 0; indexBtn < isSelected.length; indexBtn++) {
-                            if (indexBtn == index) {
-                              isSelected[indexBtn] = true;
-                              switch (indexBtn) {
-                                case 0:
-                                  {
-                                    selectedForecast = 'current';
-                                    break;
-                                  }
-                                case 1:
-                                  {
-                                    selectedForecast = 'daily';
-                                    break;
-                                  }
-                                case 2:
-                                  {
-                                    selectedForecast = 'hourly';
-                                    break;
-                                  }
-                                case 3:
-                                  {
-                                    selectedForecast = 'minutely';
-                                    break;
-                                  }
-                                  break;
-                              }
+                    child: Obx(
+                      () => ToggleButtons(
+                        constraints: BoxConstraints.expand(
+                          width: Get.width / 4.4,
+                          height: 40.0,
+                        ),
+                        fillColor: kLightestBlue,
+                        selectedColor: Colors.white,
+                        color: Colors.white54,
+                        highlightColor: kHr,
+                        borderColor: kLightestBlue,
+                        borderWidth: 2.0,
+                        borderRadius: BorderRadius.circular(25),
+                        textStyle: kToggleButtonText,
+                        children: <Widget>[
+                          // Icon(Icons.format_bold),
+                          Text(' CURRENT '),
+                          Text('DAILY'),
+                          Text('HOURLY'),
+                          Text(' MINUTELY '),
+                        ],
+                        onPressed: (int index) {
+                          for (int i = 0; i < cf.isSelected.length; i++) {
+                            if (i == index) {
+                              cf.isSelected[i] = !cf.isSelected[i];
                             } else {
-                              isSelected[indexBtn] = false;
+                              cf.isSelected[i] = false;
                             }
                           }
-                        });
-                      },
+                          if (index == 0) {
+                            cf.selectedForecast.value = 'current';
+                          } else if (index == 1) {
+                            cf.selectedForecast.value = 'daily';
+                          } else if (index == 2) {
+                            cf.selectedForecast.value = 'hourly';
+                          } else {
+                            cf.selectedForecast.value = 'minutely';
+                          }
+                        },
+                        isSelected: cf.isSelected,
+                      ),
                     ),
                   ),
                 ],
@@ -215,75 +162,60 @@ class _ForecastScreenState extends State<ForecastScreen> {
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 children: [
-                  // CITY / LAST UPDATED / NAVIGATION BUTTONS
+                  // CITY / LAST UPDATED / HOME / CITY / GLANCE BUTTONS
                   Container(
-                    margin: EdgeInsets.fromLTRB(20.0, 0, 20.0, 20.0),
+                    margin: EdgeInsets.fromLTRB(20.0, 0, 20.0, 10.0),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         // CITY / LAST UPDATED
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // CITY
-                            SizedBox(
-                              width: 185.0,
-                              child: Text(
-                                '${cc.city.value.toUpperCase()}${cc.country.value}',
-                                style: kHeadingTextLarge,
-                                overflow: TextOverflow.ellipsis,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // CITY
+                              Obx(
+                                () => Text(
+                                  '${cu.city.value.toUpperCase()}${cu.country.value}',
+                                  style: kHeadingTextLarge,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
-                            ),
-                            // LAST UPDATED
-                            Text('last updated: ${cc.lastUpdate.value}', style: kSubHeadingText),
-                          ],
+                              // LAST UPDATED
+                              Obx(
+                                () => Text(
+                                  'last update: ${cf.lastUpdate.value}',
+                                  style: kSubHeadingText,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        // HOME BUTTON / NEW CITY BUTTON / DETAILS BUTTON
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            // HOME BUTTON
-                            IconButton(
-                              icon: getIconString('home', 25.0, kLighterBlue),
-                              onPressed: () => Get.to(LocationScreen()),
-                            ),
-                            // CITY BUTTON
-                            IconButton(
-                              icon: getIconString('city'),
-                              onPressed: () {
-                                c.prevScreen.value = 'forecastScreen';
-                                Get.to(CityScreen());
-                              },
-                            ),
-                            // DETAILS BUTTON
-                            IconButton(
-                              icon: getIconString('details'),
-                              onPressed: () => Get.to(GlanceScreen()),
-                            ),
-                          ],
+                        // HOME BUTTON
+                        IconButton(
+                          icon: getIconString('home', size: 25.0),
+                          onPressed: () => Get.off(LocationScreen()),
+                        ),
+                        // CITY BUTTON
+                        IconButton(
+                          icon: getIconString('city'),
+                          onPressed: () {
+                            c.prevScreen.value = 'forecast';
+                            Get.off(CityScreen());
+                          },
+                        ),
+                        // FORECAST BUTTON
+                        IconButton(
+                          icon: getIconString('glance'),
+                          onPressed: () => Get.off(GlanceScreen()),
                         ),
                       ],
                     ),
                   ),
                   // DIVIDER
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20.0, 0, 20.0, 20.0),
-                    child: SizedBox(
-                      height: 2.0,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [kHr, Color(0xFF5988F9), kHr],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            tileMode: TileMode.clamp,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(child: cf.returnSelectedForecast(selectedForecast)),
+                  gradientDivider(padding: EdgeInsets.fromLTRB(20.0, 0, 20.0, 20.0)),
+                  Obx(() => cf.returnSelectedForecast()),
                 ],
               ),
             ),

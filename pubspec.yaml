@@ -22,6 +22,7 @@ dependencies:
   sleek_circular_slider: ^1.1.0
   flutter_webview_plugin: ^0.3.11
   flutter_map: ^0.10.1+1
+  flutter_animation_progress_bar: ^1.0.5
 
 dev_dependencies:
   flutter_test:

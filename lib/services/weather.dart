@@ -7,6 +7,7 @@ import 'package:revolt_weather_app/controllers/controller_update.dart';
 import 'package:revolt_weather_app/services/location.dart';
 import 'networking.dart';
 
+// API KEY FOR OWM
 const apiKey = '217da33042b65b3c9e4bd01ab0bdd02b';
 // UPDATE UI URL
 const openWeatherMapURL = 'https://api.openweathermap.org/data/2.5/weather';
@@ -15,27 +16,28 @@ const OWMapURL = 'https://tile.openweathermap.org/map/clouds_new/4/15/15.png?app
 // UPDATE FORECAST URL
 const forecastURL = 'https://api.openweathermap.org/data/2.5/onecall';
 // ALTITUDE URL
-// const altitudeURL = 'https://api.opentopodata.org/v1/srtm90m?locations';
-const altitudeURL = 'https://api.opentopodata.org/v1/test-dataset?locations';
+// const altitudeURL = 'https://api.opentopodata.org/v1/srtm90m?locations'; // api url
+const altitudeURL = 'https://api.opentopodata.org/v1/test-dataset?locations'; // testing url
 
 class WeatherModel {
   Controller c = Get.find();
-  ControllerUpdate cc = Get.find();
+  ControllerUpdate cu = Get.find();
   ControllerForecast cf = Get.find();
 
   void getSnackbar() {
     Get.snackbar(
       'There was a problem',
-      'Cannot retrieve some of the data. Please try again!',
-      icon: getIconString('question'),
+      'Please try again!',
+      icon: getIconString('question', color: Colors.red, size: 40.0),
       shouldIconPulse: true,
       isDismissible: true,
-      duration: Duration(seconds: 5),
+      duration: Duration(seconds: 3),
       colorText: Colors.red,
       snackPosition: SnackPosition.BOTTOM,
       margin: EdgeInsets.symmetric(horizontal: 15.0, vertical: 50.0),
       padding: EdgeInsets.all(20.0),
-      overlayBlur: 0.5,
+      overlayBlur: 1,
+      backgroundColor: Colors.yellow,
     );
   }
 
@@ -46,41 +48,50 @@ class WeatherModel {
     await location.getCurrentLocation();
     NetworkHelper networkHelper = NetworkHelper('$openWeatherMapURL?lat=${location.latitude}&lon=${location.longitude}&appid=$apiKey&units=$units');
     var weatherData = await networkHelper.getData();
-    weatherData == null ? getSnackbar() : cc.updateData(weatherData);
+    weatherData == null ? getSnackbar() : cu.updateData(weatherData);
     // INIT KEY GLOBAL VARIABLES
-    cc.initialCity.value = weatherData['name'];
-    cc.city.value = cc.initialCity.value;
-    cc.userInput.value = cc.initialCity.value;
-    cc.lat.value = location.latitude;
-    cc.lon.value = location.longitude;
+    cu.initialCity.value = weatherData['name'];
+    cu.city.value = cu.initialCity.value;
+    cu.userInput.value = cu.initialCity.value;
+    cu.lat.value = location.latitude;
+    cu.lon.value = location.longitude;
     await getCityWeather();
     await getForecast();
-    await getAltitude();
+    getAltitude();
   }
 
-  Future<void> getCityWeather() async {
+  // IN CITY SCREEN,
+  // FALSE STAYS ON CITY SCREEN UNTIL VALID DATA IS ENTERED BY USER OR BACK BUTTON IS PRESSED
+  // TRUE REDIRECTS USER TO PREVIOUS SCREEN
+  Future<bool> getCityWeather() async {
     String units = c.isMetric.value == true ? 'metric' : 'imperial';
-    var url = '$openWeatherMapURL?q=${cc.userInput.value}&appid=$apiKey&units=$units';
+    var url = '$openWeatherMapURL?q=${cu.userInput.value}&appid=$apiKey&units=$units';
     NetworkHelper networkHelper = NetworkHelper(url);
     var weatherData = await networkHelper.getData();
-    weatherData == null ? getSnackbar() : cc.updateData(weatherData);
-    await getForecast();
-    await getAltitude();
+    if (weatherData == null) {
+      getSnackbar();
+      return false;
+    } else {
+      cu.updateData(weatherData);
+      await getForecast();
+      getAltitude();
+      return true;
+    }
   }
 
   Future<void> getForecast() async {
     String units = c.isMetric.value == true ? 'metric' : 'imperial';
-    var url = '$forecastURL?lat=${cc.lat.value}&lon=${cc.lon.value}&appid=$apiKey&units=$units';
+    var url = '$forecastURL?lat=${cu.lat.value}&lon=${cu.lon.value}&appid=$apiKey&units=$units';
     NetworkHelper networkHelper = NetworkHelper(url);
     var weatherData = await networkHelper.getData();
     weatherData == null ? getSnackbar() : cf.updateForecast(weatherData);
-    await getAltitude();
+    getAltitude();
   }
 
   // https://www.opentopodata.org/
   Future<void> getAltitude() async {
     try {
-      var url = '$altitudeURL=${cc.lat.value},${cc.lon.value}';
+      var url = '$altitudeURL=${cu.lat.value},${cu.lon.value}';
       NetworkHelper networkHelper = NetworkHelper(url);
       var altData = await networkHelper.getData();
       var altitude = altData == null ? 0 : altData['results'][0]['elevation'];

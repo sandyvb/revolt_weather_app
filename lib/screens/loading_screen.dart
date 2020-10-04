@@ -4,18 +4,19 @@ import 'package:revolt_weather_app/controllers/controller.dart';
 import 'package:revolt_weather_app/controllers/controller_forecast.dart';
 import 'package:revolt_weather_app/controllers/controller_update.dart';
 import 'package:revolt_weather_app/services/weather.dart';
+import 'package:revolt_weather_app/utilities/constants.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'location_screen.dart';
 
 class LoadingScreen extends StatelessWidget {
   final Controller c = Get.put(Controller());
-  final ControllerUpdate cc = Get.put(ControllerUpdate());
+  final ControllerUpdate cu = Get.put(ControllerUpdate());
   final ControllerForecast cf = Get.put(ControllerForecast());
 
   // GET USER'S LOCATION FROM DEVICE
   void getLocationData() async {
     await WeatherModel().getLocationWeather();
-    Get.to(LocationScreen());
+    Get.off(LocationScreen());
   }
 
   // SHOW SLIDER WHILE GETTING DATA THEN GO TO LOCATION SCREEN
@@ -25,19 +26,7 @@ class LoadingScreen extends StatelessWidget {
     return Scaffold(
       body: Container(
         constraints: BoxConstraints.expand(),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(15.0)),
-          gradient: LinearGradient(
-            colors: [
-              Color(0xFF37394B),
-              Color(0xFF292B38),
-              Color(0xFF222536),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            tileMode: TileMode.clamp,
-          ),
-        ),
+        decoration: kGradientBackgroundDecoration,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -54,6 +43,10 @@ class LoadingScreen extends StatelessWidget {
                   progressBarWidth: 4.5,
                 ),
               ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: Text('Retrieving Data...', style: TextStyle(fontSize: 20.0)),
             ),
           ],
         ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:revolt_weather_app/components/get_icon.dart';
 import 'package:revolt_weather_app/controllers/controller.dart';
+import 'package:revolt_weather_app/controllers/controller_forecast.dart';
 import 'package:revolt_weather_app/controllers/controller_update.dart';
 import 'package:revolt_weather_app/utilities/constants.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
@@ -9,7 +9,8 @@ import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 // https://pub.dev/packages/sleek_circular_slider
 
 final Controller c = Get.find();
-final ControllerUpdate cc = Get.find();
+final ControllerUpdate cu = Get.find();
+final ControllerForecast cf = Get.find();
 
 // TEXT MODIFIERS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 String temperatureTextModifier(double value) {
@@ -19,11 +20,6 @@ String temperatureTextModifier(double value) {
 
 String revoltTextModifier(double value) {
   final newValue = value.toInt().toString();
-  return '$newValue';
-}
-
-String iconTextModifier(double value) {
-  final newValue = '${getIconInt(cc.id.value)}';
   return '$newValue';
 }
 
@@ -48,60 +44,35 @@ String nullTextModifier(double value) {
   return '';
 }
 
-// MISC HELPER FUNCTIONS
-String getWatt() {
-  return cc.watt.value;
-}
-
-// NOT USED
-double getMaxWindSpeed() {
-  if (c.isMetric.value) {
-    if (cc.windSpeed.value > 44.704) {
-      return 67.056;
-    } else if (cc.windSpeed.value > 22.352) {
-      return 44.704;
-    } else if (cc.windSpeed.value > 11.176) {
-      return 22.352;
-    } else if (cc.windSpeed.value > 5.588) {
-      return 11.176;
-    } else {
-      return 5.588;
-    }
+// RETURNS INIT VALUE FOR LARGE SLEEK CIRCULAR SLIDER
+double getLargeSliderInitValue() {
+  var min = c.isMetric.value ? -23.3333 : -10.0;
+  var max = c.isMetric.value ? 65.5556 : 150.0;
+  if (cf.currentTemp.value < min || cf.currentTemp.value > max || cf.currentTemp.value == null) {
+    return max / 2;
   } else {
-    if (cc.windSpeed.value > 100) {
-      return 150.0;
-    } else if (cc.windSpeed.value > 50) {
-      return 100.0;
-    } else if (cc.windSpeed.value > 25) {
-      return 50.0;
-    } else if (cc.windSpeed.value > 12.5) {
-      return 25.0;
-    } else {
-      return 12.5;
-    }
+    return cf.currentTemp.value.toDouble();
   }
 }
 
-// NOT USED
-double getMaxPower() {
-  if (cc.power.value == 200) {
-    return 200;
-  }
-  return cc.power.value + 5.0;
-}
-
-// SMALL SLEEK CIRCULAR SLIDER \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-SleekCircularSlider smallSleekCircularSlider({
+// RETURN SLEEK CIRCULAR SLIDER \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+SleekCircularSlider circularSlider({
   double min: -20.0,
   double max = 1000,
   double initialValue = 0,
   var modifier,
   var colors,
+  shadowColor = kBlack,
+  shadowMaxOpacity: 0.01,
+  trackWidth: 4.0,
+  progressBarWidth: 4.0,
+  shadowWidth: 55.0,
   String bottomLabelText,
   double size = 50.0,
   var mainLabelStyle,
   double startAngle = 0.0,
   double angleRange = 360.0,
+  bottomLabelStyle = kBottomLabelStyle,
 }) {
   // BUG FIX FOR SLIDER
   if (initialValue < -20.0 || initialValue > max || initialValue == null) {
@@ -119,19 +90,19 @@ SleekCircularSlider smallSleekCircularSlider({
         trackColor: kHr,
         progressBarColors: colors,
         dotColor: Colors.transparent,
-        shadowColor: kBlack.withOpacity(0.2),
-        shadowMaxOpacity: 0.01,
+        shadowColor: shadowColor,
+        shadowMaxOpacity: shadowMaxOpacity,
       ),
       customWidths: CustomSliderWidths(
-        trackWidth: 3.5,
-        progressBarWidth: 3.5,
-        shadowWidth: 55.0,
+        trackWidth: trackWidth,
+        progressBarWidth: progressBarWidth,
+        shadowWidth: shadowWidth,
       ),
       infoProperties: InfoProperties(
         modifier: modifier,
         mainLabelStyle: mainLabelStyle,
         bottomLabelText: bottomLabelText,
-        bottomLabelStyle: kBottomLabelStyle,
+        bottomLabelStyle: bottomLabelStyle,
       ),
     ),
   );

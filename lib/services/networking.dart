@@ -13,7 +13,7 @@ class NetworkHelper {
       String data = response.body;
       return jsonDecode(data);
     } else {
-      print(response.statusCode);
+      print('response status from networking: ${response.statusCode} at $url');
     }
   }
 
