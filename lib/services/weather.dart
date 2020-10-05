@@ -31,7 +31,7 @@ class WeatherModel {
       icon: getIconString('question', color: Colors.red, size: 40.0),
       shouldIconPulse: true,
       isDismissible: true,
-      duration: Duration(seconds: 3),
+      duration: Duration(milliseconds: 2250),
       colorText: Colors.red,
       snackPosition: SnackPosition.BOTTOM,
       margin: EdgeInsets.symmetric(horizontal: 15.0, vertical: 50.0),

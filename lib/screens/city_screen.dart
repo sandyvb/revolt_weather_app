@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:revolt_weather_app/components/city_map_component.dart';
 import 'package:revolt_weather_app/components/get_icon.dart';
 import 'package:revolt_weather_app/controllers/controller.dart';
 import 'dart:ui';
@@ -16,6 +17,8 @@ class CityScreen extends StatelessWidget {
 
   final focusNode = FocusNode(); // TAP OUTSIDE TEXT FIELD TO CLOSE KEYBOARD
 
+  // IF NO DATA, SHOW SNACKBAR (WEATHER.DART) AND STAY ON SCREEN
+  // OTHERWISE, GO TO PREVIOUS SCREEN AND REMOVE CITY SCREEN FROM STACK
   void changeCity() async {
     var confirm = await WeatherModel().getCityWeather();
     if (confirm) {
@@ -111,6 +114,11 @@ class CityScreen extends StatelessWidget {
                     style: TextStyle(fontSize: 25.0),
                   ),
                 ),
+              ),
+              Container(
+                height: 250.0,
+                margin: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 15.0),
+                child: CityMapComponent(),
               ),
             ],
           ),

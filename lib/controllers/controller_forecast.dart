@@ -1,4 +1,3 @@
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:get/get.dart';
 import 'package:revolt_weather_app/components/get_current.dart';
 import 'package:revolt_weather_app/components/get_daily.dart';
@@ -28,6 +27,7 @@ class ControllerForecast extends GetxController {
   var getSunset = 0.obs;
   var getSunriseTomorrow = 0.obs;
   var getSunsetTomorrow = 0.obs;
+  var getSunriseTheNextDay = 0.obs;
   var currentSunrise = 'soon'.obs;
   var currentSunset = 'later'.obs;
   var currentTemp = 0.0.obs;
@@ -97,6 +97,7 @@ class ControllerForecast extends GetxController {
     getSunset.value = weatherData['current']['sunset']; // INT
     getSunriseTomorrow.value = weatherData['daily'][1]['sunrise']; // INT
     getSunsetTomorrow.value = weatherData['daily'][1]['sunset']; // INT
+    getSunriseTheNextDay.value = weatherData['daily'][2]['sunrise']; // INT
     currentSunset.value = getReadableTime(getSunset.value); // STRING
     currentTemp.value = weatherData['current']['temp']; // VAR - INT or DOUBLE
     currentFeelsLike.value = weatherData['current']['feels_like']; // VAR - INT or DOUBLE
@@ -258,22 +259,22 @@ class ControllerForecast extends GetxController {
     switch (selectedForecast.value) {
       case 'current':
         {
-          greetingSelectedForecast.value = 'Today\'s Forecast';
+          greetingSelectedForecast.value = 'TODAY\'S FORECAST';
           return GetCurrent();
         }
       case 'minutely':
         {
-          greetingSelectedForecast.value = '60 Min Forecast';
+          greetingSelectedForecast.value = '60 MIN FORECAST';
           return GetMinutely();
         }
       case 'hourly':
         {
-          greetingSelectedForecast.value = '48 Hr Forecast';
+          greetingSelectedForecast.value = '48 HR FORECAST';
           return GetHourly();
         }
       case 'daily':
         {
-          greetingSelectedForecast.value = '7 Day Forecast';
+          greetingSelectedForecast.value = '7 DAY FORECAST';
           return GetDaily();
         }
         break;
@@ -322,11 +323,13 @@ class ControllerForecast extends GetxController {
       DateTime sunsetTime = DateTime.fromMillisecondsSinceEpoch(getSunset.value * 1000); // DATETIME
       DateTime sunriseTomorrow = DateTime.fromMillisecondsSinceEpoch(getSunriseTomorrow.value * 1000); // DATETIME
       DateTime sunsetTomorrow = DateTime.fromMillisecondsSinceEpoch(getSunsetTomorrow.value * 1000); // DATETIME
+      DateTime sunriseTheNextDay = DateTime.fromMillisecondsSinceEpoch(getSunriseTheNextDay.value * 1000); // DATETIME
 
       double sunsetDifference = sunsetTime.difference(now).inMinutes / 60; // HOURS
       double sunriseDifference = sunriseTime.difference(now).inMinutes / 60; // HOURS
       double sunriseTomorrowDifference = sunriseTomorrow.difference(now).inMinutes / 60; // HOURS
-      double sunsetTomorrowDifference = sunsetTomorrow.difference(now).inMinutes / 60;
+      double sunsetTomorrowDifference = sunsetTomorrow.difference(now).inMinutes / 60; // HOURS
+      double sunriseTheNextDayDifference = sunriseTheNextDay.difference(now).inMinutes / 60; // HOURS
 
       if (sunriseDifference < sunsetDifference && sunriseDifference > 0 && sunsetDifference > 0) {
         // it is before sunrise
@@ -341,8 +344,10 @@ class ControllerForecast extends GetxController {
           isDayOrNight = 'night';
         } else if (sunriseTomorrowDifference < 0 && sunsetTomorrowDifference > 0) {
           isDayOrNight = 'day';
-        } else if (sunriseTomorrowDifference < 0 && sunsetTomorrowDifference < 0) {
+        } else if (sunriseTomorrowDifference < 0 && sunsetTomorrowDifference < 0 && sunriseTheNextDayDifference > 0) {
           isDayOrNight = 'night';
+        } else if (sunriseTheNextDayDifference < 0) {
+          isDayOrNight = 'day';
         }
       }
     } else {
