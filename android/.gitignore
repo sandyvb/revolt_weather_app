@@ -8,6 +8,16 @@ GeneratedPluginRegistrant.java
 *.jks
 key*.properties
 
+# Android related
+**/android/**/gradle-wrapper.jar
+**/android/.gradle
+**/android/captures/
+**/android/gradlew
+**/android/gradlew.bat
+**/android/local.properties
+**/android/**/GeneratedPluginRegistrant.java
+**/android/key.properties
+
 
 # Miscellaneous
 *.class
@@ -36,6 +46,11 @@ key*.properties
 .pub-cache/
 .pub/
 /build/
+build/
+flutter_*.png
+linked_*.ds
+unlinked.ds
+unlinked_spec.ds
 
 # Web related
 lib/generated_plugin_registrant.dart
