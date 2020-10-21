@@ -109,20 +109,13 @@ const kBoxShadowDD = [
 // GREETING IN HEADINGS
 const kGreetingText = TextStyle(
   fontWeight: FontWeight.w400,
-  // Use Expanded then Padding then FittedBox
   letterSpacing: 1,
   color: Colors.white,
 );
 
-// TEXT UNDER ICONS IN FOOTER
-const kFooterIconText = TextStyle(
-  color: kLighterBlue,
-  fontSize: 11.0,
-);
-
 // DATE TIMES IN HEADINGS
 const kHeadingText = TextStyle(
-  fontSize: 15.0,
+  fontSize: 13.0,
   color: Colors.white70,
   letterSpacing: 1.5,
 );
@@ -163,7 +156,7 @@ const kDataText = TextStyle(
 );
 
 // FORECAST TOGGLE BUTTONS
-const kToggleButtonText = TextStyle(
+const kLighterBlueText = TextStyle(
   color: kLighterBlue,
 );
 

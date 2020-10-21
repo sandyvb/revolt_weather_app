@@ -8,6 +8,7 @@ import 'package:revolt_weather_app/controllers/controller.dart';
 import 'package:revolt_weather_app/controllers/controller_daily.dart';
 import 'package:revolt_weather_app/controllers/controller_forecast.dart';
 import 'package:intl/intl.dart';
+import 'package:revolt_weather_app/screens/revolt_screen.dart';
 import 'package:revolt_weather_app/utilities/constants.dart';
 
 class GetDaily extends StatefulWidget {
@@ -16,9 +17,10 @@ class GetDaily extends StatefulWidget {
 }
 
 class _GetDailyState extends State<GetDaily> {
+  final ControllerDaily cd = Get.put(ControllerDaily());
   final Controller c = Get.find();
   final ControllerForecast cf = Get.find();
-  final ControllerDaily cd = Get.find();
+
   ProgressBar progressBar = ProgressBar();
 
   // CALL TO INITIALIZE A LIST
@@ -28,12 +30,25 @@ class _GetDailyState extends State<GetDaily> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Obx(() => Text('HIGH TEMPERATURES (${c.temperatureUnits.value})', style: TextStyle(fontSize: 12.0, letterSpacing: 0.7, color: kLighterBlue))),
-        Obx(() => progressBar.getSpotlight(type: 'temp')),
+        Obx(() => Text('HIGH TEMPERATURES (${c.temperatureUnits.value})', style: TextStyle(fontSize: 12.0, letterSpacing: 0.7))),
+        Obx(() => progressBar.getSpotlight(type: 'tempDaily')),
         progressBar.getSpotlightText(),
         gradientDivider(padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0)),
-        Obx(() => Text('MAX WIND (${c.speedUnits.value})', style: TextStyle(fontSize: 12.0, letterSpacing: 0.7, color: kLighterBlue))),
-        Obx(() => progressBar.getSpotlight(type: 'wind')),
+        Obx(() => Text('MAX WIND (${c.speedUnits.value})', style: TextStyle(fontSize: 12.0, letterSpacing: 0.7))),
+        Obx(() => progressBar.getSpotlight(type: 'windDaily')),
+        progressBar.getSpotlightText(),
+        gradientDivider(padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0)),
+        GestureDetector(
+          onTap: () => Get.to(RevoltScreen()),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              getIconString('revolt', size: 15.0, color: Colors.white),
+              Text('  REVOLT POWER (Watts)', style: TextStyle(fontSize: 12.0, letterSpacing: 0.7)),
+            ],
+          ),
+        ),
+        Obx(() => progressBar.getSpotlight(type: 'powerDaily')),
         progressBar.getSpotlightText(),
         gradientDivider(padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0)),
         Container(
@@ -90,7 +105,7 @@ class _GetDailyState extends State<GetDaily> {
                                 ),
                                 Obx(
                                   () => Text(
-                                    ' ${cf.daily[item.index]['pop'].toStringAsFixed(1)}%',
+                                    ' ${(cf.daily[item.index]['pop'] * 100).toStringAsFixed(1)}%',
                                     style: kOxygenWhite,
                                   ),
                                 ),
@@ -101,8 +116,15 @@ class _GetDailyState extends State<GetDaily> {
                               () => Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  getWindIcon(cf.daily[item.index]['wind_deg'], size: 16.0, color: Colors.white),
-                                  Text(' ${cf.daily[item.index]['wind_speed'].toInt()}', style: kOxygenWhite),
+                                  getWindIcon(
+                                    item.index == 0 ? cf.currentWindDeg.value : cf.daily[item.index]['wind_deg'],
+                                    size: 16.0,
+                                    color: Colors.white,
+                                  ),
+                                  Text(
+                                    item.index == 0 ? ' ${cf.currentWindSpeed.value.toInt()}' : ' ${cf.daily[item.index]['wind_speed'].toInt()}',
+                                    style: kOxygenWhite,
+                                  ),
                                   Text(' ${c.speedUnits.value}', style: TextStyle(fontSize: 12.0, fontFamily: 'Oxygen')),
                                 ],
                               ),
@@ -175,7 +197,7 @@ class _GetDailyState extends State<GetDaily> {
                               child: getIconString('raindrop'),
                             ),
                             Text(
-                              ' Chance of ${cd.rainOrSnow(item.index, 'day')}: ${cf.daily[item.index]['pop'].toStringAsFixed(2)}%',
+                              ' Chance of ${cd.rainOrSnow(item.index, 'day')}: ${(cf.daily[item.index]['pop'] * 100).toStringAsFixed(1)}%',
                               style: TextStyle(
                                 fontFamily: 'Oxygen',
                                 letterSpacing: 0.7,
@@ -194,7 +216,9 @@ class _GetDailyState extends State<GetDaily> {
                               child: getWindIcon(cf.daily[item.index]['wind_deg'], size: 22.0),
                             ),
                             Text(
-                              '  Winds ${getWindDirection(cf.daily[item.index]['wind_deg'])} ${cf.daily[item.index]['wind_speed'].toInt()}${cd.getGust(item.index)} ${c.speedUnits.value}.',
+                              item.index == 0
+                                  ? '  Winds ${getWindDirection(cf.currentWindDeg.value)} ${cf.currentWindSpeed.value.toInt()} ${c.speedUnits.value}${cf.gustingWind()}'
+                                  : '  Winds ${getWindDirection(cf.daily[item.index]['wind_deg'])} ${cf.daily[item.index]['wind_speed'].toInt()}${cd.getGust(item.index)} ${c.speedUnits.value}',
                               style: TextStyle(
                                 fontFamily: 'Oxygen',
                                 letterSpacing: 0.7,
@@ -213,7 +237,7 @@ class _GetDailyState extends State<GetDaily> {
                               child: getIconString('revolt', size: 22.0),
                             ),
                             Text(
-                              '  REVOLT power: ${cf.power.value.toInt()} ${cf.watt.value}',
+                              item.index == 0 ? '  REVOLT power ${cf.power.value.ceil()} ${cf.watt.value}' : '  REVOLT power: ${cf.getRevoltPower(item.index, type: 'daily')} ${cf.watt.value}',
                               style: TextStyle(
                                 fontFamily: 'Oxygen',
                                 letterSpacing: 0.7,
@@ -242,7 +266,7 @@ class _GetDailyState extends State<GetDaily> {
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Text('HUMIDITY'),
+                                        FittedBox(child: Text('HUMIDITY')),
                                         FittedBox(
                                           child: Text(
                                             '${cf.daily[item.index]['humidity']}%',
@@ -269,7 +293,7 @@ class _GetDailyState extends State<GetDaily> {
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Text('UV INDEX'),
+                                        FittedBox(child: Text('UV INDEX')),
                                         FittedBox(
                                           child: Text(
                                             '${cf.returnUviIndex(cf.daily[item.index]['uvi'])}',
@@ -302,7 +326,7 @@ class _GetDailyState extends State<GetDaily> {
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Text('SUNRISE'),
+                                        FittedBox(child: Text('SUNRISE')),
                                         FittedBox(
                                           child: Text(
                                             '${cf.getReadableTime(cf.daily[item.index]['sunrise'])}',
@@ -329,7 +353,7 @@ class _GetDailyState extends State<GetDaily> {
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Text('SUNSET'),
+                                        FittedBox(child: Text('SUNSET')),
                                         FittedBox(
                                           child: Text(
                                             '${cf.getReadableTime(cf.daily[item.index]['sunset'])}',

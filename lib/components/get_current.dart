@@ -12,11 +12,10 @@ import 'package:revolt_weather_app/utilities/constants.dart';
 import 'get_icon.dart';
 
 class GetCurrent extends StatelessWidget {
+  final ControllerCurrent cc = Get.put(ControllerCurrent());
   final Controller c = Get.find();
   final ControllerUpdate cu = Get.find();
   final ControllerForecast cf = Get.find();
-  // CC RUNS SUNSET TIMER
-  final ControllerCurrent cc = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -288,10 +287,10 @@ class GetCurrent extends StatelessWidget {
                     padding: const EdgeInsets.only(right: 20.0),
                     child: getIconString('raindrop', color: Colors.white),
                   ),
-                  Text('Chance of Precipitation', style: kOxygenWhite),
+                  FittedBox(child: Text('Chance of Precipitation', style: kOxygenWhite)),
                 ],
               ),
-              Obx(() => Text('${cf.daily[0]['pop'].toStringAsFixed(1)}%', style: kOxygenWhite)),
+              Obx(() => Text('${(cf.daily[0]['pop'] * 100).toStringAsFixed(1)}%', style: kOxygenWhite)),
             ],
           ),
           // DIVIDER

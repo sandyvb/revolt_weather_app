@@ -3,13 +3,11 @@ import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.da
 import 'package:get/get.dart';
 import 'package:revolt_weather_app/controllers/controller.dart';
 import 'package:revolt_weather_app/controllers/controller_forecast.dart';
-import 'package:revolt_weather_app/controllers/controller_minutely.dart';
 import 'package:revolt_weather_app/utilities/constants.dart';
 
 class ProgressBar {
   final Controller c = Get.find();
   final ControllerForecast cf = Get.find();
-  final ControllerMinutely cm = Get.find();
 
   FAProgressBar progressBar({
     int currentValue = 5,
@@ -43,16 +41,23 @@ class ProgressBar {
     var length;
     var border;
 
-    if (type == 'temp') {
+    if (type == 'tempDaily') {
       displayText = '';
       maxValue = c.isMetric.value ? 43 : 110;
       width = Get.width / 10;
       height = 75.0;
       length = 8;
       border = 'default';
-    } else if (type == 'wind') {
+    } else if (type == 'windDaily') {
       displayText = '';
       maxValue = c.isMetric.value ? 9 : 20;
+      width = Get.width / 10;
+      height = 60.0;
+      length = 8;
+      border = 'default';
+    } else if (type == 'powerDaily') {
+      displayText = '';
+      maxValue = 40;
       width = Get.width / 10;
       height = 60.0;
       length = 8;
@@ -69,7 +74,20 @@ class ProgressBar {
       height = 60.0;
       length = 48;
       border = null;
+    } else if (type == 'powerHourly') {
+      maxValue = 40;
+      width = Get.width / 60;
+      height = 60.0;
+      length = 48;
+      border = null;
+    } else if (type == 'precipHourly') {
+      maxValue = 600;
+      width = Get.width / 60;
+      height = 60.0;
+      length = 48;
+      border = null;
     } else {
+      // MINUTELY
       maxValue = 600;
       width = Get.width / 80;
       height = 60.0;
@@ -79,17 +97,24 @@ class ProgressBar {
 
     List<Widget> list = new List<Widget>();
     for (int i = 0; i < length; i++) {
-      if (type == 'temp') {
+      if (type == 'tempDaily') {
         currentValue = cf.daily[i]['temp']['max'].toInt();
-      } else if (type == 'wind') {
+      } else if (type == 'windDaily') {
         currentValue = cf.daily[i]['wind_speed'].toInt();
+      } else if (type == 'powerDaily') {
+        currentValue = cf.getRevoltPower(i, type: 'daily').toInt();
+      } else if (type == 'powerHourly') {
+        currentValue = cf.getRevoltPower(i, type: 'hourly').toInt();
       } else if (type == 'tempHourly') {
         currentValue = cf.hourly[i]['temp'].toInt();
       } else if (type == 'windHourly') {
         currentValue = cf.hourly[i]['wind_speed'].toInt();
+      } else if (type == 'precipHourly') {
+        currentValue = (cf.hourly[i]['pop'] * 100).toInt() + 20;
       } else {
         currentValue = (cf.minutely[i]['precipitation'] * 100).toInt() + 20;
       }
+
       list.add(
         Container(
           width: width,
@@ -124,7 +149,15 @@ class ProgressBar {
         Container(
           width: width,
           child: Center(
-            child: FittedBox(fit: BoxFit.contain, child: Text(text)),
+            child: FittedBox(
+              fit: BoxFit.contain,
+              child: Text(
+                text,
+                style: TextStyle(
+                  color: kLighterBlue,
+                ),
+              ),
+            ),
           ),
         ),
       );

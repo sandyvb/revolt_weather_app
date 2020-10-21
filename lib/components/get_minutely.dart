@@ -14,9 +14,9 @@ class GetMinutely extends StatefulWidget {
 }
 
 class _GetMinutelyState extends State<GetMinutely> {
+  final ControllerMinutely cm = Get.put(ControllerMinutely());
   final Controller c = Get.find();
   final ControllerForecast cf = Get.find();
-  final ControllerMinutely cm = Get.find();
   final ControllerUpdate cu = Get.find();
 
   List<Widget> list = List<Widget>();
@@ -85,7 +85,6 @@ class _GetMinutelyState extends State<GetMinutely> {
           style: TextStyle(
             fontSize: 12.0,
             letterSpacing: 0.7,
-            color: kLighterBlue,
           ),
         ),
         Obx(() => ProgressBar().getSpotlight(type: 'minutely')),

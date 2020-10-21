@@ -12,7 +12,11 @@ class ControllerUpdate extends GetxController {
     // UPDATE LOCATION VARIABLES FROM WEATHER.DART //////////////////////////////////////////
     city.value = weatherData['name'];
     var _getCountry = weatherData['sys']['country'];
-    country.value = _getCountry == 'US' ? '' : ', $_getCountry';
+    country.value = _getCountry == 'US'
+        ? ''
+        : _getCountry == null
+            ? ''
+            : ', $_getCountry';
     lon.value = weatherData['coord']['lon'].toDouble();
     lat.value = weatherData['coord']['lat'].toDouble();
   }

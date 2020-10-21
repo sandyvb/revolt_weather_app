@@ -8,9 +8,6 @@ class Calculator {
   final ControllerForecast cf = Get.find();
 
   // VARIABLES
-  double temp;
-  double dew;
-  double ws;
   double ps;
   double exponent;
   double ps0;
@@ -20,16 +17,15 @@ class Calculator {
   double ro;
 
   // RETURNS REVOLT POWER
-  double calculate() {
+  double calculate({var temp, var dew, var ws}) {
+    temp = temp == null ? cf.currentTemp.value.toDouble() : temp;
+    dew = dew == null ? cf.currentDewpoint.value : dew;
+    ws = ws == null ? cf.currentWindSpeed.value : ws;
     // CONVERSIONS
-    if (c.isMetric.value) {
-      temp = cf.currentTemp.value.toDouble(); // C (error if I remove toDouble() ???)
-      dew = cf.currentDewpoint.value; // C
-      ws = cf.currentWindSpeed.value; // m/s
-    } else {
-      temp = (cf.currentTemp.value - 32) * 5 / 9; // F to C
-      dew = (cf.currentDewpoint.value - 32) * 5 / 9; // F to C
-      ws = cf.currentWindSpeed.value / 2.237;
+    if (c.isMetric.value == false) {
+      temp = (temp - 32) * 5 / 9; // F to C
+      dew = (dew - 32) * 5 / 9; // F to C
+      ws = ws / 2.237;
     }
 
     // CALCULATIONS

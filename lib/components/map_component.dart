@@ -20,7 +20,7 @@ class MapComponent extends StatefulWidget {
 class _MapComponentState extends State<MapComponent> {
   final Controller c = Get.find();
   final ControllerUpdate cu = Get.find();
-  final ControllerMap cm = Get.put(ControllerMap());
+  final ControllerMap cmap = Get.put(ControllerMap());
   final ControllerForecast cf = Get.find();
 
   String _mapURL = 'https://tile.openweathermap.org/map';
@@ -46,48 +46,48 @@ class _MapComponentState extends State<MapComponent> {
                       child: getIconString('wind', color: Colors.white),
                     ),
                     onTap: () {
-                      cm.mapLayer.value = 'wind';
-                      cm.updateLegend();
+                      cmap.mapLayer.value = 'wind';
+                      cmap.updateLegend();
                     },
                   ),
                   // TEMPERATURE
                   InkWell(
                     child: getIconString('thermometer', color: Colors.white),
                     onTap: () {
-                      cm.mapLayer.value = 'temp';
-                      cm.updateLegend();
+                      cmap.mapLayer.value = 'temp';
+                      cmap.updateLegend();
                     },
                   ),
                   // PRECIPITATION
                   InkWell(
                     child: getIconInt(501, color: Colors.white),
                     onTap: () {
-                      cm.mapLayer.value = 'precipitation';
-                      cm.updateLegend();
+                      cmap.mapLayer.value = 'precipitation';
+                      cmap.updateLegend();
                     },
                   ),
                   // CLOUDS
                   InkWell(
                     child: getIconInt(802, color: Colors.white),
                     onTap: () {
-                      cm.mapLayer.value = 'clouds';
-                      cm.updateLegend();
+                      cmap.mapLayer.value = 'clouds';
+                      cmap.updateLegend();
                     },
                   ),
                   // PRESSURE
                   InkWell(
                     child: getIconString('pressure', color: Colors.white),
                     onTap: () {
-                      cm.mapLayer.value = 'pressure';
-                      cm.updateLegend();
+                      cmap.mapLayer.value = 'pressure';
+                      cmap.updateLegend();
                     },
                   ),
                   // SNOW
                   InkWell(
                     child: getIconString('cold', color: Colors.white),
                     onTap: () {
-                      cm.mapLayer.value = 'snow';
-                      cm.updateLegend();
+                      cmap.mapLayer.value = 'snow';
+                      cmap.updateLegend();
                     },
                   ),
                 ],
@@ -135,13 +135,13 @@ class _MapComponentState extends State<MapComponent> {
               // OWM MAP TILES
               TileLayerWidget(
                 options: TileLayerOptions(
-                  urlTemplate: '$_mapURL/${cm.mapLayer.value}/{z}/{x}/{y}.png?appid=$apiKey',
+                  urlTemplate: '$_mapURL/${cmap.mapLayer.value}/{z}/{x}/{y}.png?appid=$apiKey',
                   subdomains: ['a', 'b', 'c'],
                   opacity: 0.4,
                 ),
               ),
 
-              // TODO: RAIN VIEWER TILE - https://www.rainviewer.com/api.html?ref=public-apis
+              // RAIN VIEWER TILE - https://www.rainviewer.com/api.html?ref=public-apis
               // TileLayerWidget(
               //   options: TileLayerOptions(
               //     urlTemplate: '$_rainViewerMapURL/coverage/0/256/{z}/{x}/{y}.png',
@@ -150,6 +150,7 @@ class _MapComponentState extends State<MapComponent> {
               //     opacity: 0.4,
               //   ),
               // ),
+
               // MIN / LEGEND / MAX
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
@@ -164,7 +165,7 @@ class _MapComponentState extends State<MapComponent> {
                         Padding(
                           padding: const EdgeInsets.only(right: 8.0),
                           child: Text(
-                            cm.min.value,
+                            cmap.min.value,
                             style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
@@ -180,8 +181,8 @@ class _MapComponentState extends State<MapComponent> {
                                 Radius.circular(8.0),
                               ),
                               gradient: LinearGradient(
-                                colors: cm.updateLegend(),
-                                stops: cm.updateLegendStops(),
+                                colors: cmap.updateLegend(),
+                                stops: cmap.updateLegendStops(),
                                 begin: Alignment.centerLeft,
                                 end: Alignment.centerRight,
                                 tileMode: TileMode.clamp,
@@ -201,7 +202,7 @@ class _MapComponentState extends State<MapComponent> {
                         Padding(
                           padding: const EdgeInsets.only(left: 8.0),
                           child: Text(
-                            cm.max.value,
+                            cmap.max.value,
                             style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
@@ -214,7 +215,7 @@ class _MapComponentState extends State<MapComponent> {
                     FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Text(
-                        cm.legendText.value,
+                        cmap.legendText.value,
                         style: kUpdateLegendText,
                       ),
                     ),
@@ -236,7 +237,7 @@ class _MapComponentState extends State<MapComponent> {
             children: [
               // FULL SCREEN
               InkWell(
-                child: cm.fullscreen.value
+                child: cmap.fullscreen.value
                     ? getIconString(
                         'fullscreenExit',
                         color: Colors.white,
@@ -246,11 +247,11 @@ class _MapComponentState extends State<MapComponent> {
                         color: Colors.white,
                       ),
                 onTap: () {
-                  if (cm.fullscreen.value) {
-                    cm.fullscreen.value = false;
+                  if (cmap.fullscreen.value) {
+                    cmap.fullscreen.value = false;
                     Get.back();
                   } else {
-                    cm.fullscreen.value = true;
+                    cmap.fullscreen.value = true;
                     Get.to(MapScreen());
                   }
                 },

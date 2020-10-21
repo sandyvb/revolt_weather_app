@@ -3,11 +3,7 @@ import 'package:get/get.dart';
 import 'package:revolt_weather_app/components/get_icon.dart';
 import 'package:revolt_weather_app/components/gradientDivider.dart';
 import 'package:revolt_weather_app/controllers/controller.dart';
-import 'package:revolt_weather_app/controllers/controller_current.dart';
-import 'package:revolt_weather_app/controllers/controller_daily.dart';
 import 'package:revolt_weather_app/controllers/controller_forecast.dart';
-import 'package:revolt_weather_app/controllers/controller_hourly.dart';
-import 'package:revolt_weather_app/controllers/controller_minutely.dart';
 import 'package:revolt_weather_app/controllers/controller_update.dart';
 import 'package:revolt_weather_app/screens/city_screen.dart';
 import 'package:revolt_weather_app/screens/glance_screen.dart';
@@ -21,10 +17,7 @@ class ForecastScreen extends StatelessWidget {
   final Controller c = Get.find();
   final ControllerUpdate cu = Get.find();
   final ControllerForecast cf = Get.find();
-  final ControllerCurrent cc = Get.put(ControllerCurrent());
-  final ControllerDaily cd = Get.put(ControllerDaily());
-  final ControllerHourly ch = Get.put(ControllerHourly());
-  final ControllerMinutely cm = Get.put(ControllerMinutely());
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -97,14 +90,7 @@ class ForecastScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 10.0),
                   // DATE & TIME
-                  Obx(() => Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text('${cf.day.value.toUpperCase()}', style: kHeadingText),
-                          Text('${cf.date.value.toUpperCase()}', style: kHeadingText),
-                          Text('${c.theTime.value}', style: kHeadingText),
-                        ],
-                      )),
+                  cf.getDayDate(),
                   // DIVIDER
                   gradientDivider(padding: EdgeInsets.fromLTRB(15.0, 13.0, 15.0, 0)),
                   // SELECT FORECAST - CURRENT / MINUTELY / HOURLY / DAILY BUTTONS
@@ -120,18 +106,35 @@ class ForecastScreen extends StatelessWidget {
                         selectedColor: Colors.white,
                         color: Colors.white54,
                         highlightColor: kHr,
-                        borderColor: kLightestBlue,
+                        borderColor: kLighterBlue.withOpacity(0.5),
+                        selectedBorderColor: kLighterBlue.withOpacity(0.5),
                         borderWidth: 2.0,
                         borderRadius: BorderRadius.circular(25),
-                        textStyle: kToggleButtonText,
+                        textStyle: kLighterBlueText,
                         children: <Widget>[
-                          // Icon(Icons.format_bold),
-                          Text(' CURRENT '),
-                          Text('DAILY'),
-                          Text('HOURLY'),
-                          Text(' MINUTELY '),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                            child: FittedBox(child: Text('CURRENT', style: TextStyle(fontSize: 14.0))),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                            child: FittedBox(child: Text('DAILY', style: TextStyle(fontSize: 14.0))),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                            child: FittedBox(child: Text('HOURLY', style: TextStyle(fontSize: 14.0))),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                            child: FittedBox(child: Text('MINUTE', style: TextStyle(fontSize: 14.0))),
+                          ),
                         ],
                         onPressed: (int index) {
+                          _scrollController.animateTo(
+                            0.0,
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.easeOut,
+                          );
                           for (int i = 0; i < cf.isSelected.length; i++) {
                             if (i == index) {
                               cf.isSelected[i] = !cf.isSelected[i];
@@ -159,6 +162,7 @@ class ForecastScreen extends StatelessWidget {
             // DISPLAY SELECTED FORECAST
             Expanded(
               child: ListView(
+                controller: _scrollController,
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 children: [
@@ -175,18 +179,22 @@ class ForecastScreen extends StatelessWidget {
                             children: [
                               // CITY
                               Obx(
-                                () => Text(
-                                  '${cu.city.value.toUpperCase()}${cu.country.value}',
-                                  style: kHeadingTextLarge,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
+                                () => FittedBox(
+                                  child: Text(
+                                    '${cu.city.value.toUpperCase()}${cu.country.value}',
+                                    style: kHeadingTextLarge,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
                               ),
                               // LAST UPDATED
                               Obx(
-                                () => Text(
-                                  'last update: ${cf.lastUpdate.value}',
-                                  style: kSubHeadingText,
+                                () => FittedBox(
+                                  child: Text(
+                                    'last update: ${cf.lastUpdate.value}',
+                                    style: kSubHeadingText,
+                                  ),
                                 ),
                               ),
                             ],

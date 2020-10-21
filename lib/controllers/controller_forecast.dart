@@ -10,6 +10,7 @@ import 'package:revolt_weather_app/controllers/controller_update.dart';
 import 'package:revolt_weather_app/controllers/controller.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:revolt_weather_app/utilities/constants.dart';
 
 class ControllerForecast extends GetxController {
   final Controller c = Get.find();
@@ -74,12 +75,13 @@ class ControllerForecast extends GetxController {
   final alerts = <dynamic>[].obs;
 
   void updateForecast(dynamic weatherData) async {
+    Calculator calculator = Calculator();
     //UPDATE LOCAL TIME VARIABLES ////////////////////////////////////////////////////////
     DateTime _now = DateTime.now();
     getDayOrNight();
     day.value = DateFormat.EEEE().format(_now); //weekday
     String _hourNow = DateFormat.H().format(_now); //hour
-    date.value = DateFormat.yMMMd('en_US').format(_now);
+    date.value = DateFormat.yMMMMd('en_US').format(_now);
     int _testTime = int.parse(_hourNow);
     if (_testTime >= 18) {
       greetingLocationScreen.value = 'Good Evening!';
@@ -159,7 +161,6 @@ class ControllerForecast extends GetxController {
 
     // UPDATE VARIABLES IN CALCULATOR.DART //////////////////////////////////////////////////
     // CALCULATE POWER
-    Calculator calculator = Calculator();
     power.value = calculator.calculate();
 
     // CALCULATE DENSITY
@@ -168,10 +169,58 @@ class ControllerForecast extends GetxController {
     // UPDATE REVOLT MESSAGE ////////////////////////////////////////////////////////////////
     watt.value = power.value.round() == 1 ? 'Watt' : 'Watts';
     revoltText.value =
-        'A REVOLT Hanging Wind Turbine would be producing ${power.value.round()} ${watt.value} of power in ${cu.city.value} with a wind speed of ${currentWindSpeed.value.toInt()} ${c.speedUnits.value}.';
+        'A REVOLT Hanging Wind Turbine would be producing ${power.value.ceil()} ${watt.value} of power in ${cu.city.value} with a wind speed of ${currentWindSpeed.value.toInt()} ${c.speedUnits.value}.';
   }
 
   // MISC FUNCTIONS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+  Container getDayDate() {
+    return Container(
+      width: Get.width * 0.85,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              '${day.value.toUpperCase()}',
+              style: kHeadingText,
+            ),
+          ),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              '${date.value.toUpperCase()}',
+              style: kHeadingText,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  int getRevoltPower(int i, {var type}) {
+    Calculator calculator = Calculator();
+    var result;
+    if (type == 'daily') {
+      result = calculator
+          .calculate(
+            temp: daily[i]['temp']['max'],
+            dew: daily[i]['dew_point'],
+            ws: daily[i]['wind_speed'],
+          )
+          .ceil();
+    } else {
+      result = calculator
+          .calculate(
+            temp: hourly[i]['temp'],
+            dew: hourly[i]['dew_point'],
+            ws: hourly[i]['wind_speed'],
+          )
+          .ceil();
+    }
+    return result;
+  }
+
   String gustingWind() {
     if (currentWindGust.value > 0) {
       return 'gusting to ${currentWindGust.value} ${c.speedUnits.value}';
@@ -256,30 +305,19 @@ class ControllerForecast extends GetxController {
 
 // RETURN CURRENT / MINUTELY / HOURLY / DAILY COMPONENTS & GREETING
   dynamic returnSelectedForecast() {
-    switch (selectedForecast.value) {
-      case 'current':
-        {
-          greetingSelectedForecast.value = 'TODAY\'S FORECAST';
-          return GetCurrent();
-        }
-      case 'minutely':
-        {
-          greetingSelectedForecast.value = '60 MIN FORECAST';
-          return GetMinutely();
-        }
-      case 'hourly':
-        {
-          greetingSelectedForecast.value = '48 HR FORECAST';
-          return GetHourly();
-        }
-      case 'daily':
-        {
-          greetingSelectedForecast.value = '7 DAY FORECAST';
-          return GetDaily();
-        }
-        break;
+    if (selectedForecast.value == 'current') {
+      greetingSelectedForecast.value = 'TODAY\'S FORECAST';
+      return GetCurrent();
+    } else if (selectedForecast.value == 'daily') {
+      greetingSelectedForecast.value = '7 DAY FORECAST';
+      return GetDaily();
+    } else if (selectedForecast.value == 'hourly') {
+      greetingSelectedForecast.value = '48 HR FORECAST';
+      return GetHourly();
+    } else {
+      greetingSelectedForecast.value = '60 MIN FORECAST';
+      return GetMinutely();
     }
-    return Text('OOPS! Could not update screen.');
   }
 
   // FLOATING ACTION BUTTON FOR ALL SCREENS EXCEPT LOCATION SCREEN

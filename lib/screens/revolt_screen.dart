@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:revolt_weather_app/components/get_icon.dart';
-import 'package:revolt_weather_app/components/revolt_container.dart';
 import 'package:revolt_weather_app/controllers/controller.dart';
 import 'package:revolt_weather_app/controllers/controller_forecast.dart';
 import 'package:revolt_weather_app/controllers/controller_revolt.dart';
 import 'package:revolt_weather_app/controllers/controller_update.dart';
+import 'package:revolt_weather_app/services/networking.dart';
 import 'package:revolt_weather_app/services/weather.dart';
 import 'package:revolt_weather_app/utilities/constants.dart';
 
@@ -158,7 +158,26 @@ class RevoltScreen extends StatelessWidget {
                 shrinkWrap: true,
                 children: [
                   // REVOLT CONTAINER
-                  RevoltContainerToWebsite(),
+                  GestureDetector(
+                    onTap: () => NetworkHelper('https://revoltwind.com').openBrowserTab(),
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
+                      child: Row(
+                        children: [
+                          ImageIcon(AssetImage('images/greenBolt.png'), size: 50.0, color: kSwitchColor),
+                          SizedBox(width: 20.0),
+                          Flexible(
+                            child: Obx(
+                              () => Text(
+                                '${cf.revoltText.value} Tap to visit REVOLTwind.com',
+                                maxLines: 5,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                   // GIF
                   cr.windmillGif(),
                   // DESCRIPTION OF REVOLT WIND

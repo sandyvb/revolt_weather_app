@@ -10,7 +10,7 @@ class ControllerCurrent extends GetxController {
 
   void startSunsetTimer() {
     _sunsetTimer = Timer.periodic(
-      Duration(seconds: 5),
+      Duration(minutes: 1),
       (Timer t) {
         getHoursUntilSunset();
       },
@@ -24,8 +24,8 @@ class ControllerCurrent extends GetxController {
 
   @override
   void onInit() {
+    getHoursUntilSunset();
     startSunsetTimer();
-    print('start sunset timer');
     super.onInit();
   }
 
@@ -38,6 +38,8 @@ class ControllerCurrent extends GetxController {
 
   // HOURS OR MINUTES UNTIL SUNRISE OR SUNSET
   void getHoursUntilSunset() {
+    cf.timeDifference.value = 0;
+    cf.sunriseSunsetMessage.value = 'Calculating...';
     DateTime now = DateTime.now();
     DateTime sunriseTime = DateTime.fromMillisecondsSinceEpoch(cf.getSunrise.value * 1000); // DATETIME
     DateTime sunsetTime = DateTime.fromMillisecondsSinceEpoch(cf.getSunset.value * 1000); // DATETIME

@@ -1,6 +1,4 @@
-import 'dart:async';
 import 'package:get/get.dart';
-import 'package:revolt_weather_app/services/current_time.dart';
 
 // GLOBAL VALUES USED THROUGHOUT APP
 class Controller extends GetxController {
@@ -11,7 +9,6 @@ class Controller extends GetxController {
   var temperatureUnits = '°F'.obs;
   var distanceUnits = 'miles'.obs;
   var precipUnits = 'in'.obs;
-  var theTime = CurrentTime().getTime().obs;
   var prevScreen = 'location'.obs;
 
   // CHANGE UNITS FROM IMPERIAL TO METRIC AND BACK \\\\\\\\\\\\\\\\\\\\\\
@@ -29,31 +26,5 @@ class Controller extends GetxController {
       altitudeUnits.value = 'ft';
       precipUnits.value = 'in';
     }
-  }
-
-  // TIMER KEEPS CURRENT TIME
-  Timer _timer;
-
-  void startTimer() {
-    _timer = Timer.periodic(
-      Duration(seconds: 2),
-      (Timer t) {
-        var current = CurrentTime().getTime();
-        theTime.value = current;
-      },
-    );
-  }
-
-  @override
-  void onInit() {
-    startTimer();
-    super.onInit();
-  }
-
-  @override
-  void onClose() {
-    _timer.cancel();
-    print('cf stop timer');
-    super.onClose();
   }
 }

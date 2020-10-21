@@ -23,7 +23,7 @@ class LocationScreen extends StatelessWidget {
   final ControllerLocation cl = Get.put(ControllerLocation());
   final ControllerForecast cf = Get.find();
 
-  // TODO: GET WORLD TIME - https://www.bigdatacloud.com/time-zone-apis/timezone-by-location-api
+  // GET WORLD TIME - https://www.bigdatacloud.com/time-zone-apis/timezone-by-location-api
 
   @override
   Widget build(BuildContext context) {
@@ -101,15 +101,8 @@ class LocationScreen extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 10.0),
-                  // DATE & TIME
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text('${cf.day.value.toUpperCase()}', style: kHeadingText),
-                      Text('${cf.date.value.toUpperCase()}', style: kHeadingText),
-                      Obx(() => Text('${c.theTime.value}', style: kHeadingText)),
-                    ],
-                  ),
+                  // DAY / DATE
+                  cf.getDayDate(),
                   // DIVIDER
                   gradientDivider(padding: EdgeInsets.fromLTRB(15, 13, 15, 8)),
                 ],
@@ -120,7 +113,9 @@ class LocationScreen extends StatelessWidget {
               child: ListView(
                 padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
                 children: [
+                  // FLOATING ACTION BUTTON
                   Obx(() => cf.isWeatherEventExtended(EdgeInsets.fromLTRB(20.0, 0, 20.0, 20.0))),
+                  // DATA CONTAINER
                   Container(
                     padding: EdgeInsets.symmetric(vertical: 18.0),
                     decoration: BoxDecoration(
@@ -150,13 +145,16 @@ class LocationScreen extends StatelessWidget {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Obx(() => Text(
-                                          '${cu.city.value.toUpperCase()}${cu.country.value}',
-                                          style: kHeadingTextLarge,
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 2,
-                                        )),
-                                    FittedBox(fit: BoxFit.cover, child: Obx(() => Text('last update: ${cf.lastUpdate.value}', style: kSubHeadingText))),
+                                    FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      child: Obx(() => Text(
+                                            '${cu.city.value.toUpperCase()}${cu.country.value}',
+                                            style: kHeadingTextLarge,
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 2,
+                                          )),
+                                    ),
+                                    FittedBox(fit: BoxFit.scaleDown, child: Obx(() => Text('last update: ${cf.lastUpdate.value}', style: kSubHeadingText))),
                                   ],
                                 ),
                               ),

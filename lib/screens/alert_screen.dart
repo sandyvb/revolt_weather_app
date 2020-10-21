@@ -123,7 +123,10 @@ class AlertScreen extends StatelessWidget {
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 children: [
-                  FittedBox(child: Text('From: ${cf.senderName}')),
+                  Text(
+                    'From: ${cf.senderName}',
+                    maxLines: 2,
+                  ),
                   FittedBox(child: Text(cf.event.value)),
                   Text(cf.eventDescription.value,
                       style: TextStyle(

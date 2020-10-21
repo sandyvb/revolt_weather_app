@@ -6,13 +6,13 @@ import 'package:revolt_weather_app/components/get_icon.dart';
 import 'package:revolt_weather_app/components/glance_box.dart';
 import 'package:revolt_weather_app/components/gradientDivider.dart';
 import 'package:revolt_weather_app/components/map_component.dart';
-import 'package:revolt_weather_app/components/revolt_container.dart';
 import 'package:revolt_weather_app/controllers/controller.dart';
 import 'package:revolt_weather_app/controllers/controller_forecast.dart';
 import 'package:revolt_weather_app/controllers/controller_glance.dart';
 import 'package:revolt_weather_app/controllers/controller_update.dart';
 import 'package:revolt_weather_app/screens/city_screen.dart';
 import 'package:revolt_weather_app/screens/forecast_screen.dart';
+import 'package:revolt_weather_app/screens/revolt_screen.dart';
 import 'package:revolt_weather_app/services/weather.dart';
 import 'package:revolt_weather_app/utilities/constants.dart';
 import 'package:revolt_weather_app/screens/location_screen.dart';
@@ -22,8 +22,6 @@ class GlanceScreen extends StatelessWidget {
   final ControllerUpdate cu = Get.find();
   final ControllerForecast cf = Get.find();
   final ControllerGlance cg = Get.put(ControllerGlance());
-
-  // TODO: add email, messaging, phone calls from - https://pub.dev/packages/url_launcher
 
   @override
   Widget build(BuildContext context) {
@@ -63,13 +61,18 @@ class GlanceScreen extends StatelessWidget {
                           child: getIconString('back', color: Colors.white),
                         ),
                         // PAGE TITLE
-                        Text('At a Glance',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              fontSize: 25.0,
-                              letterSpacing: 1,
-                              color: Colors.white,
-                            )),
+                        Expanded(
+                          child: FittedBox(
+                            fit: BoxFit.contain,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Text(
+                                'At a Glance',
+                                style: kGreetingText,
+                              ),
+                            ),
+                          ),
+                        ),
                         // SWITCH UNITS
                         Padding(
                           padding: const EdgeInsets.only(right: 20.0),
@@ -98,16 +101,7 @@ class GlanceScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 14.0),
                     // DATE & TIME
-                    Obx(
-                      () => Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text('${cf.day.value.toUpperCase()}', style: kHeadingTextWhite),
-                          Text('${cf.date.value.toUpperCase()}', style: kHeadingTextWhite),
-                          Text('${c.theTime.value}', style: kHeadingTextWhite),
-                        ],
-                      ),
-                    ),
+                    cf.getDayDate(),
                   ],
                 )),
             // START SCROLLABLE DATA
@@ -124,16 +118,18 @@ class GlanceScreen extends StatelessWidget {
                       children: [
                         // CITY / LAST UPDATED
                         Expanded(
-                          flex: 9,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               // CITY
-                              Obx(
-                                () => Text(
-                                  '${cu.city.value.toUpperCase()}${cu.country.value}',
-                                  style: kHeadingTextLarge,
-                                  maxLines: 3,
+                              FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Obx(
+                                  () => Text(
+                                    '${cu.city.value.toUpperCase()}${cu.country.value}',
+                                    style: kHeadingTextLarge,
+                                    maxLines: 3,
+                                  ),
                                 ),
                               ),
                               // LAST UPDATED
@@ -150,31 +146,22 @@ class GlanceScreen extends StatelessWidget {
                           ),
                         ),
                         // HOME BUTTON
-                        Expanded(
-                          flex: 2,
-                          child: IconButton(
-                            icon: getIconString('home', size: 25.0),
-                            onPressed: () => Get.to(LocationScreen()),
-                          ),
+                        IconButton(
+                          icon: getIconString('home', size: 25.0),
+                          onPressed: () => Get.to(LocationScreen()),
                         ),
                         // CITY BUTTON
-                        Expanded(
-                          flex: 2,
-                          child: IconButton(
-                            icon: getIconString('city'),
-                            onPressed: () {
-                              c.prevScreen.value = 'glance';
-                              Get.to(CityScreen());
-                            },
-                          ),
+                        IconButton(
+                          icon: getIconString('city'),
+                          onPressed: () {
+                            c.prevScreen.value = 'glance';
+                            Get.to(CityScreen());
+                          },
                         ),
                         // FORECAST BUTTON
-                        Expanded(
-                          flex: 2,
-                          child: IconButton(
-                            icon: getIconString('forecast'),
-                            onPressed: () => Get.to(ForecastScreen()),
-                          ),
+                        IconButton(
+                          icon: getIconString('forecast'),
+                          onPressed: () => Get.to(ForecastScreen()),
                         ),
                       ],
                     ),
@@ -197,9 +184,12 @@ class GlanceScreen extends StatelessWidget {
                               child: getIconString('thermometer', color: Colors.white),
                             ),
                             Obx(
-                              () => Text(
-                                '${cf.currentTemp.value.toInt()}${c.temperatureUnits.value}',
-                                style: kOxygenWhite,
+                              () => FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  '${cf.currentTemp.value.toInt()}${c.temperatureUnits.value}',
+                                  style: kOxygenWhite,
+                                ),
                               ),
                             ),
                           ],
@@ -255,7 +245,24 @@ class GlanceScreen extends StatelessWidget {
                   // SNOW CONTAINER (ONLY IF THERE IS SNOW)
                   Obx(() => cg.getSnowContainer()),
                   // REVOLT POWER
-                  RevoltContainer(),
+                  GestureDetector(
+                    onTap: () => Get.to(RevoltScreen()),
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
+                      child: Row(
+                        children: [
+                          ImageIcon(AssetImage('images/greenBolt.png'), size: 50.0, color: kSwitchColor),
+                          SizedBox(width: 20.0),
+                          Flexible(
+                            child: Obx(() => Text(
+                                  '${cf.revoltText.value} Tap here for more information!',
+                                  maxLines: 5,
+                                )),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                   // DIVIDER
                   gradientDivider(padding: EdgeInsets.fromLTRB(20.0, 0, 20.0, 10.0)),
                   // TODAY / TOMORROW / NEXT DAY
@@ -272,7 +279,7 @@ class GlanceScreen extends StatelessWidget {
                             lowTemp: cf.daily[0]['temp']['min'],
                             iconId: cf.currentWeatherId.value,
                             main: cf.currentWeatherMain.value,
-                            pop: cf.daily[0]['pop'].toStringAsFixed(1),
+                            pop: (cf.daily[0]['pop'] * 100).toStringAsFixed(1),
                             windAngle: cf.currentWindDeg.value,
                             windSpeed: cf.currentWindSpeed.value.round(),
                           ),
@@ -285,7 +292,7 @@ class GlanceScreen extends StatelessWidget {
                             lowTemp: cf.daily[1]['temp']['min'],
                             iconId: cf.daily[1]['weather'][0]['id'],
                             main: cf.daily[1]['weather'][0]['main'],
-                            pop: cf.daily[1]['pop'].toStringAsFixed(1),
+                            pop: (cf.daily[1]['pop'] * 100).toStringAsFixed(1),
                             windAngle: cf.daily[1]['wind_deg'],
                             windSpeed: cf.daily[1]['wind_speed'],
                           ),
@@ -298,7 +305,7 @@ class GlanceScreen extends StatelessWidget {
                             lowTemp: cf.daily[2]['temp']['min'],
                             iconId: cf.daily[2]['weather'][0]['id'],
                             main: cf.daily[2]['weather'][0]['main'],
-                            pop: cf.daily[2]['pop'].toStringAsFixed(1),
+                            pop: (cf.daily[2]['pop'] * 100).toStringAsFixed(1),
                             windAngle: cf.daily[2]['wind_deg'],
                             windSpeed: cf.daily[2]['wind_speed'],
                           ),

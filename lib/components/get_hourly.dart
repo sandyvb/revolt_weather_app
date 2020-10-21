@@ -9,6 +9,7 @@ import 'package:revolt_weather_app/controllers/controller.dart';
 import 'package:revolt_weather_app/controllers/controller_forecast.dart';
 import 'package:revolt_weather_app/controllers/controller_hourly.dart';
 import 'package:revolt_weather_app/controllers/controller_update.dart';
+import 'package:revolt_weather_app/screens/revolt_screen.dart';
 import 'package:revolt_weather_app/utilities/constants.dart';
 
 class GetHourly extends StatefulWidget {
@@ -17,10 +18,10 @@ class GetHourly extends StatefulWidget {
 }
 
 class _GetHourlyState extends State<GetHourly> {
+  final ControllerHourly ch = Get.put(ControllerHourly());
   final Controller c = Get.find();
   final ControllerUpdate cu = Get.find();
   final ControllerForecast cf = Get.find();
-  final ControllerHourly ch = Get.find();
 
   final ProgressBar progressBar = ProgressBar();
 
@@ -32,17 +33,35 @@ class _GetHourlyState extends State<GetHourly> {
     return Column(
       // crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Obx(() => Text('TEMPERATURE (${c.temperatureUnits.value})', style: TextStyle(fontSize: 12.0, letterSpacing: 0.7, color: kLighterBlue))),
+        Text('TEMPERATURE', style: TextStyle(fontSize: 12.0, letterSpacing: 0.7)),
         Obx(() => progressBar.getSpotlight(type: 'tempHourly')),
         Obx(() => progressBar.getSpotlightTextHourly()),
         gradientDivider(padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0)),
-        Obx(() => Text('WIND (${c.speedUnits.value})', style: TextStyle(fontSize: 12.0, letterSpacing: 0.7, color: kLighterBlue))),
+        Text('WIND', style: TextStyle(fontSize: 12.0, letterSpacing: 0.7)),
         Obx(() => progressBar.getSpotlight(type: 'windHourly')),
         Obx(() => progressBar.getSpotlightTextHourly()),
         gradientDivider(padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0)),
-        Padding(
-          padding: const EdgeInsets.only(left: 20.0, bottom: 20.0),
-          child: Text('${cu.initialCity.value.toUpperCase()} TIME', style: kTimePrecipHeadings),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            getIconString('revolt', size: 15.0, color: Colors.white),
+            Text('  REVOLT POWER', style: TextStyle(fontSize: 12.0, letterSpacing: 0.7)),
+          ],
+        ),
+        Obx(() => progressBar.getSpotlight(type: 'powerHourly')),
+        Obx(() => progressBar.getSpotlightTextHourly()),
+        gradientDivider(padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0)),
+        Text('PRECIPITATION', style: TextStyle(fontSize: 12.0, letterSpacing: 0.7)),
+        Obx(() => progressBar.getSpotlight(type: 'precipHourly')),
+        Obx(() => progressBar.getSpotlightTextHourly()),
+        gradientDivider(padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0)),
+        Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0, bottom: 15.0, top: 8.0),
+              child: Text('${cu.initialCity.value.toUpperCase()} TIME', style: kTimePrecipHeadings),
+            ),
+          ],
         ),
         Container(
           decoration: BoxDecoration(
@@ -98,7 +117,7 @@ class _GetHourlyState extends State<GetHourly> {
                                     child: getIconString('raindrop', size: 17.0, color: Colors.white),
                                   ),
                                   Text(
-                                    ' ${cf.hourly[item.index]['pop'].toInt()}%',
+                                    ' ${(cf.hourly[item.index]['pop'] * 100).toInt()}%',
                                     style: kOxygenWhite,
                                   ),
                                 ],
@@ -127,16 +146,35 @@ class _GetHourlyState extends State<GetHourly> {
                       // DESCRIPTION / FEELS LIKE / WIND / HUMIDITY / UVI
                       gradientDivider(padding: EdgeInsets.only(bottom: 15.0)),
                       Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0, right: 8.0),
+                            child: getIconInt(cf.hourly[item.index]['weather'][0]['id']),
+                          ),
                           Obx(
                             () => Text(
                               '${toBeginningOfSentenceCase(cf.hourly[item.index]['weather'][0]['description'])}  ',
                               style: kDataText,
                             ),
                           ),
-                          getIconInt(cf.hourly[item.index]['weather'][0]['id']),
                         ],
+                      ),
+                      GestureDetector(
+                        onTap: () => Get.to(RevoltScreen()),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 3.0, top: 8.0, right: 8.0),
+                              child: getIconString('revolt', size: 23.0),
+                            ),
+                            Obx(() => Text(
+                                  'Revolt Power: ${cf.getRevoltPower(item.index, type: 'hourly')} ${cf.watt.value}',
+                                  style: kDataText,
+                                )),
+                          ],
+                        ),
                       ),
                       // FEELS LIKE / WIND
                       Row(
@@ -187,7 +225,7 @@ class _GetHourlyState extends State<GetHourly> {
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text('WIND'),
+                                      FittedBox(child: Text('WIND')),
                                       Obx(() => FittedBox(
                                             child: Text(
                                               '${getWindDirection(cf.hourly[item.index]['wind_deg'])} ${cf.hourly[item.index]['wind_speed'].toInt()} ${c.speedUnits}',
@@ -218,7 +256,7 @@ class _GetHourlyState extends State<GetHourly> {
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text('HUMIDITY'),
+                                      FittedBox(child: Text('HUMIDITY')),
                                       Obx(() => FittedBox(
                                             child: Text(
                                               '${cf.hourly[item.index]['humidity']}%',
@@ -244,7 +282,7 @@ class _GetHourlyState extends State<GetHourly> {
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text('CLOUDS'),
+                                      FittedBox(child: Text('CLOUDS')),
                                       Obx(() => FittedBox(
                                             child: Text(
                                               '${cf.hourly[item.index]['clouds']}%',

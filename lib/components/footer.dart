@@ -40,7 +40,15 @@ Container footer() {
                         Get.to(CityScreen());
                       },
                     ),
-                    Text('NEW CITY', style: kFooterIconText),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                      child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text('NEW CITY',
+                              style: kLighterBlueText.copyWith(
+                                fontSize: 11.0,
+                              ))),
+                    ),
                   ],
                 ),
               ),
@@ -52,7 +60,15 @@ Container footer() {
                       icon: getIconString('forecast'),
                       onPressed: () => Get.to(ForecastScreen()),
                     ),
-                    Text('FORECAST', style: kFooterIconText),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                      child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text('FORECAST',
+                              style: kLighterBlueText.copyWith(
+                                fontSize: 11.0,
+                              ))),
+                    ),
                   ],
                 ),
               ),
@@ -64,7 +80,15 @@ Container footer() {
                       icon: getIconString('glance', size: 30.0),
                       onPressed: () => Get.to(GlanceScreen()),
                     ),
-                    Text('GLANCE', style: kFooterIconText),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                      child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text('GLANCE',
+                              style: kLighterBlueText.copyWith(
+                                fontSize: 11.0,
+                              ))),
+                    ),
                   ],
                 ),
               ),
@@ -76,7 +100,15 @@ Container footer() {
                       icon: getIconString('refreshBottom'),
                       onPressed: () => cl.refresh(),
                     ),
-                    Text('REFRESH', style: kFooterIconText),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                      child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text('REFRESH',
+                              style: kLighterBlueText.copyWith(
+                                fontSize: 11.0,
+                              ))),
+                    ),
                   ],
                 ),
               ),
@@ -88,7 +120,15 @@ Container footer() {
                       child: getIconString('revolt'),
                       onPressed: () => Get.to(RevoltScreen()),
                     ),
-                    Text('REVOLT', style: kFooterIconText),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                      child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text('REVOLT',
+                              style: kLighterBlueText.copyWith(
+                                fontSize: 11.0,
+                              ))),
+                    ),
                   ],
                 ),
               ),

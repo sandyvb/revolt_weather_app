@@ -108,15 +108,21 @@ Icon getIconInt(int code, {double size, Color color = kLighterBlue, String dayOr
   if (code == 801 || code == 802 || code == 803 || code == 804) {
     return dayOrNight == 'day'
         ? Icon(WeatherIcons.wi_day_cloudy, size: size, color: color)
-        : dayOrNight == 'night' ? Icon(WeatherIcons.wi_night_alt_cloudy, size: size, color: color) : Icon(WeatherIcons.wi_cloudy, size: size, color: color);
+        : dayOrNight == 'night'
+            ? Icon(WeatherIcons.wi_night_alt_cloudy, size: size, color: color)
+            : Icon(WeatherIcons.wi_cloudy, size: size, color: color);
   } else if (code == 800) {
     return dayOrNight == 'day'
         ? Icon(WeatherIcons.wi_day_sunny, size: size, color: color)
-        : dayOrNight == 'night' ? Icon(WeatherIcons.wi_night_clear, size: size, color: color) : Icon(WeatherIcons.wi_day_sunny, size: size, color: color);
+        : dayOrNight == 'night'
+            ? Icon(WeatherIcons.wi_night_clear, size: size, color: color)
+            : Icon(WeatherIcons.wi_day_sunny, size: size, color: color);
   } else if (code == 701) {
     return dayOrNight == 'day'
         ? Icon(WeatherIcons.wi_day_sprinkle, size: size, color: color)
-        : dayOrNight == 'night' ? Icon(WeatherIcons.wi_night_alt_sprinkle, size: size, color: color) : Icon(WeatherIcons.wi_sprinkle, size: size, color: color);
+        : dayOrNight == 'night'
+            ? Icon(WeatherIcons.wi_night_alt_sprinkle, size: size, color: color)
+            : Icon(WeatherIcons.wi_sprinkle, size: size, color: color);
   } else if (code == 711) {
     return Icon(WeatherIcons.wi_smoke, size: size, color: color);
   } else if (code == 721) {
@@ -126,7 +132,9 @@ Icon getIconInt(int code, {double size, Color color = kLighterBlue, String dayOr
   } else if (code == 741) {
     return dayOrNight == 'day'
         ? Icon(WeatherIcons.wi_day_fog, size: size, color: color)
-        : dayOrNight == 'night' ? Icon(WeatherIcons.wi_night_fog, size: size, color: color) : Icon(WeatherIcons.wi_fog, size: size, color: color);
+        : dayOrNight == 'night'
+            ? Icon(WeatherIcons.wi_night_fog, size: size, color: color)
+            : Icon(WeatherIcons.wi_fog, size: size, color: color);
   } else if (code == 751) {
     return Icon(WeatherIcons.wi_sandstorm, size: size, color: color);
   } else if (code == 761) {
@@ -136,53 +144,77 @@ Icon getIconInt(int code, {double size, Color color = kLighterBlue, String dayOr
   } else if (code == 771) {
     return dayOrNight == 'day'
         ? Icon(WeatherIcons.wi_day_cloudy_gusts, size: size, color: color)
-        : dayOrNight == 'night' ? Icon(WeatherIcons.wi_night_alt_cloudy_gusts, size: size, color: color) : Icon(WeatherIcons.wi_cloudy_gusts, size: size, color: color);
+        : dayOrNight == 'night'
+            ? Icon(WeatherIcons.wi_night_alt_cloudy_gusts, size: size, color: color)
+            : Icon(WeatherIcons.wi_cloudy_gusts, size: size, color: color);
   } else if (code == 781) {
     return Icon(WeatherIcons.wi_tornado, size: size, color: color);
   } else if (code == 600) {
     return dayOrNight == 'day'
         ? Icon(WeatherIcons.wi_day_snow, size: size, color: color)
-        : dayOrNight == 'night' ? Icon(WeatherIcons.wi_night_alt_snow, size: size, color: color) : Icon(WeatherIcons.wi_snow, size: size, color: color);
+        : dayOrNight == 'night'
+            ? Icon(WeatherIcons.wi_night_alt_snow, size: size, color: color)
+            : Icon(WeatherIcons.wi_snow, size: size, color: color);
   } else if (code == 611 || code == 612 || code == 613) {
     return dayOrNight == 'day'
         ? Icon(WeatherIcons.wi_day_sleet, size: size, color: color)
-        : dayOrNight == 'night' ? Icon(WeatherIcons.wi_night_alt_sleet, size: size, color: color) : Icon(WeatherIcons.wi_sleet, size: size, color: color);
+        : dayOrNight == 'night'
+            ? Icon(WeatherIcons.wi_night_alt_sleet, size: size, color: color)
+            : Icon(WeatherIcons.wi_sleet, size: size, color: color);
   } else if (code == 615 || code == 616 || code == 620 || code == 621 || code == 622) {
     return dayOrNight == 'day'
         ? Icon(WeatherIcons.wi_day_rain_mix, size: size, color: color)
-        : dayOrNight == 'night' ? Icon(WeatherIcons.wi_night_alt_rain_mix) : Icon(WeatherIcons.wi_rain_mix, size: size, color: color);
+        : dayOrNight == 'night'
+            ? Icon(WeatherIcons.wi_night_alt_rain_mix)
+            : Icon(WeatherIcons.wi_rain_mix, size: size, color: color);
   } else if (code == 500 || code == 520) {
     return dayOrNight == 'day'
         ? Icon(WeatherIcons.wi_day_sprinkle, size: size, color: color)
-        : dayOrNight == 'night' ? Icon(WeatherIcons.wi_night_alt_sprinkle, size: size, color: color) : Icon(WeatherIcons.wi_sprinkle, size: size, color: color);
+        : dayOrNight == 'night'
+            ? Icon(WeatherIcons.wi_night_alt_sprinkle, size: size, color: color)
+            : Icon(WeatherIcons.wi_sprinkle, size: size, color: color);
   } else if (code == 501 || code == 502 || code == 503 || code == 504) {
     return dayOrNight == 'day'
         ? Icon(WeatherIcons.wi_day_rain, size: size, color: color)
-        : dayOrNight == 'night' ? Icon(WeatherIcons.wi_night_alt_rain, size: size, color: color) : Icon(WeatherIcons.wi_rain, size: size, color: color);
+        : dayOrNight == 'night'
+            ? Icon(WeatherIcons.wi_night_alt_rain, size: size, color: color)
+            : Icon(WeatherIcons.wi_rain, size: size, color: color);
   } else if (code == 511) {
     return dayOrNight == 'day'
         ? Icon(WeatherIcons.wi_day_sleet, size: size, color: color)
-        : dayOrNight == 'night' ? Icon(WeatherIcons.wi_night_alt_sleet, size: size, color: color) : Icon(WeatherIcons.wi_sleet, size: size, color: color);
+        : dayOrNight == 'night'
+            ? Icon(WeatherIcons.wi_night_alt_sleet, size: size, color: color)
+            : Icon(WeatherIcons.wi_sleet, size: size, color: color);
   } else if (code == 521 || code == 522 || code == 531) {
     return dayOrNight == 'day'
         ? Icon(WeatherIcons.wi_day_showers, size: size, color: color)
-        : dayOrNight == 'night' ? Icon(WeatherIcons.wi_night_alt_showers, size: size, color: color) : Icon(WeatherIcons.wi_showers, size: size, color: color);
+        : dayOrNight == 'night'
+            ? Icon(WeatherIcons.wi_night_alt_showers, size: size, color: color)
+            : Icon(WeatherIcons.wi_showers, size: size, color: color);
   } else if (code == 300 || code == 301 || code == 302 || code == 310 || code == 311 || code == 312 || code == 313 || code == 314 || code == 321) {
     return dayOrNight == 'day'
         ? Icon(WeatherIcons.wi_day_sprinkle, size: size, color: color)
-        : dayOrNight == 'night' ? Icon(WeatherIcons.wi_night_alt_sprinkle, size: size, color: color) : Icon(WeatherIcons.wi_sprinkle, size: size, color: color);
+        : dayOrNight == 'night'
+            ? Icon(WeatherIcons.wi_night_alt_sprinkle, size: size, color: color)
+            : Icon(WeatherIcons.wi_sprinkle, size: size, color: color);
   } else if (code == 200 || code == 201 || code == 230 || code == 231 || code == 232) {
     return dayOrNight == 'day'
         ? Icon(WeatherIcons.wi_day_storm_showers, size: size, color: color)
-        : dayOrNight == 'night' ? Icon(WeatherIcons.wi_night_alt_storm_showers, size: size, color: color) : Icon(WeatherIcons.wi_storm_showers, size: size, color: color);
+        : dayOrNight == 'night'
+            ? Icon(WeatherIcons.wi_night_alt_storm_showers, size: size, color: color)
+            : Icon(WeatherIcons.wi_storm_showers, size: size, color: color);
   } else if (code == 202) {
     return dayOrNight == 'day'
         ? Icon(WeatherIcons.wi_day_thunderstorm)
-        : dayOrNight == 'night' ? Icon(WeatherIcons.wi_night_alt_thunderstorm, size: size, color: color) : Icon(WeatherIcons.wi_thunderstorm, size: size, color: color);
+        : dayOrNight == 'night'
+            ? Icon(WeatherIcons.wi_night_alt_thunderstorm, size: size, color: color)
+            : Icon(WeatherIcons.wi_thunderstorm, size: size, color: color);
   } else if (code == 210 || code == 211 || code == 212 || code == 221) {
     return dayOrNight == 'day'
         ? Icon(WeatherIcons.wi_day_lightning, size: size, color: color)
-        : dayOrNight == 'night' ? Icon(WeatherIcons.wi_night_alt_lightning, size: size, color: color) : Icon(WeatherIcons.wi_lightning, size: size, color: color);
+        : dayOrNight == 'night'
+            ? Icon(WeatherIcons.wi_night_alt_lightning, size: size, color: color)
+            : Icon(WeatherIcons.wi_lightning, size: size, color: color);
   } else {
     return Icon(WeatherIcons.wi_na, size: size, color: color);
   }

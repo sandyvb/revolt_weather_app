@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:revolt_weather_app/components/get_icon.dart';
 import 'package:revolt_weather_app/controllers/controller_forecast.dart';
-import 'package:revolt_weather_app/controllers/controller_update.dart';
 import 'package:revolt_weather_app/utilities/constants.dart';
 import 'controller.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +8,6 @@ import 'package:flutter/material.dart';
 class ControllerMinutely extends GetxController {
   final Controller c = Get.find();
   final ControllerForecast cf = Get.find();
-  final ControllerUpdate cu = Get.find();
 
 // GET READABLE TIME & USE HOUR / AM OR PM FOR OTHER FUNCTIONS
   String getTime(int i) {

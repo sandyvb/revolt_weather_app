@@ -16,13 +16,13 @@ const OWMapURL = 'https://tile.openweathermap.org/map/clouds_new/4/15/15.png?app
 // UPDATE FORECAST URL
 const forecastURL = 'https://api.openweathermap.org/data/2.5/onecall';
 // ALTITUDE URL
-// const altitudeURL = 'https://api.opentopodata.org/v1/srtm90m?locations'; // api url
-const altitudeURL = 'https://api.opentopodata.org/v1/test-dataset?locations'; // testing url
+const altitudeURL = 'https://api.opentopodata.org/v1/srtm90m?locations'; // api url
+// const altitudeURL = 'https://api.opentopodata.org/v1/test-dataset?locations'; // testing url
 
 class WeatherModel {
-  Controller c = Get.find();
-  ControllerUpdate cu = Get.find();
-  ControllerForecast cf = Get.find();
+  final Controller c = Get.find();
+  final ControllerUpdate cu = Get.find();
+  final ControllerForecast cf = Get.find();
 
   void getSnackbar() {
     Get.snackbar(
@@ -52,7 +52,7 @@ class WeatherModel {
     // INIT KEY GLOBAL VARIABLES
     cu.initialCity.value = weatherData['name'];
     cu.city.value = cu.initialCity.value;
-    cu.userInput.value = cu.initialCity.value;
+    cu.userInput.value = 'q=${cu.initialCity.value}';
     cu.lat.value = location.latitude;
     cu.lon.value = location.longitude;
     await getCityWeather();
@@ -65,7 +65,7 @@ class WeatherModel {
   // TRUE REDIRECTS USER TO PREVIOUS SCREEN
   Future<bool> getCityWeather() async {
     String units = c.isMetric.value == true ? 'metric' : 'imperial';
-    var url = '$openWeatherMapURL?q=${cu.userInput.value}&appid=$apiKey&units=$units';
+    var url = '$openWeatherMapURL?${cu.userInput.value}&appid=$apiKey&units=$units';
     NetworkHelper networkHelper = NetworkHelper(url);
     var weatherData = await networkHelper.getData();
     if (weatherData == null) {

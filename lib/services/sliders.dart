@@ -19,7 +19,7 @@ String temperatureTextModifier(double value) {
 }
 
 String revoltTextModifier(double value) {
-  final newValue = value.toInt().toString();
+  final newValue = value.ceil().toString();
   return '$newValue';
 }
 

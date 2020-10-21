@@ -26,7 +26,7 @@ class ControllerHourly extends GetxController {
     } catch (e) {
       hourlyPrecip.value = 0;
     }
-    if (hourlyPrecip.value != 0 && cf.hourly[i]['pop'] != 0) {
+    if (hourlyPrecip.value != 0 && (cf.hourly[i]['pop'] * 100) != 0) {
       c.isMetric.value ? hourlyPrecip.value : hourlyPrecip.value /= 25.4;
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -46,7 +46,7 @@ class ControllerHourly extends GetxController {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('CHANCE'),
-                    Obx(() => Text('${cf.hourly[i]['pop'].toStringAsFixed(1)}%')),
+                    Obx(() => Text('${(cf.hourly[i]['pop'] * 100).toStringAsFixed(1)}%')),
                   ],
                 ),
               ],
