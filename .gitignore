@@ -1,3 +1,23 @@
+gradle-wrapper.jar
+/.gradle
+/captures/
+/gradlew
+/gradlew.bat
+/local.properties
+GeneratedPluginRegistrant.java
+*.jks
+key*.properties
+
+# Android related
+**/android/**/gradle-wrapper.jar
+**/android/.gradle
+**/android/captures/
+**/android/gradlew
+**/android/gradlew.bat
+**/android/local.properties
+**/android/**/GeneratedPluginRegistrant.java
+**/android/key.properties
+
 # Miscellaneous
 *.class
 *.log
@@ -15,11 +35,6 @@
 *.iws
 .idea/
 
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
-
 # Flutter/Dart/Pub related
 **/doc/api/
 **/ios/Flutter/.last_build_id
@@ -30,6 +45,11 @@
 .pub-cache/
 .pub/
 /build/
+build/
+flutter_*.png
+linked_*.ds
+unlinked.ds
+unlinked_spec.ds
 
 # Web related
 lib/generated_plugin_registrant.dart
@@ -40,5 +60,3 @@ app.*.symbols
 # Obfuscation related
 app.*.map.json
 
-# Exceptions to above rules.
-!/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
