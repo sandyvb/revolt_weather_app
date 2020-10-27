@@ -75,7 +75,7 @@ class ProgressBar {
       length = 48;
       border = null;
     } else if (type == 'powerHourly') {
-      maxValue = 40;
+      maxValue = 50;
       width = Get.width / 60;
       height = 60.0;
       length = 48;
@@ -100,7 +100,7 @@ class ProgressBar {
       if (type == 'tempDaily') {
         currentValue = cf.daily[i]['temp']['max'].toInt();
       } else if (type == 'windDaily') {
-        currentValue = cf.daily[i]['wind_speed'].toInt();
+        currentValue = i == 0 ? cf.currentWindSpeed.value.toInt() : cf.daily[i]['wind_speed'].toInt();
       } else if (type == 'powerDaily') {
         currentValue = cf.getRevoltPower(i, type: 'daily').toInt();
       } else if (type == 'powerHourly') {
@@ -112,7 +112,11 @@ class ProgressBar {
       } else if (type == 'precipHourly') {
         currentValue = (cf.hourly[i]['pop'] * 100).toInt() + 20;
       } else {
-        currentValue = (cf.minutely[i]['precipitation'] * 100).toInt() + 20;
+        try {
+          currentValue = (cf.minutely[i]['precipitation'] * 100).toInt() + 20;
+        } catch (e) {
+          currentValue = 20;
+        }
       }
 
       list.add(

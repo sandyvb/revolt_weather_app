@@ -24,7 +24,7 @@ class WeatherModel {
   final ControllerUpdate cu = Get.find();
   final ControllerForecast cf = Get.find();
 
-  void getSnackbar() {
+  void _getSnackbar() {
     Get.snackbar(
       'There was a problem',
       'Please try again!',
@@ -48,33 +48,29 @@ class WeatherModel {
     await location.getCurrentLocation();
     NetworkHelper networkHelper = NetworkHelper('$openWeatherMapURL?lat=${location.latitude}&lon=${location.longitude}&appid=$apiKey&units=$units');
     var weatherData = await networkHelper.getData();
-    weatherData == null ? getSnackbar() : cu.updateData(weatherData);
+    weatherData == null ? _getSnackbar() : cu.updateData(weatherData);
     // INIT KEY GLOBAL VARIABLES
     cu.initialCity.value = weatherData['name'];
     cu.city.value = cu.initialCity.value;
-    cu.userInput.value = 'q=${cu.initialCity.value}';
     cu.lat.value = location.latitude;
     cu.lon.value = location.longitude;
-    await getCityWeather();
     await getForecast();
-    getAltitude();
   }
 
   // IN CITY SCREEN,
-  // FALSE STAYS ON CITY SCREEN UNTIL VALID DATA IS ENTERED BY USER OR BACK BUTTON IS PRESSED
-  // TRUE REDIRECTS USER TO PREVIOUS SCREEN
+  // FALSE STAYS ON CITY SCREEN
+  // TRUE REDIRECTS TO PREVIOUS SCREEN
   Future<bool> getCityWeather() async {
     String units = c.isMetric.value == true ? 'metric' : 'imperial';
-    var url = '$openWeatherMapURL?${cu.userInput.value}&appid=$apiKey&units=$units';
+    var url = '$openWeatherMapURL?lat=${cu.userInputLat.value}&lon=${cu.userInputLon.value}&appid=$apiKey&units=$units';
     NetworkHelper networkHelper = NetworkHelper(url);
     var weatherData = await networkHelper.getData();
     if (weatherData == null) {
-      getSnackbar();
+      _getSnackbar();
       return false;
     } else {
-      cu.updateData(weatherData);
+      await cu.updateData(weatherData);
       await getForecast();
-      getAltitude();
       return true;
     }
   }
@@ -84,7 +80,7 @@ class WeatherModel {
     var url = '$forecastURL?lat=${cu.lat.value}&lon=${cu.lon.value}&appid=$apiKey&units=$units';
     NetworkHelper networkHelper = NetworkHelper(url);
     var weatherData = await networkHelper.getData();
-    weatherData == null ? getSnackbar() : cf.updateForecast(weatherData);
+    weatherData == null ? _getSnackbar() : cf.updateForecast(weatherData);
     getAltitude();
   }
 
@@ -94,8 +90,14 @@ class WeatherModel {
       var url = '$altitudeURL=${cu.lat.value},${cu.lon.value}';
       NetworkHelper networkHelper = NetworkHelper(url);
       var altData = await networkHelper.getData();
-      var altitude = altData == null ? 0 : altData['results'][0]['elevation'];
-      c.altitude.value = c.isMetric.value ? altitude : altitude * 3.281;
+      if (altData['results'][0]['elevation'] == null) {
+        c.isUnknown.value = true;
+        c.altitude.value = 0;
+      } else {
+        var altitude = altData['results'][0]['elevation'];
+        c.altitude.value = c.isMetric.value ? altitude : altitude * 3.281;
+        c.isUnknown.value = false;
+      }
     } catch (e) {
       print('altitude error: weather.dart: $e');
     }

@@ -6,6 +6,14 @@ class ControllerDaily extends GetxController {
   final ControllerForecast cf = Get.find();
   final Controller c = Get.find();
 
+  var data = <Item>[].obs;
+
+  @override
+  void onInit() {
+    data.value = generateItems(8);
+    super.onInit();
+  }
+
   String getGust(int i) {
     try {
       return ' - ${cf.daily[i]['wind_gust'].toInt()}';

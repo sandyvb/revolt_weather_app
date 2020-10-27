@@ -1,8 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:get/get.dart';
 import 'package:revolt_weather_app/controllers/controller_forecast.dart';
 import 'package:revolt_weather_app/controllers/controller_update.dart';
+import 'package:revolt_weather_app/utilities/constants.dart';
 import 'controller.dart';
 
 class ControllerMap extends GetxController {
@@ -15,6 +17,24 @@ class ControllerMap extends GetxController {
   var max = '5.5in'.obs;
   var fullscreen = false.obs;
   var legendText = 'nice day!'.obs;
+
+  void getSnackbar() {
+    Get.snackbar(
+      '',
+      'Please wait...',
+      titleText: FittedBox(child: Text('Retrieving Data', style: TextStyle(color: kLighterBlue))),
+      icon: Icon(MaterialCommunityIcons.map_search_outline),
+      shouldIconPulse: false,
+      isDismissible: true,
+      duration: Duration(milliseconds: 800),
+      colorText: kLighterBlue,
+      snackPosition: SnackPosition.BOTTOM,
+      maxWidth: Get.width * 0.6,
+      margin: EdgeInsets.symmetric(vertical: Get.height / 3),
+      padding: EdgeInsets.fromLTRB(35.0, 15.0, 0.0, 15.0),
+      backgroundColor: Color(0xFF222536),
+    );
+  }
 
   // UPDATES MIN AND MAX OF LEGEND VALUED DEPENDING UPON UNITS
   void updateLegendMinMax() {
@@ -141,18 +161,19 @@ class ControllerMap extends GetxController {
 
   // UPDATE MAP LEGEND AT BOTTOM OF MAP
   void updateLegendText() {
+    String city = cu.city.value == 'Somewhere' ? '${cu.city.value}' : 'In ${cu.city.value}';
     if (mapLayer.value == 'clouds') {
-      legendText.value = 'In ${cu.city.value} the cloud cover is ${cf.currentClouds.value}%';
+      legendText.value = '$city the cloud cover is ${cf.currentClouds.value}%';
     } else if (mapLayer.value == 'wind') {
-      legendText.value = 'In ${cu.city.value} the wind speed is ${cf.currentWindSpeed.value.toInt()} ${c.speedUnits.value}.  ${cf.gustingWind()}';
+      legendText.value = '$city the wind speed is ${cf.currentWindSpeed.value.toInt()} ${c.speedUnits.value}.  ${cf.gustingWind()}';
     } else if (mapLayer.value == 'precipitation') {
-      legendText.value = 'In ${cu.city.value}, there has been ${cf.currentRain.value.toStringAsFixed(1)} ${c.precipUnits.value} of rain in the last hour';
+      legendText.value = '$city, there has been ${cf.currentRain.value.toStringAsFixed(1)} ${c.precipUnits.value} of rain in the last hour';
     } else if (mapLayer.value == 'snow') {
-      legendText.value = 'In ${cu.city.value}, there has been ${cf.currentSnow.value.toStringAsFixed(1)} ${c.precipUnits.value} of snow in the last hour';
+      legendText.value = '$city, there has been ${cf.currentSnow.value.toStringAsFixed(1)} ${c.precipUnits.value} of snow in the last hour';
     } else if (mapLayer.value == 'pressure') {
-      legendText.value = 'In ${cu.city.value} the pressure is ${cf.currentPressureHg.value} inHg';
+      legendText.value = '$city the pressure is ${cf.currentPressureHg.value} inHg';
     } else if (mapLayer.value == 'temp') {
-      legendText.value = 'In ${cu.city.value} the temperature is ${cf.currentTemp.value.toInt()}${c.temperatureUnits.value}';
+      legendText.value = '$city the temperature is ${cf.currentTemp.value.toInt()}${c.temperatureUnits.value}';
     } else {
       legendText.value = 'No data available';
     }

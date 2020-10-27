@@ -4,13 +4,11 @@ import 'package:flutter/painting.dart';
 import 'package:get/get.dart';
 import 'package:revolt_weather_app/components/footer.dart';
 import 'package:revolt_weather_app/components/gradientDivider.dart';
+import 'package:revolt_weather_app/components/mini_nav.dart';
 import 'package:revolt_weather_app/controllers/controller.dart';
 import 'package:revolt_weather_app/controllers/controller_forecast.dart';
 import 'package:revolt_weather_app/controllers/controller_location.dart';
 import 'package:revolt_weather_app/controllers/controller_update.dart';
-import 'package:revolt_weather_app/screens/city_screen.dart';
-import 'package:revolt_weather_app/screens/glance_screen.dart';
-import 'package:revolt_weather_app/screens/forecast_screen.dart';
 import 'package:revolt_weather_app/screens/revolt_screen.dart';
 import 'package:revolt_weather_app/services/sliders.dart';
 import 'package:revolt_weather_app/services/weather.dart';
@@ -29,8 +27,6 @@ class LocationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      // floatingActionButton: Obx(() => cf.isWeatherEventExtended(EdgeInsets.only(top: 105.0))),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
       // INCL BACKGROUND GRADIENT
       body: Container(
         constraints: BoxConstraints.expand(),
@@ -89,8 +85,8 @@ class LocationScreen extends StatelessWidget {
                                 value: c.isMetric.value,
                                 onChanged: (value) async {
                                   c.isMetric.value = value;
-                                  c.updateUnits();
-                                  await WeatherModel().getCityWeather();
+                                  await c.updateUnits();
+                                  await WeatherModel().getForecast();
                                 },
                               ),
                             ),
@@ -113,8 +109,8 @@ class LocationScreen extends StatelessWidget {
               child: ListView(
                 padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
                 children: [
-                  // FLOATING ACTION BUTTON
-                  Obx(() => cf.isWeatherEventExtended(EdgeInsets.fromLTRB(20.0, 0, 20.0, 20.0))),
+                  // ALERT - FLOATING ACTION BUTTON
+                  Obx(() => cf.isWeatherEventExtended()),
                   // DATA CONTAINER
                   Container(
                     padding: EdgeInsets.symmetric(vertical: 18.0),
@@ -135,49 +131,7 @@ class LocationScreen extends StatelessWidget {
                     // HEADER AND CIRCULAR SLIDERS SECTION
                     child: Column(
                       children: [
-                        // CURRENT CITY & LAST UPDATED / CITY BUTTON / FORECAST BUTTON / GLANCE BUTTON
-                        Padding(
-                          padding: const EdgeInsets.only(left: 18.0, right: 9.0, bottom: 18.0),
-                          child: Row(
-                            children: [
-                              // CURRENT CITY & LAST UPDATED
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    FittedBox(
-                                      fit: BoxFit.scaleDown,
-                                      child: Obx(() => Text(
-                                            '${cu.city.value.toUpperCase()}${cu.country.value}',
-                                            style: kHeadingTextLarge,
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 2,
-                                          )),
-                                    ),
-                                    FittedBox(fit: BoxFit.scaleDown, child: Obx(() => Text('last update: ${cf.lastUpdate.value}', style: kSubHeadingText))),
-                                  ],
-                                ),
-                              ),
-                              // CITY BUTTON
-                              IconButton(
-                                  icon: getIconString('city'),
-                                  onPressed: () {
-                                    c.prevScreen.value = 'location';
-                                    Get.to(CityScreen());
-                                  }),
-                              // FORECAST BUTTON
-                              IconButton(
-                                icon: getIconString('forecast'),
-                                onPressed: () => Get.to(ForecastScreen()),
-                              ),
-                              // GLANCE BUTTON
-                              IconButton(
-                                icon: getIconString('glance'),
-                                onPressed: () => Get.to(GlanceScreen()),
-                              ),
-                            ],
-                          ),
-                        ),
+                        miniNav(),
                         // BEGIN SLIDERS (row of 2 columns)
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -192,10 +146,10 @@ class LocationScreen extends StatelessWidget {
                                   padding: const EdgeInsets.only(bottom: 20.0, right: 20.0),
                                   child: Obx(
                                     () => circularSlider(
-                                      min: c.isMetric.value ? -23.3333 : -10.0,
-                                      max: c.isMetric.value ? 65.5556 : 150.0,
-                                      initialValue: getLargeSliderInitValue(),
-                                      modifier: temperatureTextModifier,
+                                      min: c.min.value,
+                                      max: c.max.value,
+                                      initialValue: cf.currentTemp.value.toDouble(),
+                                      modifier: tempTextModifierCurrent,
                                       colors: [kHr, Color(0xFF1F7AFC)],
                                       shadowColor: kBlack,
                                       shadowMaxOpacity: 0.018,
@@ -230,10 +184,14 @@ class LocationScreen extends StatelessWidget {
                                                 mainLabelStyle: kData,
                                               ),
                                               // CONDITION ICON
-                                              Container(
-                                                width: 30,
-                                                height: 30,
-                                                child: getIconInt(cf.currentWeatherId.value, color: Colors.white, dayOrNight: cf.getDayOrNight()),
+                                              SizedBox(
+                                                width: 35,
+                                                height: 35,
+                                                child: getIconInt(
+                                                  cf.currentWeatherId.value,
+                                                  color: Colors.white,
+                                                  dayOrNight: cf.getDayOrNight(),
+                                                ),
                                               ),
                                             ],
                                           ),
@@ -304,14 +262,16 @@ class LocationScreen extends StatelessWidget {
                                       children: [
                                         Padding(
                                           padding: const EdgeInsets.only(top: 15.0, bottom: 10.0),
-                                          child: circularSlider(
-                                            max: 200.5,
-                                            initialValue: cf.power.value,
-                                            modifier: revoltTextModifier,
-                                            colors: [kHr, Color(0xFF83D475), Color(0xFF2EB62C)],
-                                            bottomLabelText: cf.watt.value,
-                                            size: Get.width * 0.2,
-                                            mainLabelStyle: kData,
+                                          child: Obx(
+                                            () => circularSlider(
+                                              max: 200.5,
+                                              initialValue: cf.power.value,
+                                              modifier: revoltTextModifier,
+                                              colors: [kHr, Color(0xFF83D475), Color(0xFF2EB62C)],
+                                              bottomLabelText: cf.watt.value,
+                                              size: Get.width * 0.2,
+                                              mainLabelStyle: kData,
+                                            ),
                                           ),
                                         ),
                                         Row(

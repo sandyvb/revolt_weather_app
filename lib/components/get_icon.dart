@@ -18,7 +18,7 @@ import 'dart:math';
 var hour = DateTime.now().hour;
 
 // RETURNS DIRECTIONAL ARROW GIVEN A RADIAN ANGLE
-Widget getWindIcon(var angle, {double size, Color color = kLighterBlue}) {
+Widget getWindIcon(var angle, {double size = 24.0, Color color = kLighterBlue}) {
   angle = angle * pi / 180;
   return Transform.rotate(
     angle: angle,
@@ -104,7 +104,7 @@ Widget getIconString(String code, {double size = 27.0, Color color = kLighterBlu
 }
 
 // RETURNS A DAY OR NIGHT ICON GIVEN AN INT
-Icon getIconInt(int code, {double size, Color color = kLighterBlue, String dayOrNight}) {
+Icon getIconInt(int code, {double size = 24.0, Color color = kLighterBlue, String dayOrNight}) {
   if (code == 801 || code == 802 || code == 803 || code == 804) {
     return dayOrNight == 'day'
         ? Icon(WeatherIcons.wi_day_cloudy, size: size, color: color)

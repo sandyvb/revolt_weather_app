@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 
 // FONTS USED
 // Oxygen 200 400 900 narrow // NUMBERS
@@ -7,16 +6,13 @@ import 'package:flutter_icons/flutter_icons.dart';
 
 // COLOR PALETTE
 const kSwitchColor = Color(0xFF29D857);
-const kLighterBlue = Color(0xFF9D9DA5);
+const kLighterBlue = Colors.white70;
+// const kLighterBlue = Color(0xFF9D9DA5);
 const kHr = Color(0xFF4E505F);
-const kLightestBlue = Color(0xFF474958);
-const kLightPurple = Color(0xFF697EF5);
 const kHeaderBlue = Color(0xFF3B3C4E);
 
 //COLOR PALETTE from dribble
 const kBlack = Color(0xFF0F111A);
-const kGrey = Color(0xFF46495E);
-const kLightBlue = Color(0xFF567FB5);
 
 // GRADIENT BACKGROUND DECORATION FOR ENTIRE SCREEN
 const kGradientBackgroundDecoration = BoxDecoration(
@@ -120,18 +116,6 @@ const kHeadingText = TextStyle(
   letterSpacing: 1.5,
 );
 
-// TIME & PRECIP HEADINGS IN MINUTELY
-const kTimePrecipHeadings = TextStyle(
-  fontSize: 12.0,
-  color: Colors.white70,
-  letterSpacing: 1.5,
-);
-
-const kHeadingTextWhite = TextStyle(
-  fontSize: 15.0,
-  letterSpacing: 1.5,
-);
-
 // eg CITY NAME
 const kHeadingTextLarge = TextStyle(
   fontSize: 20.0,
@@ -139,12 +123,11 @@ const kHeadingTextLarge = TextStyle(
   letterSpacing: 1.5,
 );
 
-// small blue boxes glance screen
-const kBlueBoxText = TextStyle(
-  color: Colors.white,
-  fontSize: 18.0,
-  fontFamily: 'Oxygen',
-  letterSpacing: 0.7,
+// TIME & PRECIP HEADINGS IN MINUTELY
+const kTimePrecipHeadings = TextStyle(
+  fontSize: 12.0,
+  color: Colors.white70,
+  letterSpacing: 1.5,
 );
 
 // Forecast page data text
@@ -229,15 +212,13 @@ const kOxygen = TextStyle(
   fontFamily: 'Oxygen',
   color: kLighterBlue,
 );
-const kJustOxygen = TextStyle(
-  fontFamily: 'Oxygen',
-);
 
 // CHANGE FAMILY TO OXYGEN
 const kOxygenWhite = TextStyle(
   fontFamily: 'Oxygen',
   fontSize: 15.0,
   letterSpacing: 0.5,
+  color: Colors.white,
 );
 
 // BOTTOM TEXT IN LARGE SPINNER
@@ -270,20 +251,24 @@ const kUpdateLegendText = TextStyle(
   fontSize: 14.0,
 );
 
-// TEXT INPUT STYLE
-const kInputDecoration = InputDecoration(
-  hintText: 'Enter City Name',
-  hintStyle: TextStyle(color: Colors.grey),
-  filled: true,
-  fillColor: Colors.white,
-  border: OutlineInputBorder(
-    borderRadius: BorderRadius.all(
-      Radius.circular(10.0),
+Container kExpansionContainer({dynamic child}) {
+  return Container(
+    margin: EdgeInsets.symmetric(vertical: 15.0),
+    padding: EdgeInsets.all(15.0),
+    decoration: BoxDecoration(
+      boxShadow: kBoxShadowDD,
+      borderRadius: BorderRadius.circular(15.0),
+      gradient: LinearGradient(
+        colors: [
+          Color(0xFF37394B),
+          Color(0xFF292B38),
+          Color(0xFF222536),
+        ],
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        tileMode: TileMode.clamp,
+      ),
     ),
-    borderSide: BorderSide.none,
-  ),
-  suffixIcon: Icon(
-    MaterialCommunityIcons.city_variant_outline,
-    color: Colors.grey,
-  ),
-);
+    child: child,
+  );
+}

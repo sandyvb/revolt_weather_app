@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
@@ -12,25 +13,33 @@ import 'package:latlong/latlong.dart' as latLng;
 import 'package:revolt_weather_app/services/weather.dart';
 import 'package:revolt_weather_app/utilities/constants.dart';
 
-class MapComponent extends StatefulWidget {
-  @override
-  _MapComponentState createState() => _MapComponentState();
-}
-
-class _MapComponentState extends State<MapComponent> {
+class MapComponent extends StatelessWidget {
   final Controller c = Get.find();
   final ControllerUpdate cu = Get.find();
   final ControllerMap cmap = Get.put(ControllerMap());
   final ControllerForecast cf = Get.find();
 
-  String _mapURL = 'https://tile.openweathermap.org/map';
-  // String _rainViewerMapURL = 'https://tilecache.rainviewer.com/v2';
+  final String _mapURL = 'https://tile.openweathermap.org/map';
+  // final String _rainViewerMapURL = 'https://tilecache.rainviewer.com/v2';
+
+  final MapController _mapController = MapController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       // BUTTON CONTROLS
       appBar: AppBar(
+        leading: InkWell(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 10.0),
+            child: Obx(() => getIconString('wind', color: cmap.mapLayer.value == 'wind' ? Colors.white : kLighterBlue)),
+          ),
+          onTap: () {
+            cmap.getSnackbar();
+            cmap.mapLayer.value = 'wind';
+            cmap.updateLegend();
+          },
+        ),
         actions: [
           Expanded(
             child: Padding(
@@ -39,53 +48,47 @@ class _MapComponentState extends State<MapComponent> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // WIND
-                  InkWell(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 10.0),
-                      child: getIconString('wind', color: Colors.white),
-                    ),
-                    onTap: () {
-                      cmap.mapLayer.value = 'wind';
-                      cmap.updateLegend();
-                    },
-                  ),
                   // TEMPERATURE
                   InkWell(
-                    child: getIconString('thermometer', color: Colors.white),
+                    child: Obx(() => getIconString('thermometer', color: cmap.mapLayer.value == 'temp' ? Colors.white : kLighterBlue)),
                     onTap: () {
+                      cmap.getSnackbar();
                       cmap.mapLayer.value = 'temp';
                       cmap.updateLegend();
                     },
                   ),
                   // PRECIPITATION
                   InkWell(
-                    child: getIconInt(501, color: Colors.white),
+                    child: Obx(() => getIconInt(501, color: cmap.mapLayer.value == 'precipitation' ? Colors.white : kLighterBlue)),
                     onTap: () {
+                      cmap.getSnackbar();
                       cmap.mapLayer.value = 'precipitation';
                       cmap.updateLegend();
                     },
                   ),
                   // CLOUDS
                   InkWell(
-                    child: getIconInt(802, color: Colors.white),
+                    child: Obx(() => getIconInt(802, color: cmap.mapLayer.value == 'clouds' ? Colors.white : kLighterBlue)),
                     onTap: () {
+                      cmap.getSnackbar();
                       cmap.mapLayer.value = 'clouds';
                       cmap.updateLegend();
                     },
                   ),
                   // PRESSURE
                   InkWell(
-                    child: getIconString('pressure', color: Colors.white),
+                    child: Obx(() => getIconString('pressure', color: cmap.mapLayer.value == 'pressure' ? Colors.white : kLighterBlue)),
                     onTap: () {
+                      cmap.getSnackbar();
                       cmap.mapLayer.value = 'pressure';
                       cmap.updateLegend();
                     },
                   ),
                   // SNOW
                   InkWell(
-                    child: getIconString('cold', color: Colors.white),
+                    child: Obx(() => getIconString('cold', color: cmap.mapLayer.value == 'snow' ? Colors.white : kLighterBlue)),
                     onTap: () {
+                      cmap.getSnackbar();
                       cmap.mapLayer.value = 'snow';
                       cmap.updateLegend();
                     },
@@ -101,8 +104,9 @@ class _MapComponentState extends State<MapComponent> {
         child: Obx(
           () => FlutterMap(
             options: MapOptions(
+              controller: _mapController,
               center: latLng.LatLng(cu.lat.value, cu.lon.value),
-              zoom: 12.0,
+              zoom: 7.0,
             ),
             layers: [
               // MAP LAYER OPTIONS
@@ -137,7 +141,7 @@ class _MapComponentState extends State<MapComponent> {
                 options: TileLayerOptions(
                   urlTemplate: '$_mapURL/${cmap.mapLayer.value}/{z}/{x}/{y}.png?appid=$apiKey',
                   subdomains: ['a', 'b', 'c'],
-                  opacity: 0.4,
+                  opacity: 0.5,
                 ),
               ),
 
@@ -152,6 +156,7 @@ class _MapComponentState extends State<MapComponent> {
               // ),
 
               // MIN / LEGEND / MAX
+
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
                 child: Column(

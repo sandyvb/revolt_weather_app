@@ -4,13 +4,15 @@ class ControllerUpdate extends GetxController {
   var city = 'home'.obs;
   var initialCity = 'my city'.obs;
   var country = 'anywhere but here'.obs;
-  var userInput = 'userInput'.obs;
+  var userInputLat = 0.0.obs;
+  var userInputLon = 0.0.obs;
   var lat = 0.0.obs;
   var lon = 0.0.obs;
 
-  void updateData(dynamic weatherData) async {
+  Future<void> updateData(dynamic weatherData) async {
     // UPDATE LOCATION VARIABLES FROM WEATHER.DART //////////////////////////////////////////
     city.value = weatherData['name'];
+    if (city.value.isNullOrBlank) city.value = 'Somewhere';
     var _getCountry = weatherData['sys']['country'];
     country.value = _getCountry == 'US'
         ? ''

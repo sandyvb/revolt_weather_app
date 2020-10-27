@@ -11,29 +11,37 @@ class ControllerMinutely extends GetxController {
 
 // GET READABLE TIME & USE HOUR / AM OR PM FOR OTHER FUNCTIONS
   String getTime(int i) {
-    String time = cf.getReadableTime(cf.minutely[i]['dt']);
-    return time;
+    String _time;
+    try {
+      _time = cf.getReadableTime(cf.minutely[i]['dt']);
+    } catch (e) {
+      _time = 'N/A';
+    }
+    return _time;
   }
 
   // RETURN 0 IF NULL / RETURN METRIC (int) OR IMPERIAL (double) PRECIP AMT
   Widget getPrecip(int i) {
-    var _mmPrecip;
     try {
-      _mmPrecip = cf.minutely[i]['precipitation'];
+      var _mmPrecip = cf.minutely[i]['precipitation'];
+      return Obx(
+        () => Text(
+          '${c.isMetric.value ? _mmPrecip.toStringAsFixed(2) : (_mmPrecip / 25.4).toStringAsFixed(2)} ${c.precipUnits.value}',
+          style: kOxygenWhite,
+        ),
+      );
     } catch (e) {
-      _mmPrecip = 0;
+      return Text('N/A');
     }
-    return Obx(
-      () => Text(
-        '${c.isMetric.value ? _mmPrecip.toStringAsFixed(2) : (_mmPrecip / 25.4).toStringAsFixed(2)} ${c.precipUnits.value}',
-        style: kOxygenWhite,
-      ),
-    );
   }
 
   // RETURN APPROPRIATE WEATHER ICON
   Widget getIcon(int i) {
-    String isDayOrNight = cf.getDayOrNight(cf.minutely[i]['dt']);
-    return getIconInt(cf.currentWeatherId.value, size: 16.0, dayOrNight: isDayOrNight, color: Colors.white);
+    try {
+      String _isDayOrNight = cf.getDayOrNight(cf.minutely[i]['dt']);
+      return getIconInt(cf.currentWeatherId.value, size: 16.0, dayOrNight: _isDayOrNight, color: Colors.white);
+    } catch (e) {
+      return getIconInt(cf.currentWeatherId.value, size: 16.0, color: Colors.white);
+    }
   }
 }

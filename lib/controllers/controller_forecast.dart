@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:revolt_weather_app/components/get_current.dart';
 import 'package:revolt_weather_app/components/get_daily.dart';
@@ -44,14 +45,15 @@ class ControllerForecast extends GetxController {
   var currentWindGust = 0.0.obs;
   var currentWindDeg = 0.obs;
   var currentRain = 0.0.obs;
+  var currentRain1h = 0.0.obs;
   var currentSnow = 0.0.obs;
+  var currentSnow1h = 0.0.obs;
   var currentWeatherId = 0.obs;
   var currentWeatherMain = 'pleasant'.obs;
   var currentWeatherDescription = 'very pleasant'.obs;
   var selectedForecast = 'current'.obs;
   var isSelected = [true, false, false, false].obs;
   var sunriseSunsetMessage = 'Calculating...'.obs;
-  var timeDifference = 0.0.obs;
   var senderName = 'weather service'.obs;
   var event = 'weather event'.obs;
   var eventDescription = 'weather event description'.obs;
@@ -60,6 +62,9 @@ class ControllerForecast extends GetxController {
   var airDensity = 'thick'.obs;
   var watt = 'wattage'.obs;
   var revoltText = 'cool windmill'.obs;
+
+  // CURRENT
+  final current = <dynamic>[].obs;
 
   // MINUTELY - LENGTH = 61
   final minutely = <dynamic>[].obs;
@@ -71,11 +76,11 @@ class ControllerForecast extends GetxController {
   final daily = <dynamic>[].obs;
 
   // ALERTS - LENGTH = 1
-  // ['sender_name', 'event', 'start', 'end', 'description']
   final alerts = <dynamic>[].obs;
 
   void updateForecast(dynamic weatherData) async {
-    Calculator calculator = Calculator();
+    final Calculator calculator = Calculator();
+
     //UPDATE LOCAL TIME VARIABLES ////////////////////////////////////////////////////////
     DateTime _now = DateTime.now();
     getDayOrNight();
@@ -94,13 +99,26 @@ class ControllerForecast extends GetxController {
     // GATHER ALL DATA
     currentDt.value = weatherData['current']['dt']; // INT
     lastUpdate.value = getReadableTime(currentDt.value);
-    getSunrise.value = weatherData['current']['sunrise']; // INT
-    currentSunrise.value = getReadableTime(getSunrise.value); // STRING
-    getSunset.value = weatherData['current']['sunset']; // INT
+
+    // REMOTE LOCATIONS SOMETIMES DON'T PROVIDE SUNRISE/SUNSET OR MINUTELY DATA
+    try {
+      getSunrise.value = weatherData['current']['sunrise']; // INT
+      currentSunrise.value = getReadableTime(getSunrise.value); // STRING
+    } catch (e) {
+      getSunrise.value = 0;
+      currentSunrise.value = 'N/A';
+    }
+    try {
+      getSunset.value = weatherData['current']['sunset']; // INT
+      currentSunset.value = getReadableTime(getSunset.value); // STRING
+
+    } catch (e) {
+      getSunset.value = 0;
+      currentSunset.value = 'N/A';
+    }
     getSunriseTomorrow.value = weatherData['daily'][1]['sunrise']; // INT
     getSunsetTomorrow.value = weatherData['daily'][1]['sunset']; // INT
     getSunriseTheNextDay.value = weatherData['daily'][2]['sunrise']; // INT
-    currentSunset.value = getReadableTime(getSunset.value); // STRING
     currentTemp.value = weatherData['current']['temp']; // VAR - INT or DOUBLE
     currentFeelsLike.value = weatherData['current']['feels_like']; // VAR - INT or DOUBLE
     currentPressure.value = weatherData['current']['pressure']; // INT
@@ -122,18 +140,21 @@ class ControllerForecast extends GetxController {
       currentWindGust.value = 0;
     }
     currentWindDeg.value = weatherData['current']['wind_deg']; // INT
+
+    // PRECIPITATION
+    // currentSnow.value = weatherData['current']['snow'];
+    // currentRain.value = weatherData['current']['rain'];
     try {
-      currentRain.value = weatherData['current']['rain']['1h']; // DOUBLE mm
+      currentRain1h.value = weatherData['current']['rain']['1h']; // DOUBLE mm
     } catch (e) {
-      currentRain.value = 0;
+      currentRain1h.value = 0;
     }
     try {
-      currentSnow.value = weatherData['current']['snow']['1hr']; // DOUBLE mm
+      currentSnow1h.value = weatherData['current']['snow']['1hr']; // DOUBLE mm
     } catch (e) {
-      currentSnow.value = 0;
+      currentSnow1h.value = 0;
     }
-    c.isMetric.value ? currentRain.value : currentRain.value /= 25.4;
-    c.isMetric.value ? currentSnow.value : currentSnow.value /= 25.4;
+
     currentWeatherId.value = weatherData['current']['weather'][0]['id']; // INT
     currentWeatherMain.value = weatherData['current']['weather'][0]['main']; // ONE WORD DESC
     currentWeatherDescription.value = weatherData['current']['weather'][0]['description']; // DESCRIPTION
@@ -167,9 +188,10 @@ class ControllerForecast extends GetxController {
     airDensity.value = (calculator.getDensity()).toStringAsFixed(2);
 
     // UPDATE REVOLT MESSAGE ////////////////////////////////////////////////////////////////
-    watt.value = power.value.round() == 1 ? 'Watt' : 'Watts';
-    revoltText.value =
-        'A REVOLT Hanging Wind Turbine would be producing ${power.value.ceil()} ${watt.value} of power in ${cu.city.value} with a wind speed of ${currentWindSpeed.value.toInt()} ${c.speedUnits.value}.';
+    watt.value = power.value.ceil() == 1 ? 'Watt' : 'Watts';
+    revoltText.value = cu.city.value == 'Somewhere'
+        ? 'A REVOLT Hanging Wind Turbine would be producing ${power.value.ceil()} ${watt.value} of power ${cu.city.value} with a wind speed of ${currentWindSpeed.value.toInt()} ${c.speedUnits.value}.'
+        : 'A REVOLT Hanging Wind Turbine would be producing ${power.value.ceil()} ${watt.value} of power in ${cu.city.value} with a wind speed of ${currentWindSpeed.value.toInt()} ${c.speedUnits.value}.';
   }
 
   // MISC FUNCTIONS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -199,24 +221,29 @@ class ControllerForecast extends GetxController {
   }
 
   int getRevoltPower(int i, {var type}) {
-    Calculator calculator = Calculator();
+    final Calculator calculator = Calculator();
+
     var result;
     if (type == 'daily') {
-      result = calculator
-          .calculate(
-            temp: daily[i]['temp']['max'],
-            dew: daily[i]['dew_point'],
-            ws: daily[i]['wind_speed'],
-          )
-          .ceil();
+      result = i == 0
+          ? calculator.calculate().ceil()
+          : calculator
+              .calculate(
+                temp: daily[i]['temp']['max'],
+                dew: daily[i]['dew_point'],
+                ws: daily[i]['wind_speed'],
+              )
+              .ceil();
     } else {
-      result = calculator
-          .calculate(
-            temp: hourly[i]['temp'],
-            dew: hourly[i]['dew_point'],
-            ws: hourly[i]['wind_speed'],
-          )
-          .ceil();
+      result = i == 0
+          ? calculator.calculate().ceil()
+          : calculator
+              .calculate(
+                temp: hourly[i]['temp'],
+                dew: hourly[i]['dew_point'],
+                ws: hourly[i]['wind_speed'],
+              )
+              .ceil();
     }
     return result;
   }
@@ -229,24 +256,27 @@ class ControllerForecast extends GetxController {
   }
 
 // Example: Moderate (6)
-  String returnUviIndex(var uviIndex) {
+  Text returnUviIndex(var uviIndex) {
+    String value;
+    if (uviIndex == null) return Text('Unknown...', style: kOxygenWhite.copyWith(color: kLighterBlue, fontStyle: FontStyle.italic));
     var uvi = uviIndex.toInt();
     if (uvi >= 0 && uvi <= 2) {
-      return 'Low ($uvi)';
+      value = 'Low ($uvi)';
     } else if (uvi >= 3 && uvi <= 5) {
-      return 'Moderate ($uvi)';
+      value = 'Moderate ($uvi)';
     } else if (uvi >= 6 && uvi <= 7) {
-      return 'High ($uvi)';
+      value = 'High ($uvi)';
     } else if (uvi >= 8 && uvi <= 10) {
-      return 'Very High ($uvi)';
+      value = 'Very High ($uvi)';
     } else {
-      return 'Extreme ($uvi)';
+      value = 'Extreme ($uvi)';
     }
+    return Text(value, style: kOxygenWhite);
   }
 
 // Example: 12:42 PM
   String getReadableTime(var time) {
-    var result = DateTime.fromMillisecondsSinceEpoch(time * 1000);
+    DateTime result = DateTime.fromMillisecondsSinceEpoch(time * 1000);
     return DateFormat.jm().format(result);
   }
 
@@ -287,7 +317,7 @@ class ControllerForecast extends GetxController {
   }
 
 // Example: Tuesday Sep 15 | Night
-  String getNight(var time) {
+  String getAbbrNight(var time) {
     var result = DateTime.fromMillisecondsSinceEpoch(time * 1000);
     var weekday = DateFormat.EEEE().format(result);
     var month = DateFormat.MMM().format(result);
@@ -336,21 +366,37 @@ class ControllerForecast extends GetxController {
   }
 
   // FLOATING ACTION BUTTON EXTENDED FOR ALL SCREENS EXCEPT LOCATION SCREEN
-  Container isWeatherEventExtended(dynamic margin) {
+  Center isWeatherEventExtended() {
     return isEvent.value
-        ? Container(
-            margin: margin,
-            child: FloatingActionButton.extended(
-              onPressed: () => Get.to(AlertScreen()),
-              icon: getIconString('alert', color: Colors.white),
-              label: Text(
-                '${event.value.toUpperCase()}!',
-                style: TextStyle(color: Colors.white),
+        ? Center(
+            child: Container(
+              margin: EdgeInsets.only(bottom: 20.0),
+              height: 40.0,
+              padding: EdgeInsets.fromLTRB(10.0, 2.0, 15.0, 2.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20.0),
+                color: Color(0xFFC42E2C),
               ),
-              backgroundColor: Color(0xFFC42E2C),
+              child: FittedBox(
+                child: GestureDetector(
+                  onTap: () => Get.to(AlertScreen()),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      getIconString('alert', color: Colors.white),
+                      SizedBox(width: 5.0),
+                      Text(
+                        '${event.value.toUpperCase()}!',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
           )
-        : Container();
+        : Center();
   }
 
   String getDayOrNight([int time]) {

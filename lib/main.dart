@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:revolt_weather_app/screens/loading_screen.dart';
+import 'package:revolt_weather_app/utilities/constants.dart';
 
 void main() => runApp(MyApp());
 
@@ -16,8 +17,12 @@ class MyApp extends StatelessWidget {
       statusBarColor: Colors.transparent, //transparent status bar
     ));
     return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Revolt Wind Weather App',
       theme: ThemeData.dark().copyWith(
+        accentColor: kLighterBlue,
+        dividerColor: Colors.transparent,
+        iconTheme: IconThemeData(size: 30.0, color: kLighterBlue),
         textTheme: Theme.of(context).textTheme.apply(
               fontFamily: 'RedHat',
               bodyColor: Colors.white,

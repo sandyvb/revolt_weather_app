@@ -12,6 +12,14 @@ class ControllerHourly extends GetxController {
   var hourlyPrecip = 0.0.obs;
   var typeOfPrecip = 'PRECIPITATION'.obs;
 
+  var data = <Item>[].obs;
+
+  @override
+  void onInit() {
+    data.value = generateItems(48);
+    super.onInit();
+  }
+
   // RETURN ROW IF THERE IS PRECIPITATION
   Row getPrecipInfo(int i) {
     try {

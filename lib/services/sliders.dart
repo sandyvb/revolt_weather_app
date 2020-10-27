@@ -13,8 +13,28 @@ final ControllerUpdate cu = Get.find();
 final ControllerForecast cf = Get.find();
 
 // TEXT MODIFIERS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-String temperatureTextModifier(double value) {
-  final newValue = value.toInt().toString();
+String tempTextModifierCurrent(double value) {
+  final newValue = cf.currentTemp.value.toInt();
+  return '$newValue${c.temperatureUnits}';
+}
+
+String tempTextModifierMorn(double value) {
+  final newValue = cf.daily[0]['temp']['morn'].toInt();
+  return '$newValue${c.temperatureUnits}';
+}
+
+String tempTextModifierDay(double value) {
+  final newValue = cf.daily[0]['temp']['day'].toInt();
+  return '$newValue${c.temperatureUnits}';
+}
+
+String tempTextModifierEve(double value) {
+  final newValue = cf.daily[0]['temp']['eve'].toInt();
+  return '$newValue${c.temperatureUnits}';
+}
+
+String tempTextModifierNight(double value) {
+  final newValue = cf.daily[0]['temp']['night'].toInt();
   return '$newValue${c.temperatureUnits}';
 }
 
@@ -44,21 +64,10 @@ String nullTextModifier(double value) {
   return '';
 }
 
-// RETURNS INIT VALUE FOR LARGE SLEEK CIRCULAR SLIDER
-double getLargeSliderInitValue() {
-  var min = c.isMetric.value ? -23.3333 : -10.0;
-  var max = c.isMetric.value ? 65.5556 : 150.0;
-  if (cf.currentTemp.value < min || cf.currentTemp.value > max || cf.currentTemp.value == null) {
-    return max / 2;
-  } else {
-    return cf.currentTemp.value.toDouble();
-  }
-}
-
 // RETURN SLEEK CIRCULAR SLIDER \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 SleekCircularSlider circularSlider({
-  double min: -20.0,
-  double max = 1000,
+  double min: 0.0,
+  double max = 100,
   double initialValue = 0,
   var modifier,
   var colors,
@@ -74,10 +83,6 @@ SleekCircularSlider circularSlider({
   double angleRange = 360.0,
   bottomLabelStyle = kBottomLabelStyle,
 }) {
-  // BUG FIX FOR SLIDER
-  if (initialValue < -20.0 || initialValue > max || initialValue == null) {
-    initialValue = max / 2;
-  }
   return SleekCircularSlider(
     min: min,
     max: max,
@@ -103,6 +108,23 @@ SleekCircularSlider circularSlider({
         mainLabelStyle: mainLabelStyle,
         bottomLabelText: bottomLabelText,
         bottomLabelStyle: bottomLabelStyle,
+      ),
+    ),
+  );
+}
+
+SleekCircularSlider loadingSpinner() {
+  return SleekCircularSlider(
+    appearance: CircularSliderAppearance(
+      spinnerMode: true,
+      size: 110.0,
+      customColors: CustomSliderColors(
+        dotColor: Colors.transparent,
+        hideShadow: true,
+      ),
+      customWidths: CustomSliderWidths(
+        trackWidth: 4.5,
+        progressBarWidth: 4.5,
       ),
     ),
   );

@@ -41,7 +41,11 @@ class Calculator {
     // RETURN POWER
     double power = ro * pow(ws, 3) * 0.2125; // in W
     // RETURN MAXIMUM OF 200
-    return (power > 200) ? 200 : power;
+    return cf.currentWindSpeed.value < 6.0
+        ? 0
+        : power > 200
+            ? 200
+            : power;
   }
 
   // RETURNS AIR DENSITY

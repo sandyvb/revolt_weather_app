@@ -3,9 +3,9 @@ import 'package:get/get.dart';
 import 'package:revolt_weather_app/controllers/controller.dart';
 import 'package:revolt_weather_app/controllers/controller_forecast.dart';
 import 'package:revolt_weather_app/controllers/controller_update.dart';
+import 'package:revolt_weather_app/services/sliders.dart';
 import 'package:revolt_weather_app/services/weather.dart';
 import 'package:revolt_weather_app/utilities/constants.dart';
-import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'location_screen.dart';
 
 class LoadingScreen extends StatelessWidget {
@@ -30,20 +30,7 @@ class LoadingScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SleekCircularSlider(
-              appearance: CircularSliderAppearance(
-                spinnerMode: true,
-                size: 110.0,
-                customColors: CustomSliderColors(
-                  dotColor: Colors.transparent,
-                  hideShadow: true,
-                ),
-                customWidths: CustomSliderWidths(
-                  trackWidth: 4.5,
-                  progressBarWidth: 4.5,
-                ),
-              ),
-            ),
+            loadingSpinner(),
             Padding(
               padding: const EdgeInsets.only(top: 10.0),
               child: Text('Retrieving Data...', style: TextStyle(fontSize: 20.0)),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:revolt_weather_app/components/get_icon.dart';
+import 'package:revolt_weather_app/components/gradientDivider.dart';
 import 'package:revolt_weather_app/controllers/controller_forecast.dart';
 import 'package:revolt_weather_app/controllers/controller_update.dart';
 import 'package:revolt_weather_app/utilities/constants.dart';
@@ -123,11 +124,13 @@ class AlertScreen extends StatelessWidget {
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 children: [
-                  Text(
-                    'From: ${cf.senderName}',
-                    maxLines: 2,
+                  if (cf.senderName.value.length > 0) FittedBox(child: Text('From: ${cf.senderName.value}', style: TextStyle(fontSize: 20.0))),
+                  gradientDividerTransparentEnds(padding: EdgeInsets.only(top: 20.0, bottom: 5.0)),
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(cf.event.value, style: TextStyle(fontSize: 35.0)),
                   ),
-                  FittedBox(child: Text(cf.event.value)),
+                  gradientDividerTransparentEnds(padding: EdgeInsets.only(top: 10.0, bottom: 15.0)),
                   Text(cf.eventDescription.value,
                       style: TextStyle(
                         fontSize: 16.0,

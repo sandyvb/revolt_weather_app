@@ -36,7 +36,8 @@ class _CityMapComponentState extends State<CityMapComponent> {
         ),
       );
     });
-    cu.userInput.value = 'lat=${latLng.latitude}&lon=${latLng.longitude}';
+    cu.userInputLat.value = latLng.latitude;
+    cu.userInputLon.value = latLng.longitude;
   }
 
   @override
@@ -44,7 +45,7 @@ class _CityMapComponentState extends State<CityMapComponent> {
     return GoogleMap(
       initialCameraPosition: CameraPosition(
         target: LatLng(cu.lat.value, cu.lon.value),
-        zoom: 10.0,
+        zoom: 7.0,
       ),
       markers: Set.from(markers),
       onTap: _handleTap,

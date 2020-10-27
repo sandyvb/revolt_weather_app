@@ -1,19 +1,21 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:revolt_weather_app/components/gradientDivider.dart';
 import 'package:revolt_weather_app/controllers/controller.dart';
-import 'package:revolt_weather_app/controllers/controller_location.dart';
 import 'package:revolt_weather_app/screens/city_screen.dart';
 import 'package:revolt_weather_app/screens/forecast_screen.dart';
 import 'package:revolt_weather_app/screens/glance_screen.dart';
+import 'package:revolt_weather_app/screens/location_screen.dart';
 import 'package:revolt_weather_app/screens/revolt_screen.dart';
 import 'package:revolt_weather_app/utilities/constants.dart';
 import 'get_icon.dart';
 
-Container footer() {
-  final Controller c = Get.find();
-  final ControllerLocation cl = Get.find();
+final Controller c = Get.find();
 
+Container footer() {
   return Container(
+    margin: EdgeInsets.only(top: 10.0),
     decoration: BoxDecoration(
       borderRadius: BorderRadius.only(
         topLeft: Radius.circular(15.0),
@@ -24,31 +26,17 @@ Container footer() {
     ),
     child: Column(
       children: [
-        // BOTTOM NAVIGATOR
-        Padding(
-          padding: const EdgeInsets.only(top: 4.0, bottom: 2.0),
+        Container(
+          padding: EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 2.0),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              // NEW CITY
+              // HOME
               Expanded(
                 child: Column(
                   children: [
-                    IconButton(
-                      icon: getIconString('city'),
-                      onPressed: () {
-                        c.prevScreen.value = 'location';
-                        Get.to(CityScreen());
-                      },
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                      child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Text('NEW CITY',
-                              style: kLighterBlueText.copyWith(
-                                fontSize: 11.0,
-                              ))),
-                    ),
+                    IconButton(icon: getIconString('home'), onPressed: () => Get.offAll(LocationScreen())),
+                    Text('HOME', style: kLighterBlueText.copyWith(fontSize: 11.0)),
                   ],
                 ),
               ),
@@ -56,19 +44,8 @@ Container footer() {
               Expanded(
                 child: Column(
                   children: [
-                    IconButton(
-                      icon: getIconString('forecast'),
-                      onPressed: () => Get.to(ForecastScreen()),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                      child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Text('FORECAST',
-                              style: kLighterBlueText.copyWith(
-                                fontSize: 11.0,
-                              ))),
-                    ),
+                    IconButton(icon: getIconString('forecast'), onPressed: () => Get.to(ForecastScreen())),
+                    Text('FORECAST', style: kLighterBlueText.copyWith(fontSize: 11.0)),
                   ],
                 ),
               ),
@@ -76,39 +53,8 @@ Container footer() {
               Expanded(
                 child: Column(
                   children: [
-                    IconButton(
-                      icon: getIconString('glance', size: 30.0),
-                      onPressed: () => Get.to(GlanceScreen()),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                      child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Text('GLANCE',
-                              style: kLighterBlueText.copyWith(
-                                fontSize: 11.0,
-                              ))),
-                    ),
-                  ],
-                ),
-              ),
-              // REFRESH
-              Expanded(
-                child: Column(
-                  children: [
-                    IconButton(
-                      icon: getIconString('refreshBottom'),
-                      onPressed: () => cl.refresh(),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                      child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Text('REFRESH',
-                              style: kLighterBlueText.copyWith(
-                                fontSize: 11.0,
-                              ))),
-                    ),
+                    IconButton(icon: getIconString('glance'), onPressed: () => Get.to(GlanceScreen())),
+                    Text('GLANCE', style: kLighterBlueText.copyWith(fontSize: 11.0)),
                   ],
                 ),
               ),
@@ -116,32 +62,27 @@ Container footer() {
               Expanded(
                 child: Column(
                   children: [
-                    FlatButton(
-                      child: getIconString('revolt'),
-                      onPressed: () => Get.to(RevoltScreen()),
+                    FlatButton(child: getIconString('revolt'), onPressed: () => Get.to(RevoltScreen())),
+                    Text('REVOLT', style: kLighterBlueText.copyWith(fontSize: 11.0)),
+                  ],
+                ),
+              ),
+              // NEW CITY
+              Expanded(
+                child: Column(
+                  children: [
+                    IconButton(
+                      icon: getIconString('city'),
+                      onPressed: () => Get.to(CityScreen()),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                      child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Text('REVOLT',
-                              style: kLighterBlueText.copyWith(
-                                fontSize: 11.0,
-                              ))),
-                    ),
+                    Text('NEW CITY', style: kLighterBlueText.copyWith(fontSize: 11.0)),
                   ],
                 ),
               ),
             ],
           ),
         ),
-        Divider(
-          color: kHr,
-          height: 20.0,
-          thickness: 2.0,
-          indent: 130.0,
-          endIndent: 130.0,
-        ),
+        gradientDividerTransparentEnds(padding: EdgeInsets.all(10.0)),
       ],
     ),
   );

@@ -2,28 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:revolt_weather_app/components/get_icon.dart';
 import 'package:revolt_weather_app/components/gradientDivider.dart';
+import 'package:revolt_weather_app/components/mini_nav.dart';
 import 'package:revolt_weather_app/controllers/controller.dart';
 import 'package:revolt_weather_app/controllers/controller_forecast.dart';
 import 'package:revolt_weather_app/controllers/controller_update.dart';
-import 'package:revolt_weather_app/screens/city_screen.dart';
-import 'package:revolt_weather_app/screens/glance_screen.dart';
-import 'package:revolt_weather_app/screens/location_screen.dart';
 import 'package:revolt_weather_app/services/weather.dart';
 import 'package:revolt_weather_app/utilities/constants.dart';
-
-// HORIZONTAL SCROLL - https://stackoverflow.com/questions/49153087/flutter-scrolling-to-a-widget-in-listview
 
 class ForecastScreen extends StatelessWidget {
   final Controller c = Get.find();
   final ControllerUpdate cu = Get.find();
   final ControllerForecast cf = Get.find();
+
   final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      floatingActionButton: Obx(() => cf.isWeatherEvent(EdgeInsets.only(top: 170.0))),
+      floatingActionButton: Obx(() => cf.isWeatherEvent(EdgeInsets.only(top: 165.0))),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
       body: Container(
         constraints: BoxConstraints.expand(),
@@ -35,7 +32,7 @@ class ForecastScreen extends StatelessWidget {
             Container(
               padding: EdgeInsets.only(top: 35.0),
               decoration: BoxDecoration(
-                color: Color(0xFF3B3C4E),
+                color: kHeaderBlue,
                 boxShadow: kBoxShadowDown,
               ),
               child: Column(
@@ -77,7 +74,7 @@ class ForecastScreen extends StatelessWidget {
                                 value: c.isMetric.value,
                                 onChanged: (value) async {
                                   c.isMetric.value = value;
-                                  c.updateUnits();
+                                  await c.updateUnits();
                                   await WeatherModel().getForecast();
                                 },
                               ),
@@ -102,7 +99,7 @@ class ForecastScreen extends StatelessWidget {
                           width: Get.width / 4.4,
                           height: 40.0,
                         ),
-                        fillColor: kLightestBlue,
+                        fillColor: Colors.white12,
                         selectedColor: Colors.white,
                         color: Colors.white54,
                         highlightColor: kHr,
@@ -166,61 +163,7 @@ class ForecastScreen extends StatelessWidget {
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 children: [
-                  // CITY / LAST UPDATED / HOME / CITY / GLANCE BUTTONS
-                  Container(
-                    margin: EdgeInsets.fromLTRB(20.0, 0, 20.0, 10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        // CITY / LAST UPDATED
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // CITY
-                              Obx(
-                                () => FittedBox(
-                                  child: Text(
-                                    '${cu.city.value.toUpperCase()}${cu.country.value}',
-                                    style: kHeadingTextLarge,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ),
-                              // LAST UPDATED
-                              Obx(
-                                () => FittedBox(
-                                  child: Text(
-                                    'last update: ${cf.lastUpdate.value}',
-                                    style: kSubHeadingText,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        // HOME BUTTON
-                        IconButton(
-                          icon: getIconString('home', size: 25.0),
-                          onPressed: () => Get.off(LocationScreen()),
-                        ),
-                        // CITY BUTTON
-                        IconButton(
-                          icon: getIconString('city'),
-                          onPressed: () {
-                            c.prevScreen.value = 'forecast';
-                            Get.off(CityScreen());
-                          },
-                        ),
-                        // FORECAST BUTTON
-                        IconButton(
-                          icon: getIconString('glance'),
-                          onPressed: () => Get.off(GlanceScreen()),
-                        ),
-                      ],
-                    ),
-                  ),
+                  miniNav(),
                   // DIVIDER
                   gradientDivider(padding: EdgeInsets.fromLTRB(20.0, 0, 20.0, 20.0)),
                   Obx(() => cf.returnSelectedForecast()),

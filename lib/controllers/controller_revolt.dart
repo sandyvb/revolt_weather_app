@@ -19,12 +19,13 @@ class ControllerRevolt extends GetxController {
       width: 300.0,
       height: 300.0,
       margin: EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(Radius.circular(15.0)),
-        image: DecorationImage(
-          image: AssetImage('images/gallery2-1.gif'),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(15.0),
+        child: FadeInImage(
+          imageSemanticLabel: 'The REVOLT Hanging Wind Turbine',
           fit: BoxFit.fill,
+          image: NetworkImage('https://revoltwind.com/images/buy/gallery2-1.gif'),
+          placeholder: AssetImage('images/gallery2-1.jpg'),
         ),
       ),
     );

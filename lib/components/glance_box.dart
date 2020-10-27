@@ -34,7 +34,7 @@ Widget glanceBox({
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           // DAY
-          Text(day, maxLines: 1),
+          Container(height: 20.0, child: FittedBox(child: Text(day))),
           // DIVIDER
           gradientDividerTransparentEnds(padding: EdgeInsets.symmetric(vertical: 8.0)),
           // HIGH TEMP
@@ -80,7 +80,9 @@ Widget glanceBox({
           ),
           gradientDividerTransparentEnds(padding: EdgeInsets.symmetric(vertical: 8.0)),
           // WEATHER ICON
-          Padding(
+          Container(
+            width: 50.0,
+            height: 75.0,
             padding: const EdgeInsets.only(bottom: 20.0),
             child: getIconInt(iconId, size: 45.0, color: Colors.white),
           ),
@@ -109,8 +111,8 @@ Widget glanceBox({
           ),
           gradientDividerTransparentEnds(padding: EdgeInsets.symmetric(vertical: 8.0)),
           // WIND ICON & WIND SPEED
-          Padding(
-            padding: const EdgeInsets.only(bottom: 5.0, top: 2.0),
+          Container(
+            height: 50.0,
             child: getWindIcon(windAngle, color: Colors.white, size: 30.0),
           ),
           FittedBox(
