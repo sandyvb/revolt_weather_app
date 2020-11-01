@@ -128,8 +128,10 @@ class GetCurrent extends StatelessWidget {
                           Container(
                             padding: EdgeInsets.only(bottom: 10.0),
                             child: Obx(
+                              //TODO: MIN MAX
                               () => circularSlider(
-                                max: 12,
+                                min: 0,
+                                max: 24,
                                 initialValue: cc.getHoursUntilSunset().toDouble(),
                                 modifier: hourTillSunsetTextModifier,
                                 colors: [kHr, Color(0xFFF1AA3B), Color(0xFFD36321)],
@@ -308,7 +310,7 @@ class GetCurrent extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(right: 20.0),
+                        padding: const EdgeInsets.only(right: 15.0),
                         child: getIconString('raindrop', color: Colors.white),
                       ),
                       FittedBox(child: Text('Chance of Precipitation', style: kOxygenWhite)),
@@ -397,7 +399,7 @@ class GetCurrent extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(right: 20.0),
+                        padding: const EdgeInsets.only(right: 15.0),
                         child: getIconString('raindrops', color: Colors.white),
                       ),
                       Text('Dew Point', style: kOxygenWhite),

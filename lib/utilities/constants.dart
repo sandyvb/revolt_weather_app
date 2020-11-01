@@ -28,8 +28,21 @@ const kGradientBackgroundDecoration = BoxDecoration(
   ),
 );
 
-// BLUE GRADIENT VERTICAL (0x7F OPACITY)
+// BLUE GRADIENT VERTICAL
 const kBlueGradientVertical = LinearGradient(
+  colors: [
+    Color(0x7F709EFE),
+    Color(0x7F5C47E0),
+    Color(0xFF4120A9),
+  ],
+  begin: Alignment.topCenter,
+  end: Alignment.bottomCenter,
+  tileMode: TileMode.clamp,
+);
+
+// FOOTER GRADIENT VERTICAL
+// BLUE GRADIENT VERTICAL
+const kBlueGradientFooter = LinearGradient(
   colors: [
     Color(0x7F709EFE),
     Color(0x7F5C47E0),
@@ -39,22 +52,24 @@ const kBlueGradientVertical = LinearGradient(
   tileMode: TileMode.clamp,
 );
 
-// HEADER BLUE/PURPLE DIAGONAL SECTION GRADIENT
+// HEADER BLUE/PURPLE DIAGONAL GRADIENT
 const kBlueGradientDiagonal = LinearGradient(
   colors: [
     Color(0xFF709EFE),
     Color(0xFF5C47E0),
+    Color(0xFF4120A9),
   ],
   begin: Alignment.topLeft,
   end: Alignment.bottomRight,
   tileMode: TileMode.clamp,
 );
 
-// HEADER BLUE/PURPLE HORIZONTAL SECTION GRADIENT
+// HEADER BLUE/PURPLE HORIZONTAL GRADIENT
 const kBlueGradientHorizontal = LinearGradient(
   colors: [
     Color(0xFF709EFE),
     Color(0xFF5C47E0),
+    Color(0xFF4120A9),
   ],
   begin: Alignment.centerLeft,
   end: Alignment.centerRight,

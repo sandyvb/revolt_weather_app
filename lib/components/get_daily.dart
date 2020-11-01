@@ -23,6 +23,12 @@ class GetDaily extends StatelessWidget {
   final ScrollController _scrollController = ScrollController();
 
   Future<Column> _getDailyProgressBars() async {
+    String _uvi;
+    try {
+      if (cf.daily[0]['uvi'] >= 0) _uvi = 'UV INDEX';
+    } catch (e) {
+      _uvi = 'NO UVI DATA AVAILABLE';
+    }
     return Column(
       children: [
         Obx(() => Text('HIGH TEMPERATURES (${c.temperatureUnits.value})', style: TextStyle(fontSize: 12.0, letterSpacing: 0.7))),
@@ -42,6 +48,18 @@ class GetDaily extends StatelessWidget {
         ),
         Obx(() => _progressBar.getSpotlight(type: 'powerDaily')),
         _progressBar.getSpotlightText(),
+        gradientDivider(padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0)),
+        Text('CHANCE OF PRECIPITATION (%)', style: TextStyle(fontSize: 12.0, letterSpacing: 0.7)),
+        Obx(() => _progressBar.getSpotlight(type: 'popDaily')),
+        _progressBar.getSpotlightText(),
+        gradientDivider(padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0)),
+        Text('HUMIDITY (%)', style: TextStyle(fontSize: 12.0, letterSpacing: 0.7)),
+        Obx(() => _progressBar.getSpotlight(type: 'humidityDaily')),
+        _progressBar.getSpotlightText(),
+        gradientDivider(padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0)),
+        Text(_uvi, style: TextStyle(fontSize: 12.0, letterSpacing: 0.7)),
+        if (_uvi == 'UV INDEX') Obx(() => _progressBar.getSpotlight(type: 'uviDaily')),
+        if (_uvi == 'UVI INDEX') _progressBar.getSpotlightText(),
         gradientDivider(padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0)),
       ],
     );

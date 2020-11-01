@@ -189,9 +189,16 @@ class ControllerForecast extends GetxController {
 
     // UPDATE REVOLT MESSAGE ////////////////////////////////////////////////////////////////
     watt.value = power.value.ceil() == 1 ? 'Watt' : 'Watts';
-    revoltText.value = cu.city.value == 'Somewhere'
-        ? 'A REVOLT Hanging Wind Turbine would be producing ${power.value.ceil()} ${watt.value} of power ${cu.city.value} with a wind speed of ${currentWindSpeed.value.toInt()} ${c.speedUnits.value}.'
-        : 'A REVOLT Hanging Wind Turbine would be producing ${power.value.ceil()} ${watt.value} of power in ${cu.city.value} with a wind speed of ${currentWindSpeed.value.toInt()} ${c.speedUnits.value}.';
+    if (cu.city.value.contains('SOMEWHERE')) {
+      String _newValue = cu.city.value;
+      _newValue = _newValue.replaceFirst('\n', ' ');
+      _newValue = _newValue.replaceFirst('SOMEWHERE AT', 'Somewhere at');
+      revoltText.value =
+          'A REVOLT Hanging Wind Turbine would be producing ${power.value.ceil()} ${watt.value} of power $_newValue with a wind speed of ${currentWindSpeed.value.toInt()} ${c.speedUnits.value}.';
+    } else {
+      revoltText.value =
+          'A REVOLT Hanging Wind Turbine would be producing ${power.value.ceil()} ${watt.value} of power in ${cu.city.value} with a wind speed of ${currentWindSpeed.value.toInt()} ${c.speedUnits.value}.';
+    }
   }
 
   // MISC FUNCTIONS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

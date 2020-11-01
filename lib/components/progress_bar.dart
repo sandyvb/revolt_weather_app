@@ -62,6 +62,27 @@ class ProgressBar {
       height = 60.0;
       length = 8;
       border = 'default';
+    } else if (type == 'popDaily') {
+      displayText = '';
+      maxValue = 100;
+      width = Get.width / 10;
+      height = 60.0;
+      length = 8;
+      border = 'default';
+    } else if (type == 'humidityDaily') {
+      displayText = '';
+      maxValue = 100;
+      width = Get.width / 10;
+      height = 60.0;
+      length = 8;
+      border = 'default';
+    } else if (type == 'uviDaily') {
+      displayText = '';
+      maxValue = 10;
+      width = Get.width / 10;
+      height = 60.0;
+      length = 8;
+      border = 'default';
     } else if (type == 'tempHourly') {
       maxValue = c.isMetric.value ? 43 : 110;
       width = Get.width / 60;
@@ -86,6 +107,24 @@ class ProgressBar {
       height = 60.0;
       length = 48;
       border = null;
+    } else if (type == 'popHourly') {
+      maxValue = 100;
+      width = Get.width / 60;
+      height = 60.0;
+      length = 48;
+      border = null;
+    } else if (type == 'humidityHourly') {
+      maxValue = 100;
+      width = Get.width / 60;
+      height = 60.0;
+      length = 48;
+      border = null;
+    } else if (type == 'cloudsHourly') {
+      maxValue = 100;
+      width = Get.width / 60;
+      height = 60.0;
+      length = 48;
+      border = null;
     } else {
       // MINUTELY
       maxValue = 600;
@@ -103,6 +142,12 @@ class ProgressBar {
         currentValue = i == 0 ? cf.currentWindSpeed.value.toInt() : cf.daily[i]['wind_speed'].toInt();
       } else if (type == 'powerDaily') {
         currentValue = cf.getRevoltPower(i, type: 'daily').toInt();
+      } else if (type == 'popDaily') {
+        currentValue = (cf.daily[i]['pop'] * 100).toInt();
+      } else if (type == 'humidityDaily') {
+        currentValue = cf.daily[i]['humidity'].toInt();
+      } else if (type == 'uviDaily') {
+        currentValue = cf.daily[i]['uvi'].toInt();
       } else if (type == 'powerHourly') {
         currentValue = cf.getRevoltPower(i, type: 'hourly').toInt();
       } else if (type == 'tempHourly') {
@@ -111,6 +156,12 @@ class ProgressBar {
         currentValue = cf.hourly[i]['wind_speed'].toInt();
       } else if (type == 'precipHourly') {
         currentValue = (cf.hourly[i]['pop'] * 100).toInt() + 20;
+      } else if (type == 'popHourly') {
+        currentValue = (cf.hourly[i]['pop'] * 100).toInt();
+      } else if (type == 'humidityHourly') {
+        currentValue = cf.hourly[i]['humidity'].toInt();
+      } else if (type == 'cloudsHourly') {
+        currentValue = cf.hourly[i]['clouds'].toInt();
       } else {
         try {
           currentValue = (cf.minutely[i]['precipitation'] * 100).toInt() + 20;

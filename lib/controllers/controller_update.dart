@@ -12,7 +12,7 @@ class ControllerUpdate extends GetxController {
   Future<void> updateData(dynamic weatherData) async {
     // UPDATE LOCATION VARIABLES FROM WEATHER.DART //////////////////////////////////////////
     city.value = weatherData['name'];
-    if (city.value.isNullOrBlank) city.value = 'Somewhere';
+    if (city.value.isNullOrBlank) city.value = 'SOMEWHERE AT\nlat: ${lat.value.toStringAsFixed(2)}, lon: ${lon.value.toStringAsFixed(2)}';
     var _getCountry = weatherData['sys']['country'];
     country.value = _getCountry == 'US'
         ? ''

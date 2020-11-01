@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:revolt_weather_app/components/get_icon.dart';
 import 'package:revolt_weather_app/controllers/controller.dart';
 import 'package:revolt_weather_app/controllers/controller_forecast.dart';
 import 'package:revolt_weather_app/controllers/controller_update.dart';
@@ -30,7 +31,13 @@ class LoadingScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            loadingSpinner(),
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                loadingSpinner(),
+                getIconString('revolt', color: kSwitchColor, size: 43.0),
+              ],
+            ),
             Padding(
               padding: const EdgeInsets.only(top: 10.0),
               child: Text('Retrieving Data...', style: TextStyle(fontSize: 20.0)),

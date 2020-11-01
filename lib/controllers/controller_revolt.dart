@@ -25,7 +25,7 @@ class ControllerRevolt extends GetxController {
           imageSemanticLabel: 'The REVOLT Hanging Wind Turbine',
           fit: BoxFit.fill,
           image: NetworkImage('https://revoltwind.com/images/buy/gallery2-1.gif'),
-          placeholder: AssetImage('images/gallery2-1.jpg'),
+          placeholder: AssetImage('images/galleryLoad.gif'),
         ),
       ),
     );

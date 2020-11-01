@@ -21,7 +21,7 @@ Container footer() {
         topLeft: Radius.circular(15.0),
         topRight: Radius.circular(15.0),
       ),
-      gradient: kBlueGradientVertical,
+      gradient: kBlueGradientFooter,
       boxShadow: kBoxShadowUp,
     ),
     child: Column(

@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -45,8 +46,20 @@ class GetHourly extends StatelessWidget {
         Obx(() => _progressBar.getSpotlight(type: 'powerHourly')),
         Obx(() => _progressBar.getSpotlightTextHourly()),
         gradientDivider(padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0)),
+        Text('CHANCE OF PRECIPITATION', style: TextStyle(fontSize: 12.0, letterSpacing: 0.7)),
+        Obx(() => _progressBar.getSpotlight(type: 'popHourly')),
+        _progressBar.getSpotlightTextHourly(),
+        gradientDivider(padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0)),
         Text('PRECIPITATION', style: TextStyle(fontSize: 12.0, letterSpacing: 0.7)),
         Obx(() => _progressBar.getSpotlight(type: 'precipHourly')),
+        Obx(() => _progressBar.getSpotlightTextHourly()),
+        gradientDivider(padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0)),
+        Text('HUMIDITY (%)', style: TextStyle(fontSize: 12.0, letterSpacing: 0.7)),
+        Obx(() => _progressBar.getSpotlight(type: 'humidityHourly')),
+        Obx(() => _progressBar.getSpotlightTextHourly()),
+        gradientDivider(padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0)),
+        Text('CLOUD COVER (%)', style: TextStyle(fontSize: 12.0, letterSpacing: 0.7)),
+        Obx(() => _progressBar.getSpotlight(type: 'cloudsHourly')),
         Obx(() => _progressBar.getSpotlightTextHourly()),
         gradientDivider(padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0)),
         Row(

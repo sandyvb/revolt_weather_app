@@ -27,7 +27,7 @@ Padding miniNav() {
                 fit: BoxFit.scaleDown,
                 child: Obx(
                   () => Text(
-                    '${cu.city.value.toUpperCase()}${cu.country.value}',
+                    cu.city.value.contains('SOMEWHERE') ? '${cu.city.value}' : '${cu.city.value.toUpperCase()}${cu.country.value}',
                     style: kHeadingTextLarge,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,

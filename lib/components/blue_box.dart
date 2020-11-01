@@ -15,6 +15,7 @@ Widget smBlueBox({dynamic child}) {
           colors: [
             Color(0xFF709EFE),
             Color(0xFF5C47E0),
+            Color(0xFF4120A9),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -39,6 +40,7 @@ Widget blueBox({dynamic child, dynamic margin}) {
           colors: [
             Color(0xFF709EFE),
             Color(0xFF5C47E0),
+            Color(0xFF4120A9),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,

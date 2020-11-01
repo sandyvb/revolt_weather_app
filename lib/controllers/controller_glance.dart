@@ -43,7 +43,6 @@ class ControllerGlance extends GetxController {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Expanded(
-                      flex: 4,
                       child: Obx(
                         () => FittedBox(
                           child: Text(
@@ -58,7 +57,6 @@ class ControllerGlance extends GetxController {
                     ),
                     SizedBox(width: 20.0),
                     Expanded(
-                      flex: 5,
                       child: Container(
                         width: Get.width * 0.25,
                         child: FAProgressBar(
@@ -68,9 +66,7 @@ class ControllerGlance extends GetxController {
                           animatedDuration: const Duration(milliseconds: 1000),
                           direction: Axis.horizontal,
                           backgroundColor: Colors.white38,
-                          progressColor: Colors.deepPurpleAccent,
-                          changeColorValue: c.isMetric.value ? 4 : 2,
-                          changeProgressColor: Colors.deepPurple,
+                          progressColor: Colors.blue,
                         ),
                       ),
                     ),
@@ -114,7 +110,6 @@ class ControllerGlance extends GetxController {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Expanded(
-                      flex: 4,
                       child: Obx(
                         () => FittedBox(
                           child: Text(
@@ -129,7 +124,6 @@ class ControllerGlance extends GetxController {
                     ),
                     SizedBox(width: 20.0),
                     Expanded(
-                      flex: 5,
                       child: Container(
                         width: Get.width * 0.25,
                         child: FAProgressBar(
@@ -139,9 +133,7 @@ class ControllerGlance extends GetxController {
                           animatedDuration: const Duration(milliseconds: 1000),
                           direction: Axis.horizontal,
                           backgroundColor: Colors.white38,
-                          progressColor: Colors.deepPurpleAccent,
-                          changeColorValue: c.isMetric.value ? 4 : 2,
-                          changeProgressColor: Colors.deepPurple,
+                          progressColor: Colors.blue,
                         ),
                       ),
                     ),
