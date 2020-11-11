@@ -31,17 +31,22 @@ class LoadingScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                loadingSpinner(),
-                getIconString('revolt', color: kSwitchColor, size: 43.0),
-              ],
-            ),
+            loadingSpinner(),
             Padding(
               padding: const EdgeInsets.only(top: 10.0),
               child: Text('Retrieving Data...', style: TextStyle(fontSize: 20.0)),
             ),
+          ],
+        ),
+      ),
+      bottomSheet: Container(
+        padding: const EdgeInsets.symmetric(vertical: 30.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            getIconString('revolt', color: kSwitchColor),
+            SizedBox(width: 5.0),
+            Text("REVOLTwind.com", style: TextStyle(fontSize: 18.0)),
           ],
         ),
       ),

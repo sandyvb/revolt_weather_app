@@ -5,6 +5,7 @@ import 'package:revolt_weather_app/controllers/controller.dart';
 import 'package:revolt_weather_app/controllers/controller_forecast.dart';
 import 'package:revolt_weather_app/controllers/controller_update.dart';
 import 'package:revolt_weather_app/services/location.dart';
+
 import 'networking.dart';
 
 // API KEY FOR OWM
@@ -50,7 +51,11 @@ class WeatherModel {
     var weatherData = await networkHelper.getData();
     weatherData == null ? _getSnackbar() : cu.updateData(weatherData);
     // INIT KEY GLOBAL VARIABLES
-    cu.initialCity.value = weatherData['name'];
+    try {
+      cu.initialCity.value = weatherData['name'];
+    } catch (e) {
+      cu.initialCity.value = 'SOMEWHERE AT\nlat: ${location.latitude.toStringAsFixed(2)}, lon: ${location.longitude.toStringAsFixed(2)}';
+    }
     cu.city.value = cu.initialCity.value;
     cu.lat.value = location.latitude;
     cu.lon.value = location.longitude;

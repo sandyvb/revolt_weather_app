@@ -24,8 +24,8 @@ class ControllerRevolt extends GetxController {
         child: FadeInImage(
           imageSemanticLabel: 'The REVOLT Hanging Wind Turbine',
           fit: BoxFit.fill,
-          image: NetworkImage('https://revoltwind.com/images/buy/gallery2-1.gif'),
-          placeholder: AssetImage('images/galleryLoad.gif'),
+          image: NetworkImage('https://revoltwind.com/images/buy/gallery2-1.webp'),
+          placeholder: AssetImage('images/galleryLoad.webp'),
         ),
       ),
     );
@@ -42,7 +42,7 @@ class ControllerRevolt extends GetxController {
   // GO TO REVOLTWIND.COM
   IconButton goToWebsite() {
     return IconButton(
-      icon: Image.asset('images/rwBoltR.png'),
+      icon: Image.asset('images/rwBoltR.webp'),
       padding: EdgeInsets.fromLTRB(0, 5.0, 0, 25.0),
       splashColor: Colors.green[600],
       splashRadius: 100.0,

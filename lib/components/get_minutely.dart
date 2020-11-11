@@ -132,7 +132,7 @@ class GetMinutely extends StatelessWidget {
             margin: EdgeInsets.fromLTRB(30.0, 0.0, 30.0, 20.0),
             child: Row(
               children: [
-                ImageIcon(AssetImage('images/greenBolt.png'), size: 50.0, color: kSwitchColor),
+                ImageIcon(AssetImage('images/greenBolt.webp'), size: 50.0, color: kSwitchColor),
                 SizedBox(width: 20.0),
                 Flexible(
                   child: Obx(() => Text(

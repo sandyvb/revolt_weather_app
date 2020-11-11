@@ -20,16 +20,16 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Revolt Wind Weather App',
       theme: ThemeData.dark().copyWith(
-        accentColor: kLighterBlue,
-        dividerColor: Colors.transparent,
-        iconTheme: IconThemeData(size: 30.0, color: kLighterBlue),
-        textTheme: Theme.of(context).textTheme.apply(
-              fontFamily: 'RedHat',
-              bodyColor: Colors.white,
-              displayColor: Colors.white,
-            ),
-        cardColor: Color(0xFF3B3C4E).withOpacity(0.8),
-      ),
+          accentColor: kLighterBlue,
+          dividerColor: Colors.transparent,
+          iconTheme: IconThemeData(size: 30.0, color: kLighterBlue),
+          textTheme: Theme.of(context).textTheme.apply(
+                fontFamily: 'RedHat',
+                bodyColor: Colors.white,
+                displayColor: Colors.white,
+              ),
+          cardColor: Color(0xFF3B3C4E).withOpacity(0.8),
+          bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.transparent)),
       home: LoadingScreen(),
     );
   }

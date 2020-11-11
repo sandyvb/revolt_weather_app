@@ -9,6 +9,7 @@ import 'package:revolt_weather_app/controllers/controller_update.dart';
 import 'package:revolt_weather_app/screens/revolt_screen.dart';
 import 'package:revolt_weather_app/services/sliders.dart';
 import 'package:revolt_weather_app/utilities/constants.dart';
+
 import 'footer.dart';
 import 'get_icon.dart';
 
@@ -163,7 +164,7 @@ class GetCurrent extends StatelessWidget {
                           FittedBox(
                             child: Obx(
                               () => Text(
-                                '${cu.initialCity.value} time',
+                                cu.initialCity.value.contains('SOMEWHERE') ? 'Somewhere time' : '${cu.initialCity.value} time',
                                 style: kOxygen.copyWith(height: 1.6),
                                 maxLines: 2,
                                 textAlign: TextAlign.center,

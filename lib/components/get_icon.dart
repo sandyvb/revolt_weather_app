@@ -29,7 +29,7 @@ Widget getWindIcon(var angle, {double size = 24.0, Color color = kLighterBlue}) 
 // RETURNS AN ICON GIVEN A STRING
 Widget getIconString(String code, {double size = 27.0, Color color = kLighterBlue}) {
   if (code == 'revolt') {
-    return ImageIcon(AssetImage('images/greenBolt.png'), size: size, color: color);
+    return ImageIcon(AssetImage('images/greenBolt.webp'), size: size, color: color);
   } else if (code == 'location') {
     return Icon(Entypo.location_pin, size: size, color: color);
   } else if (code == 'alert') {
