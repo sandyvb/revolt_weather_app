@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:revolt_weather_app/components/get_current.dart';
+import 'package:revolt_weather_app/components/get_daily.dart';
+import 'package:revolt_weather_app/components/get_hourly.dart';
 import 'package:revolt_weather_app/components/get_icon.dart';
+import 'package:revolt_weather_app/components/get_minutely.dart';
 import 'package:revolt_weather_app/components/gradientDivider.dart';
 import 'package:revolt_weather_app/components/mini_nav.dart';
 import 'package:revolt_weather_app/controllers/controller.dart';
@@ -9,12 +13,19 @@ import 'package:revolt_weather_app/controllers/controller_update.dart';
 import 'package:revolt_weather_app/services/weather.dart';
 import 'package:revolt_weather_app/utilities/constants.dart';
 
-class ForecastScreen extends StatelessWidget {
+class ForecastScreen extends StatefulWidget {
+  @override
+  _ForecastScreenState createState() => _ForecastScreenState();
+}
+
+class _ForecastScreenState extends State<ForecastScreen> {
   final Controller c = Get.find();
   final ControllerUpdate cu = Get.find();
   final ControllerForecast cf = Get.find();
-
   final ScrollController _scrollController = ScrollController();
+
+  Widget selectedForecast = GetCurrent();
+  String greetingSelectedForecast = 'TODAY\'S FORECAST';
 
   @override
   Widget build(BuildContext context) {
@@ -48,15 +59,13 @@ class ForecastScreen extends StatelessWidget {
                         child: getIconString('back', color: Colors.white),
                       ),
                       // GREETING
-                      Obx(
-                        () => Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10.0),
-                            child: FittedBox(
-                              child: Text(
-                                '${cf.greetingSelectedForecast.value}',
-                                style: kGreetingText,
-                              ),
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10.0),
+                          child: FittedBox(
+                            child: Text(
+                              greetingSelectedForecast,
+                              style: kGreetingText,
                             ),
                           ),
                         ),
@@ -140,13 +149,25 @@ class ForecastScreen extends StatelessWidget {
                             }
                           }
                           if (index == 0) {
-                            cf.selectedForecast.value = 'current';
+                            setState(() {
+                              greetingSelectedForecast = 'TODAY\'S FORECAST';
+                              selectedForecast = GetCurrent();
+                            });
                           } else if (index == 1) {
-                            cf.selectedForecast.value = 'daily';
+                            setState(() {
+                              greetingSelectedForecast = '7 DAY FORECAST';
+                              selectedForecast = GetDaily();
+                            });
                           } else if (index == 2) {
-                            cf.selectedForecast.value = 'hourly';
+                            setState(() {
+                              greetingSelectedForecast = '48 HR FORECAST';
+                              selectedForecast = GetHourly();
+                            });
                           } else {
-                            cf.selectedForecast.value = 'minutely';
+                            setState(() {
+                              greetingSelectedForecast = '60 MIN FORECAST';
+                              selectedForecast = GetMinutely();
+                            });
                           }
                         },
                         isSelected: cf.isSelected,
@@ -166,7 +187,7 @@ class ForecastScreen extends StatelessWidget {
                   miniNav(),
                   // DIVIDER
                   gradientDivider(padding: EdgeInsets.fromLTRB(20.0, 0, 20.0, 20.0)),
-                  Obx(() => cf.returnSelectedForecast()),
+                  selectedForecast,
                 ],
               ),
             ),

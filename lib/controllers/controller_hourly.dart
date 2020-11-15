@@ -1,8 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:revolt_weather_app/components/blue_box.dart';
 import 'package:revolt_weather_app/components/get_icon.dart';
 import 'package:revolt_weather_app/controllers/controller_forecast.dart';
-import 'package:flutter/material.dart';
+
 import 'controller.dart';
 
 class ControllerHourly extends GetxController {
@@ -16,7 +17,7 @@ class ControllerHourly extends GetxController {
 
   @override
   void onInit() {
-    data.value = generateItems(48);
+    data(generateItems(48));
     super.onInit();
   }
 

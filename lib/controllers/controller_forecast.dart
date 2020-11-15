@@ -1,16 +1,12 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:revolt_weather_app/components/get_current.dart';
-import 'package:revolt_weather_app/components/get_daily.dart';
-import 'package:revolt_weather_app/components/get_hourly.dart';
+import 'package:intl/intl.dart';
 import 'package:revolt_weather_app/components/get_icon.dart';
-import 'package:revolt_weather_app/components/get_minutely.dart';
+import 'package:revolt_weather_app/controllers/controller.dart';
+import 'package:revolt_weather_app/controllers/controller_update.dart';
 import 'package:revolt_weather_app/screens/alert_screen.dart';
 import 'package:revolt_weather_app/services/calculator.dart';
-import 'package:revolt_weather_app/controllers/controller_update.dart';
-import 'package:revolt_weather_app/controllers/controller.dart';
-import 'package:intl/intl.dart';
-import 'package:flutter/material.dart';
 import 'package:revolt_weather_app/utilities/constants.dart';
 
 class ControllerForecast extends GetxController {
@@ -22,7 +18,6 @@ class ControllerForecast extends GetxController {
   var day = 'today'.obs;
   var lastUpdate = 'now'.obs;
   var greetingLocationScreen = 'hello'.obs;
-  var greetingSelectedForecast = 'forecast'.obs;
   var date = 'this day'.obs;
   var currentDt = 0.obs;
   var getSunrise = 0.obs;
@@ -38,7 +33,7 @@ class ControllerForecast extends GetxController {
   var currentPressureHg = 'pressureHg'.obs;
   var currentHumidity = 0.obs;
   var currentDewpoint = 0.0.obs;
-  var currentUvi = 0.obs;
+  var currentUvi = 0.0.obs;
   var currentClouds = 0.obs;
   var currentVisibility = 0.0.obs;
   var currentWindSpeed = 0.0.obs;
@@ -51,7 +46,6 @@ class ControllerForecast extends GetxController {
   var currentWeatherId = 0.obs;
   var currentWeatherMain = 'pleasant'.obs;
   var currentWeatherDescription = 'very pleasant'.obs;
-  var selectedForecast = 'current'.obs;
   var isSelected = [true, false, false, false].obs;
   var sunriseSunsetMessage = 'Calculating...'.obs;
   var senderName = 'weather service'.obs;
@@ -64,19 +58,19 @@ class ControllerForecast extends GetxController {
   var revoltText = 'cool windmill'.obs;
 
   // CURRENT
-  final current = <dynamic>[].obs;
+  var current = <dynamic>[].obs;
 
   // MINUTELY - LENGTH = 61
-  final minutely = <dynamic>[].obs;
+  var minutely = <dynamic>[].obs;
 
   // HOURLY - LENGTH = 48
-  final hourly = <dynamic>[].obs;
+  var hourly = <dynamic>[].obs;
 
   // DAILY - LENGTH = 8
-  final daily = <dynamic>[].obs;
+  var daily = <dynamic>[].obs;
 
   // ALERTS - LENGTH = 1
-  final alerts = <dynamic>[].obs;
+  var alerts = <dynamic>[].obs;
 
   void updateForecast(dynamic weatherData) async {
     final Calculator calculator = Calculator();
@@ -119,20 +113,23 @@ class ControllerForecast extends GetxController {
     getSunriseTomorrow.value = weatherData['daily'][1]['sunrise']; // INT
     getSunsetTomorrow.value = weatherData['daily'][1]['sunset']; // INT
     getSunriseTheNextDay.value = weatherData['daily'][2]['sunrise']; // INT
-    currentTemp.value = weatherData['current']['temp']; // VAR - INT or DOUBLE
-    currentFeelsLike.value = weatherData['current']['feels_like']; // VAR - INT or DOUBLE
-    currentPressure.value = weatherData['current']['pressure']; // INT
+    currentTemp.value = weatherData['current']['temp'].toDouble(); // VAR - INT or DOUBLE
+    currentFeelsLike.value = weatherData['current']['feels_like'].toDouble(); // VAR - INT or DOUBLE
+    currentPressure.value = weatherData['current']['pressure'].toDouble(); // INT
     currentPressureHg.value = (currentPressure.value * 0.02953).toStringAsFixed(2);
     currentHumidity.value = weatherData['current']['humidity']; // INT
-    currentDewpoint.value = weatherData['current']['dew_point']; // DOUBLE
-    currentUvi.value = weatherData['current']['uvi']; // DOUBLE - MIDDAY UV INDEX
+    currentDewpoint.value = weatherData['current']['dew_point'].toDouble(); // DOUBLE
+    currentUvi.value = weatherData['current']['uvi'].toDouble(); // DOUBLE - MIDDAY UV INDEX
     currentClouds.value = weatherData['current']['clouds']; // INT %
-    currentVisibility.value = weatherData['current']['visibility']; // METERS
+
+    // visibility
+    currentVisibility.value = weatherData['current']['visibility'].toDouble(); // INT METERS
     if (c.isMetric.value) {
       currentVisibility.value /= 1000; // KM
     } else {
       currentVisibility.value = currentVisibility.value / 1.609344 / 1000; // MILES
     }
+
     currentWindSpeed.value = weatherData['current']['wind_speed']; // VAR - INT or DOUBLE
     try {
       currentWindGust.value = weatherData['wind']['gust'].toInt();
@@ -159,12 +156,13 @@ class ControllerForecast extends GetxController {
     currentWeatherMain.value = weatherData['current']['weather'][0]['main']; // ONE WORD DESC
     currentWeatherDescription.value = weatherData['current']['weather'][0]['description']; // DESCRIPTION
     // GET LISTS
-    minutely.value = weatherData['minutely']; // 61 ITEMS
-    hourly.value = weatherData['hourly']; // 48 ITEMS
-    daily.value = weatherData['daily']; // 8 ITEMS
+    // minutely = weatherData['minutely']; // 61 ITEMS
+    minutely(weatherData['minutely']); // 61 ITEMS
+    hourly(weatherData['hourly']); // 48 ITEMS
+    daily(weatherData['daily']); // 8 ITEMS
 
     try {
-      alerts.value = weatherData['alerts']; // 1 ITEM
+      alerts = weatherData['alerts']; // 1 ITEM
       senderName.value = alerts[0]['sender_name'];
       event.value = alerts[0]['event'];
       String desc = alerts[0]['description'];
@@ -338,23 +336,6 @@ class ControllerForecast extends GetxController {
     var weekday = DateFormat.E().format(result);
     var numMonthDay = DateFormat.d().format(result);
     return '$weekday $numMonthDay';
-  }
-
-// RETURN CURRENT / MINUTELY / HOURLY / DAILY COMPONENTS & GREETING
-  dynamic returnSelectedForecast() {
-    if (selectedForecast.value == 'current') {
-      greetingSelectedForecast.value = 'TODAY\'S FORECAST';
-      return GetCurrent();
-    } else if (selectedForecast.value == 'daily') {
-      greetingSelectedForecast.value = '7 DAY FORECAST';
-      return GetDaily();
-    } else if (selectedForecast.value == 'hourly') {
-      greetingSelectedForecast.value = '48 HR FORECAST';
-      return GetHourly();
-    } else {
-      greetingSelectedForecast.value = '60 MIN FORECAST';
-      return GetMinutely();
-    }
   }
 
   // FLOATING ACTION BUTTON FOR ALL SCREENS EXCEPT LOCATION SCREEN

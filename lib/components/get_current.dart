@@ -13,13 +13,24 @@ import 'package:revolt_weather_app/utilities/constants.dart';
 import 'footer.dart';
 import 'get_icon.dart';
 
-class GetCurrent extends StatelessWidget {
+class GetCurrent extends StatefulWidget {
+  @override
+  _GetCurrentState createState() => _GetCurrentState();
+}
+
+class _GetCurrentState extends State<GetCurrent> {
   final ControllerCurrent cc = Get.put(ControllerCurrent());
   final Controller c = Get.find();
   final ControllerUpdate cu = Get.find();
   final ControllerForecast cf = Get.find();
 
+  String sunriseSunsetMsg = "init message";
+  double initTime = 0.0;
+
   Future<Column> getCurrent() async {
+    sunriseSunsetMsg = cf.sunriseSunsetMessage.value;
+    initTime = cc.getHoursUntilSunset().toDouble();
+
     return Column(
       children: [
         Container(
@@ -123,26 +134,29 @@ class GetCurrent extends StatelessWidget {
                       maxWidth: Get.width / 3.6,
                     ),
                     child: GestureDetector(
-                      onTap: () => cc.getHoursUntilSunset(),
+                      onTap: () {
+                        cc.getHoursUntilSunset();
+                        setState(() {
+                          sunriseSunsetMsg = cf.sunriseSunsetMessage.value;
+                          initTime = cc.getHoursUntilSunset().toDouble();
+                        });
+                      },
                       child: Column(
                         children: [
                           Container(
                             padding: EdgeInsets.only(bottom: 10.0),
-                            child: Obx(
-                              //TODO: MIN MAX
-                              () => circularSlider(
-                                min: 0,
-                                max: 24,
-                                initialValue: cc.getHoursUntilSunset().toDouble(),
-                                modifier: hourTillSunsetTextModifier,
-                                colors: [kHr, Color(0xFFF1AA3B), Color(0xFFD36321)],
-                                bottomLabelText: cf.sunriseSunsetMessage.value,
-                                size: Get.width / 3.6,
-                                mainLabelStyle: kDataCurrent,
-                                bottomLabelStyle: kBottomLabelStyleSm,
-                                startAngle: 0,
-                                angleRange: 360,
-                              ),
+                            child: circularSlider(
+                              min: 0,
+                              max: 24,
+                              initialValue: initTime,
+                              modifier: hourTillSunsetTextModifier,
+                              colors: [kHr, Color(0xFFF1AA3B), Color(0xFFD36321)],
+                              bottomLabelText: sunriseSunsetMsg,
+                              size: Get.width / 3.6,
+                              mainLabelStyle: kDataCurrent,
+                              bottomLabelStyle: kBottomLabelStyleSm,
+                              startAngle: 0,
+                              angleRange: 360,
                             ),
                           ),
                           FittedBox(

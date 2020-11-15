@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:revolt_weather_app/controllers/controller_forecast.dart';
+
 import 'controller.dart';
 
 class ControllerDaily extends GetxController {
@@ -10,7 +11,7 @@ class ControllerDaily extends GetxController {
 
   @override
   void onInit() {
-    data.value = generateItems(8);
+    data(generateItems(8));
     super.onInit();
   }
 
