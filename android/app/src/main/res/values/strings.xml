@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="weather">Weather</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="city">Your City</string>
+    <string name="temperature">Temperature</string>
+    <string name="condition">Condition</string>
+    <string name="last_updated">Last updated</string>
+    <string name="weather_icon">weather icon</string>
 </resources>

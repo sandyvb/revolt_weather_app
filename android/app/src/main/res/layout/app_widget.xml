@@ -1,0 +1,68 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/custom_shape"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        tools:ignore="UselessParent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/cityTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableEnd="@drawable/ic_location"
+                android:text="@string/city"
+                android:textAlignment="textStart"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tempTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/temperature"
+                android:textAlignment="textStart"
+                android:textColor="@color/white"
+                android:textSize="36sp" />
+
+            <TextView
+                android:id="@+id/condTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/condition"
+                android:textAlignment="textStart"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+
+            <TextView
+                android:id="@+id/timeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableEnd="@drawable/ic_refresh"
+                android:text="@string/last_updated"
+                android:textAlignment="textStart"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iconImageView"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center_vertical"
+            android:scaleType="fitXY"
+            android:contentDescription="@string/weather_icon"
+            tools:srcCompat="@tools:sample/avatars" />
+    </LinearLayout>
+</FrameLayout>

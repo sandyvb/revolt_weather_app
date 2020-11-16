@@ -23,6 +23,10 @@ if (flutterVersionName == null) {
 
 apply plugin: 'com.android.application'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+
 
 android {
     compileSdkVersion 30
@@ -33,7 +37,7 @@ android {
 
     defaultConfig {
         applicationId "revoltwind.revolt_weather_app"
-        minSdkVersion 19
+        minSdkVersion 26
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -49,4 +53,12 @@ android {
 
 flutter {
     source '../..'
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
+    implementation 'com.google.android.gms:play-services-location:17.1.0'
+    implementation 'com.android.volley:volley:1.1.1'
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
 }
