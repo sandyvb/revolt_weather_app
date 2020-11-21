@@ -8,23 +8,20 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.util.Log
+import android.view.View
 import android.widget.RemoteViews
 import androidx.core.app.ActivityCompat
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.AppWidgetTarget
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import java.time.Instant
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.util.*
 
-class AppWidget : AppWidgetProvider() {
+class Forecast : AppWidgetProvider() {
 
-    private val apiLink: String = "https://api.openweathermap.org/data/2.5/weather?"
+    private val apiLink: String = "https://api.openweathermap.org/data/2.5/onecall?"
+    private val apiLinkName: String = "https://api.openweathermap.org/data/2.5/weather?"
+
     private var coordinates: String = "SOMEWHERE"
     private val apiIcon: String = "https://revoltwind.com/icons/"
     private val apiKey = "217da33042b65b3c9e4bd01ab0bdd02b"
@@ -48,16 +45,16 @@ class AppWidget : AppWidgetProvider() {
         super.onReceive(context, intent)
 
         // got a new action, check if it is refresh action
-        if (intent.action == "com.revoltwind.appwidget.REFRESH") {
+        if (intent.action == "com.revoltwind.forecast.REFRESH") {
             val appWidgetManager = AppWidgetManager.getInstance(context.applicationContext)
-            val views = RemoteViews(context.packageName, R.layout.app_widget)
+            val views = RemoteViews(context.packageName, R.layout.forecast)
             val appWidgetId = intent.extras!!.getInt("appWidgetId")
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
             getLastKnownLocation(context, views, appWidgetId, appWidgetManager)
         }
-        if (intent.action == "com.revoltwind.appwidget.CONVERT") {
+        if (intent.action == "com.revoltwind.forecast.CONVERT") {
             val appWidgetManager = AppWidgetManager.getInstance(context.applicationContext)
-            val views = RemoteViews(context.packageName, R.layout.app_widget)
+            val views = RemoteViews(context.packageName, R.layout.forecast)
             val appWidgetId = intent.extras!!.getInt("appWidgetId")
 
             // set and/or change preferred unit
@@ -78,25 +75,20 @@ class AppWidget : AppWidgetProvider() {
             appWidgetId: Int
     ) {
         // Construct the RemoteViews object
-        val views = RemoteViews(context.packageName, R.layout.app_widget)
-
-        // find user's coords
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
-        getLastKnownLocation(context, views, appWidgetId, appWidgetManager)
+        val views = RemoteViews(context.packageName, R.layout.forecast)
 
         // Create an Intent to launch MainActivity
         val intent = Intent(context, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
 
         // Get the layout for the App Widget and attach an on-click listeners
-        views.setOnClickPendingIntent(R.id.city, pendingIntent)
-        views.setOnClickPendingIntent(R.id.temperature, pendingIntent)
-        views.setOnClickPendingIntent(R.id.iconCondition, pendingIntent)
-        views.setOnClickPendingIntent(R.id.revoltTextView, pendingIntent)
+//        views.setOnClickPendingIntent(R.id.cityName, pendingIntent)
+        //TODO: set intents
+//        views.setOnClickPendingIntent(R.id.forecast, pendingIntent)
 
         // Create an Intent to refresh data
-        val refreshIntent = Intent(context, AppWidget::class.java)
-        refreshIntent.action = "com.revoltwind.appwidget.REFRESH"
+        val refreshIntent = Intent(context, Forecast::class.java)
+        refreshIntent.action = "com.revoltwind.forecast.REFRESH"
         refreshIntent.putExtra("appWidgetId", appWidgetId)
         // Create pending intent for refresh
         val refreshPendingIntent = PendingIntent.getBroadcast(
@@ -106,8 +98,8 @@ class AppWidget : AppWidgetProvider() {
         views.setOnClickPendingIntent(R.id.updated, refreshPendingIntent)
 
         // Create an Intent to convert units
-        val convertIntent = Intent(context, AppWidget::class.java)
-        convertIntent.action = "com.revoltwind.appwidget.CONVERT"
+        val convertIntent = Intent(context, Forecast::class.java)
+        convertIntent.action = "com.revoltwind.forecast.CONVERT"
         convertIntent.putExtra("appWidgetId", appWidgetId)
         // Create pending intent for convert
         val convertPendingIntent = PendingIntent.getBroadcast(
@@ -115,6 +107,12 @@ class AppWidget : AppWidgetProvider() {
         )
         // set onclick to convert image view
         views.setOnClickPendingIntent(R.id.convert_button, convertPendingIntent)
+//        views.setOnClickPendingIntent(R.id.convert_c, convertPendingIntent)
+//        views.setOnClickPendingIntent(R.id.convert_f, convertPendingIntent)
+
+        // find user's coords
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
+        getLastKnownLocation(context, views, appWidgetId, appWidgetManager)
     }
 
     private fun getLastKnownLocation(
@@ -140,6 +138,7 @@ class AppWidget : AppWidgetProvider() {
         }
     }
 
+
     private fun loadWeatherForecast(
             coordinates: String,
             context: Context,
@@ -152,68 +151,31 @@ class AppWidget : AppWidgetProvider() {
         val isMetric = prefs.getBoolean("$appWidgetId", false)
         val units = if (isMetric) "metric" else "imperial"
 
+        // set toggle button image
+        val toggleIcon = if (isMetric) R.drawable.ic_toggle_on else R.drawable.ic_toggle_off
+        views.setImageViewResource(R.id.convert_button, toggleIcon)
+
+        // get only daily data
+        val urlForecast = "$apiLink$coordinates&exclude=current,minutely,hourly,alerts&APPID=$apiKey&units=$units"
+        // get city name
         val url = "$apiLink$coordinates&APPID=$apiKey&units=$units"
 
-        // JSON object request with Volley
+        // JSON NAME request with Volley
         val jsonObjectRequest = JsonObjectRequest(
                 Request.Method.GET, url, null, { response ->
             try {
                 // load OK - parse data from the loaded JSON
-                val mainJSONObject = response.getJSONObject("main")
-                val weatherArray = response.getJSONArray("weather")
-                val firstWeatherObject = weatherArray.getJSONObject(0)
-                // city, condition
                 val yourCity = response.getString("name")
-                val description = firstWeatherObject.getString("description").capitalize(Locale.ROOT)
-                // temperature
-                val tempString = mainJSONObject.getString("temp").toDouble().toInt()
-                val temperature = if (isMetric) {
-                    "$tempString°C"
-                } else {
-                    "$tempString°F"
-                }
-                // time
-                val weatherTime = response.getString("dt")
-                val weatherLong = weatherTime.toLong()
-                val formatter =
-                        DateTimeFormatter.ofPattern("MM/dd h:mm a")
-                val dt = Instant.ofEpochSecond(weatherLong).atZone(ZoneId.systemDefault())
-                        .toLocalDateTime().format(formatter).toString()
-                val updated = "Updated $dt "
-
-                // set texts to textViews and load icon with Glide
                 views.setTextViewText(R.id.city, yourCity)
-                views.setTextViewText(R.id.description, description)
-                views.setTextViewText(R.id.temperature, temperature)
-                views.setTextViewText(R.id.updated, updated)
-
-                // set toggle button image
-                val toggleIcon = if (isMetric) R.drawable.ic_toggle_on else R.drawable.ic_toggle_off
-                views.setImageViewResource(R.id.convert_button, toggleIcon)
-
-                // AppWidgetTarget will be used with Glide - image target view
-                val awt: AppWidgetTarget = object : AppWidgetTarget(
-                        context.applicationContext,
-                        R.id.iconCondition,
-                        views,
-                        appWidgetId
-                ) {}
-
-                val weatherIcon = firstWeatherObject.getString("icon")
-                val iconUrl = "$apiIcon$weatherIcon.png"
-
-                Glide
-                        .with(context)
-                        .asBitmap()
-                        .load(iconUrl)
-                        .into(awt)
+                Log.i("city", "YourCity: $yourCity")
 
             } catch (e: Exception) {
                 e.printStackTrace()
-                Log.i("WEATHER", "***** error: $e")
+                Log.i("NAME ERROR", "***** error: $e")
             }
+            Log.i("city", "$response")
         },
-                { error -> Log.i("ERROR", "Error: $error") })
+                { error -> Log.i("NAME ERROR", "Error: $error") })
 
         // start loading data with Volley
         val queue = Volley.newRequestQueue(context)
@@ -221,5 +183,79 @@ class AppWidget : AppWidgetProvider() {
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views)
+
+
+        // JSON object request with Volley
+//        val jsonDailyRequest = JsonObjectRequest(
+//                Request.Method.GET, urlForecast, null, { response ->
+//            try {
+//                // load OK - parse data from the loaded JSON
+//                val dailyArray = response.getJSONArray("daily")
+//                // updated
+//                val firstWeatherObject = dailyArray.getJSONObject(0)
+//                val dtString = firstWeatherObject.getString("dt")
+//                val weatherLong = dtString.toLong()
+//                val formatter =
+//                        DateTimeFormatter.ofPattern("MM/dd h:mm a")
+//                val dt = Instant.ofEpochSecond(weatherLong).atZone(ZoneId.systemDefault())
+//                        .toLocalDateTime().format(formatter).toString()
+//                val updated = "Updated $dt"
+//                views.setTextViewText(R.id.updatedForecast, updated)
+//
+//                // LOOP
+//                val weatherObject = dailyArray.getJSONObject(0)
+//                // date
+//                val dtStringLoop = weatherObject.getString("dt")
+//                val weatherLongLoop = dtStringLoop.toLong()
+//                val formatterLoop =
+//                        DateTimeFormatter.ofPattern("MM/dd")
+//                val date = Instant.ofEpochSecond(weatherLongLoop).atZone(ZoneId.systemDefault())
+//                        .toLocalDateTime().format(formatterLoop).toString()
+//                // temps
+//                val dailyTemps = weatherObject.getJSONObject("temp")
+//                val minTemp = dailyTemps.getDouble("min").toInt().toString()
+//                val maxTemp = dailyTemps.getDouble("max").toInt().toString()
+//                // description // id
+//                val dailyWeatherArray = weatherObject.getJSONArray("weather")
+//                val dailyWeather = dailyWeatherArray.getJSONObject(0)
+//                val description = dailyWeather.getString("main")
+//                val icon = dailyWeather.getString("icon")
+//
+//                views.setTextViewText(R.id.cityName, "HELP")
+//
+////                    views.setTextViewText(R.id.date0, date)
+////                    views.setTextViewText(R.id.description0, description)
+////                    views.setTextViewText(R.id.lowTemp0, minTemp)
+////                    views.setTextViewText(R.id.highTemp0, maxTemp)
+////                    val awt: AppWidgetTarget = object : AppWidgetTarget(
+////                            context.applicationContext,
+////                            R.id.iconCondition0,
+////                            views,
+////                            appWidgetId
+////                    ) {}
+////
+////                    val iconUrl = "$apiIcon$icon.png"
+////
+////                    Glide
+////                            .with(context)
+////                            .asBitmap()
+////                            .load(iconUrl)
+////                            .into(awt)
+//
+//            } catch (e: Exception) {
+//                e.printStackTrace()
+//                Log.i("DAILY ERROR", "***** error: $e")
+//            }
+//        },
+//                { error -> Log.i("DAILY ERROR", "Error: $error") })
+
+
+        // start loading data with Volley
+//        val queue = Volley.newRequestQueue(context)
+//        queue.add(jsonDailyRequest)
+//        queue.add(jsonNameRequest)
+
+        // Instruct the widget manager to update the widget
+//        appWidgetManager.updateAppWidget(appWidgetId, views)
     }
 }

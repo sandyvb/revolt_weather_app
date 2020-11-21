@@ -22,7 +22,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class AppWidget : AppWidgetProvider() {
+class DarkClearSky : AppWidgetProvider() {
 
     private val apiLink: String = "https://api.openweathermap.org/data/2.5/weather?"
     private var coordinates: String = "SOMEWHERE"
@@ -48,16 +48,16 @@ class AppWidget : AppWidgetProvider() {
         super.onReceive(context, intent)
 
         // got a new action, check if it is refresh action
-        if (intent.action == "com.revoltwind.appwidget.REFRESH") {
+        if (intent.action == "com.revoltwind.darkclearsky.REFRESH") {
             val appWidgetManager = AppWidgetManager.getInstance(context.applicationContext)
-            val views = RemoteViews(context.packageName, R.layout.app_widget)
+            val views = RemoteViews(context.packageName, R.layout.dark_clear_sky)
             val appWidgetId = intent.extras!!.getInt("appWidgetId")
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
             getLastKnownLocation(context, views, appWidgetId, appWidgetManager)
         }
-        if (intent.action == "com.revoltwind.appwidget.CONVERT") {
+        if (intent.action == "com.revoltwind.darkclearsky.CONVERT") {
             val appWidgetManager = AppWidgetManager.getInstance(context.applicationContext)
-            val views = RemoteViews(context.packageName, R.layout.app_widget)
+            val views = RemoteViews(context.packageName, R.layout.dark_clear_sky)
             val appWidgetId = intent.extras!!.getInt("appWidgetId")
 
             // set and/or change preferred unit
@@ -78,7 +78,7 @@ class AppWidget : AppWidgetProvider() {
             appWidgetId: Int
     ) {
         // Construct the RemoteViews object
-        val views = RemoteViews(context.packageName, R.layout.app_widget)
+        val views = RemoteViews(context.packageName, R.layout.dark_clear_sky)
 
         // find user's coords
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
@@ -95,8 +95,8 @@ class AppWidget : AppWidgetProvider() {
         views.setOnClickPendingIntent(R.id.revoltTextView, pendingIntent)
 
         // Create an Intent to refresh data
-        val refreshIntent = Intent(context, AppWidget::class.java)
-        refreshIntent.action = "com.revoltwind.appwidget.REFRESH"
+        val refreshIntent = Intent(context, DarkClearSky::class.java)
+        refreshIntent.action = "com.revoltwind.darkclearsky.REFRESH"
         refreshIntent.putExtra("appWidgetId", appWidgetId)
         // Create pending intent for refresh
         val refreshPendingIntent = PendingIntent.getBroadcast(
@@ -106,8 +106,8 @@ class AppWidget : AppWidgetProvider() {
         views.setOnClickPendingIntent(R.id.updated, refreshPendingIntent)
 
         // Create an Intent to convert units
-        val convertIntent = Intent(context, AppWidget::class.java)
-        convertIntent.action = "com.revoltwind.appwidget.CONVERT"
+        val convertIntent = Intent(context, DarkClearSky::class.java)
+        convertIntent.action = "com.revoltwind.darkclearsky.CONVERT"
         convertIntent.putExtra("appWidgetId", appWidgetId)
         // Create pending intent for convert
         val convertPendingIntent = PendingIntent.getBroadcast(
@@ -164,7 +164,7 @@ class AppWidget : AppWidgetProvider() {
                 val firstWeatherObject = weatherArray.getJSONObject(0)
                 // city, condition
                 val yourCity = response.getString("name")
-                val description = firstWeatherObject.getString("description").capitalize(Locale.ROOT)
+                val main = firstWeatherObject.getString("main").capitalize(Locale.ROOT)
                 // temperature
                 val tempString = mainJSONObject.getString("temp").toDouble().toInt()
                 val temperature = if (isMetric) {
@@ -183,12 +183,12 @@ class AppWidget : AppWidgetProvider() {
 
                 // set texts to textViews and load icon with Glide
                 views.setTextViewText(R.id.city, yourCity)
-                views.setTextViewText(R.id.description, description)
+                views.setTextViewText(R.id.description, main)
                 views.setTextViewText(R.id.temperature, temperature)
                 views.setTextViewText(R.id.updated, updated)
 
                 // set toggle button image
-                val toggleIcon = if (isMetric) R.drawable.ic_toggle_on else R.drawable.ic_toggle_off
+                val toggleIcon = if (isMetric) R.drawable.ic_toggle_on else R.drawable.ic_toggle_off_blue
                 views.setImageViewResource(R.id.convert_button, toggleIcon)
 
                 // AppWidgetTarget will be used with Glide - image target view

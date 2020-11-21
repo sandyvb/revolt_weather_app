@@ -3,9 +3,15 @@
     <string name="weather">Weather</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
-    <string name="city">Your City</string>
-    <string name="temperature">Temperature</string>
-    <string name="condition">Condition</string>
-    <string name="last_updated">Last updated</string>
+    <string name="city">Paris</string>
+    <string name="temperature">71°F</string>
+    <string name="description">Clear skies</string>
+    <string name="main">Clouds</string>
+    <string name="last_updated">Updated 11/17 11:20 AM</string>
     <string name="weather_icon">weather icon</string>
+    <string name="convert_units">metric or imperial units</string>
+
+    <string name="wi_owm_200">&#xf01e;</string>
+    <string name="revoltwind_com">REVOLTwind.com</string>
+
 </resources>

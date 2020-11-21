@@ -2,15 +2,17 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:initialKeyguardLayout="@layout/app_widget"
     android:initialLayout="@layout/app_widget"
-    android:minWidth="40dp"
-    android:minHeight="40dp"
-    android:previewImage="@drawable/example_appwidget_preview"
-    android:resizeMode="horizontal|vertical"
+    android:minWidth="180dp"
+    android:minHeight="180dp"
+    android:minResizeWidth="110dp"
+    android:minResizeHeight="110dp"
+    android:resizeMode="horizontal | vertical"
+    android:previewImage="@drawable/med"
     android:updatePeriodMillis="3600000"
     android:widgetCategory="home_screen" />
 
     <!--minHeight and minWidth is default-->
     <!--minResizeWidth and minResizeHeight will resize down from default-->
     <!--3600000 is one hour-->
-    <!--create new resource directory no density-->
+    <!--create new resource directory no density for preview image-->
     <!--add png file to drawable-nodpi-->

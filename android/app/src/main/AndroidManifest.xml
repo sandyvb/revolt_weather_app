@@ -14,14 +14,67 @@
 
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:icon="@mipmap/ic_launcher"
         android:allowBackup="false"
-        android:label="revolt_weather_app">
+        android:icon="@mipmap/ic_launcher"
+        android:label="REVOLT Weather">
+        <receiver android:name=".Forecast"
+            android:label="7 Day Forecast">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.revoltwind.forecast.REFRESH" />
+                <action android:name="com.revoltwind.forecast.CONVERT" />
+            </intent-filter>
 
-        <receiver android:name=".AppWidget">
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/forecast_info" />
+        </receiver>
+        <receiver
+            android:name=".DarkClearSky"
+            android:label="Clear Sky (blue)">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.revoltwind.darkclearsky.REFRESH" />
+                <action android:name="com.revoltwind.darkclearsky.CONVERT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/dark_clear_sky_info" />
+        </receiver>
+        <receiver
+            android:name=".ClearSky"
+            android:label="Clear Sky (white)">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.revoltwind.clearsky.REFRESH" />
+                <action android:name="com.revoltwind.clearsky.CONVERT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/clear_sky_info" />
+        </receiver>
+        <receiver
+            android:name=".BigSky"
+            android:label="Big Sky">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.revoltwind.bigsky.REFRESH" />
+                <action android:name="com.revoltwind.bigsky.CONVERT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/big_sky_info" />
+        </receiver>
+        <receiver
+            android:name=".AppWidget"
+            android:label="REVOLT Weather">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.revoltwind.appwidget.REFRESH" />
+                <action android:name="com.revoltwind.appwidget.CONVERT" />
             </intent-filter>
 
             <meta-data

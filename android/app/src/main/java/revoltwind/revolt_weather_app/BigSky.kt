@@ -20,9 +20,8 @@ import com.google.android.gms.location.LocationServices
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.*
 
-class AppWidget : AppWidgetProvider() {
+class BigSky : AppWidgetProvider() {
 
     private val apiLink: String = "https://api.openweathermap.org/data/2.5/weather?"
     private var coordinates: String = "SOMEWHERE"
@@ -48,16 +47,16 @@ class AppWidget : AppWidgetProvider() {
         super.onReceive(context, intent)
 
         // got a new action, check if it is refresh action
-        if (intent.action == "com.revoltwind.appwidget.REFRESH") {
+        if (intent.action == "com.revoltwind.bigsky.REFRESH") {
             val appWidgetManager = AppWidgetManager.getInstance(context.applicationContext)
-            val views = RemoteViews(context.packageName, R.layout.app_widget)
+            val views = RemoteViews(context.packageName, R.layout.big_sky)
             val appWidgetId = intent.extras!!.getInt("appWidgetId")
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
             getLastKnownLocation(context, views, appWidgetId, appWidgetManager)
         }
-        if (intent.action == "com.revoltwind.appwidget.CONVERT") {
+        if (intent.action == "com.revoltwind.bigsky.CONVERT") {
             val appWidgetManager = AppWidgetManager.getInstance(context.applicationContext)
-            val views = RemoteViews(context.packageName, R.layout.app_widget)
+            val views = RemoteViews(context.packageName, R.layout.big_sky)
             val appWidgetId = intent.extras!!.getInt("appWidgetId")
 
             // set and/or change preferred unit
@@ -78,7 +77,7 @@ class AppWidget : AppWidgetProvider() {
             appWidgetId: Int
     ) {
         // Construct the RemoteViews object
-        val views = RemoteViews(context.packageName, R.layout.app_widget)
+        val views = RemoteViews(context.packageName, R.layout.big_sky)
 
         // find user's coords
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
@@ -95,8 +94,8 @@ class AppWidget : AppWidgetProvider() {
         views.setOnClickPendingIntent(R.id.revoltTextView, pendingIntent)
 
         // Create an Intent to refresh data
-        val refreshIntent = Intent(context, AppWidget::class.java)
-        refreshIntent.action = "com.revoltwind.appwidget.REFRESH"
+        val refreshIntent = Intent(context, BigSky::class.java)
+        refreshIntent.action = "com.revoltwind.bigsky.REFRESH"
         refreshIntent.putExtra("appWidgetId", appWidgetId)
         // Create pending intent for refresh
         val refreshPendingIntent = PendingIntent.getBroadcast(
@@ -106,8 +105,8 @@ class AppWidget : AppWidgetProvider() {
         views.setOnClickPendingIntent(R.id.updated, refreshPendingIntent)
 
         // Create an Intent to convert units
-        val convertIntent = Intent(context, AppWidget::class.java)
-        convertIntent.action = "com.revoltwind.appwidget.CONVERT"
+        val convertIntent = Intent(context, BigSky::class.java)
+        convertIntent.action = "com.revoltwind.bigsky.CONVERT"
         convertIntent.putExtra("appWidgetId", appWidgetId)
         // Create pending intent for convert
         val convertPendingIntent = PendingIntent.getBroadcast(
@@ -164,7 +163,7 @@ class AppWidget : AppWidgetProvider() {
                 val firstWeatherObject = weatherArray.getJSONObject(0)
                 // city, condition
                 val yourCity = response.getString("name")
-                val description = firstWeatherObject.getString("description").capitalize(Locale.ROOT)
+                val description = firstWeatherObject.getString("description").capitalize()
                 // temperature
                 val tempString = mainJSONObject.getString("temp").toDouble().toInt()
                 val temperature = if (isMetric) {

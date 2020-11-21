@@ -1,0 +1,101 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="110dp"
+    android:layout_height="320dp"
+    android:background="@color/transparent"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <ImageView
+        android:id="@+id/convert_button"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="@color/transparent"
+        android:contentDescription="@string/convert_units"
+        android:scaleType="fitEnd"
+        android:src="@drawable/ic_toggle_off" />
+
+    <TextView
+        android:id="@+id/city"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:autoSizeMaxTextSize="40sp"
+        android:autoSizeMinTextSize="20sp"
+        android:autoSizeStepGranularity="1sp"
+        android:autoSizeTextType="uniform"
+        android:contentDescription="city"
+        android:fontFamily="@font/oxygen"
+        android:gravity="center"
+        android:maxLines="2"
+        android:text="@string/city"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/temperature"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/oxygen"
+        android:gravity="center"
+        android:letterSpacing="0.04"
+        android:text="@string/temperature"
+        android:textColor="@color/white"
+        android:textSize="40sp" />
+
+    <ImageView
+        android:id="@+id/iconCondition"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@color/transparent"
+        android:contentDescription="@string/weather_icon"
+        android:elevation="1dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/test_icon" />
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+
+        android:autoSizeMaxTextSize="30sp"
+        android:autoSizeMinTextSize="10sp"
+        android:autoSizeStepGranularity="1sp"
+        android:autoSizeTextType="uniform"
+        android:fontFamily="@font/oxygen"
+        android:gravity="center"
+        android:maxLines="1"
+        android:text="@string/description"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/updated"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:autoSizeMaxTextSize="30sp"
+        android:autoSizeMinTextSize="10sp"
+        android:autoSizeStepGranularity="1sp"
+        android:autoSizeTextType="uniform"
+        android:drawableEnd="@drawable/ic_refresh"
+        android:drawablePadding="2sp"
+        android:fontFamily="@font/oxygen"
+        android:gravity="center"
+        android:maxLines="2"
+        android:text="@string/last_updated"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/revoltTextView"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="5dp"
+        android:autoSizeMaxTextSize="30sp"
+        android:autoSizeMinTextSize="10sp"
+        android:autoSizeStepGranularity="1sp"
+        android:autoSizeTextType="uniform"
+        android:drawableStart="@drawable/ic_bolt"
+        android:fontFamily="@font/oxygen"
+        android:gravity="center"
+        android:maxLines="1"
+        android:text="@string/revoltwind_com"
+        android:textColor="@color/white" />
+
+</LinearLayout>
