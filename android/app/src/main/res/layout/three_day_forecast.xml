@@ -1,0 +1,328 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="250dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/custom_shape"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+<!--city and convert button-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/city"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/redhat"
+            android:maxLines="2"
+            android:text="@string/city"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/convert_f"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/redhat"
+            android:gravity="center"
+            android:text="@string/f"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/convert_button"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:background="@color/transparent"
+            android:contentDescription="@string/convert_units"
+            android:src="@drawable/ic_toggle_off" />
+
+        <TextView
+            android:id="@+id/convert_c"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/redhat"
+            android:gravity="center"
+            android:text="@string/c"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+<!--forecast container-->
+    <LinearLayout
+        android:id="@+id/forecast_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="10dp"
+        android:baselineAligned="false"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33"
+            android:layout_marginEnd="3dp"
+            android:background="@drawable/custom_outline"
+            android:orientation="vertical"
+            android:paddingVertical="10dp">
+
+            <TextView
+                android:id="@+id/date0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:letterSpacing="0.04"
+                android:text="@string/_11_19"
+                android:textColor="#ccc"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/highTemp0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:letterSpacing="0.04"
+                android:text="@string/temperature"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:id="@+id/iconCondition0"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:paddingVertical="5dp"
+                android:background="@color/transparent"
+                android:contentDescription="@string/weather_icon"
+                android:scaleType="centerInside"
+                android:src="@drawable/test_icon" />
+
+            <TextView
+                android:id="@+id/lowTemp0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:letterSpacing="0.04"
+                android:text="@string/temperature"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/description0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoSizeMaxTextSize="20sp"
+                android:autoSizeMinTextSize="10sp"
+                android:autoSizeStepGranularity="1sp"
+                android:autoSizeTextType="uniform"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="@string/main"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/pop0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:fontFamily="@font/oxygen"
+                android:text="@string/pop"
+                android:paddingStart="9dp"
+                android:paddingEnd="0dp"
+                android:drawableStart="@drawable/raindrop"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33"
+            android:layout_marginEnd="3dp"
+            android:background="@drawable/custom_outline"
+            android:orientation="vertical"
+            android:paddingVertical="10dp">
+
+            <TextView
+                android:id="@+id/date1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:letterSpacing="0.04"
+                android:text="@string/_11_19"
+                android:textColor="#ccc"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/highTemp1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:letterSpacing="0.04"
+                android:text="@string/temperature"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:id="@+id/iconCondition1"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:paddingVertical="5dp"
+                android:background="@color/transparent"
+                android:contentDescription="@string/weather_icon"
+                android:scaleType="centerInside"
+                android:src="@drawable/test_icon" />
+
+            <TextView
+                android:id="@+id/lowTemp1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:letterSpacing="0.04"
+                android:text="@string/temperature"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/description1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoSizeMaxTextSize="20sp"
+                android:autoSizeMinTextSize="10sp"
+                android:autoSizeStepGranularity="1sp"
+                android:autoSizeTextType="uniform"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="@string/main"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/pop1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:fontFamily="@font/oxygen"
+                android:text="@string/pop"
+                android:paddingStart="9dp"
+                android:paddingEnd="0dp"
+                android:drawableStart="@drawable/raindrop"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33"
+            android:background="@drawable/custom_outline"
+            android:orientation="vertical"
+            android:paddingVertical="10dp">
+
+            <TextView
+                android:id="@+id/date2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:letterSpacing="0.04"
+                android:text="@string/_11_19"
+                android:textColor="#ccc"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/highTemp2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:letterSpacing="0.04"
+                android:text="@string/temperature"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:id="@+id/iconCondition2"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:paddingVertical="5dp"
+                android:background="@color/transparent"
+                android:contentDescription="@string/weather_icon"
+                android:scaleType="centerInside"
+                android:src="@drawable/test_icon" />
+
+            <TextView
+                android:id="@+id/lowTemp2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:letterSpacing="0.04"
+                android:text="@string/temperature"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/description2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoSizeMaxTextSize="20sp"
+                android:autoSizeMinTextSize="10sp"
+                android:autoSizeStepGranularity="1sp"
+                android:autoSizeTextType="uniform"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="@string/main"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/pop2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:fontFamily="@font/oxygen"
+                android:text="@string/pop"
+                android:paddingStart="9dp"
+                android:paddingEnd="0dp"
+                android:drawableStart="@drawable/raindrop"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/updated"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableEnd="@drawable/ic_refresh"
+        android:drawablePadding="3dp"
+        android:fontFamily="@font/redhat"
+        android:gravity="end"
+        android:text="@string/last_updated"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/revoltTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:drawableStart="@drawable/ic_bolt"
+        android:drawablePadding="3dp"
+        android:fontFamily="@font/redhat"
+        android:gravity="start"
+        android:text="@string/revoltwind_com"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+
+</LinearLayout>

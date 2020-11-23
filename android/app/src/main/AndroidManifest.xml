@@ -18,6 +18,19 @@
         android:icon="@mipmap/ic_launcher"
         android:label="REVOLT Weather">
         <receiver
+            android:name=".ThreeDayForecast"
+            android:label="Forecast">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.revoltwind.forecast.REFRESH" />
+                <action android:name="com.revoltwind.forecast.CONVERT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/three_day_forecast_info" />
+        </receiver>
+        <receiver
             android:name=".Wind"
             android:label="Wind">
             <intent-filter>
@@ -29,19 +42,6 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/wind_info" />
-        </receiver>
-        <receiver
-            android:name=".Forecast"
-            android:label="7 Day Forecast">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.revoltwind.forecast.REFRESH" />
-                <action android:name="com.revoltwind.forecast.CONVERT" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/forecast_info" />
         </receiver>
         <receiver
             android:name=".DarkSky"

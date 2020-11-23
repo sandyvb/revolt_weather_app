@@ -19,5 +19,7 @@
     <string name="_11_19">11/19</string>
     <string name="c">°C</string>
     <string name="f">°F</string>
+    <string name="dummy_number">5</string>
+    <string name="units">m/s</string>
 
 </resources>

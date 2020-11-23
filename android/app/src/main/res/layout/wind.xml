@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/redhat"
             android:letterSpacing="0.04"
-            android:text="5"
+            android:text="@string/dummy_number"
             android:textColor="@color/white"
             android:textSize="42sp" />
 
@@ -56,7 +56,7 @@
             android:fontFamily="@font/redhat"
             android:letterSpacing="0.04"
             android:layout_marginStart="5dp"
-            android:text="m/s"
+            android:text="@string/units"
             android:textColor="@color/white"
             android:textSize="25sp" />
 

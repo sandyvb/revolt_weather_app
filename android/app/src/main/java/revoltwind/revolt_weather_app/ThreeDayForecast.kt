@@ -14,10 +14,6 @@ import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.bumptech.glide.Glide
-import com.bumptech.glide.annotation.GlideExtension
-import com.bumptech.glide.annotation.GlideModule
-import com.bumptech.glide.annotation.GlideOption
-import com.bumptech.glide.annotation.GlideType
 import com.bumptech.glide.request.target.AppWidgetTarget
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -27,7 +23,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
-class Forecast : AppWidgetProvider() {
+class ThreeDayForecast : AppWidgetProvider() {
 
     private val apiLink: String = "https://api.openweathermap.org/data/2.5/onecall?"
     private val apiLinkName: String = "https://api.openweathermap.org/data/2.5/weather?"
@@ -55,7 +51,7 @@ class Forecast : AppWidgetProvider() {
         // got a new action, check if it is refresh action
         if (intent.action == "com.revoltwind.forecast.REFRESH") {
             val appWidgetManager = AppWidgetManager.getInstance(context.applicationContext)
-            val views = RemoteViews(context.packageName, R.layout.forecast)
+            val views = RemoteViews(context.packageName, R.layout.three_day_forecast)
             val appWidgetId = intent.extras!!.getInt("appWidgetId")
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
             getLastKnownLocation(context, views, appWidgetId, appWidgetManager)
@@ -63,7 +59,7 @@ class Forecast : AppWidgetProvider() {
 
         if (intent.action == "com.revoltwind.forecast.CONVERT") {
             val appWidgetManager = AppWidgetManager.getInstance(context.applicationContext)
-            val views = RemoteViews(context.packageName, R.layout.forecast)
+            val views = RemoteViews(context.packageName, R.layout.three_day_forecast)
             val appWidgetId = intent.extras!!.getInt("appWidgetId")
 
             // set and/or change preferred unit
@@ -84,16 +80,16 @@ class Forecast : AppWidgetProvider() {
             appWidgetId: Int
     ) {
         // Construct the RemoteViews object
-        val views = RemoteViews(context.packageName, R.layout.forecast)
+        val views = RemoteViews(context.packageName, R.layout.three_day_forecast)
 
         // Create an Intent to launch MainActivity
         val intent = Intent(context, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
-//        views.setOnClickPendingIntent(R.id.forecast_container, pendingIntent)
+        views.setOnClickPendingIntent(R.id.forecast_container, pendingIntent)
         views.setOnClickPendingIntent(R.id.revoltTextView, pendingIntent)
 
         // Create an Intent to refresh data
-        val refreshIntent = Intent(context, Forecast::class.java)
+        val refreshIntent = Intent(context, ThreeDayForecast::class.java)
         refreshIntent.action = "com.revoltwind.forecast.REFRESH"
         refreshIntent.putExtra("appWidgetId", appWidgetId)
         val refreshPendingIntent = PendingIntent.getBroadcast(
@@ -102,7 +98,7 @@ class Forecast : AppWidgetProvider() {
         views.setOnClickPendingIntent(R.id.updated, refreshPendingIntent)
 
         // Create an Intent to convert units
-        val convertIntent = Intent(context, Forecast::class.java)
+        val convertIntent = Intent(context, ThreeDayForecast::class.java)
         convertIntent.action = "com.revoltwind.forecast.CONVERT"
         convertIntent.putExtra("appWidgetId", appWidgetId)
         val convertPendingIntent = PendingIntent.getBroadcast(
@@ -196,52 +192,85 @@ class Forecast : AppWidgetProvider() {
                 Request.Method.GET, urlForecast, null, { response ->
             try {
                 // load OK - parse data from the loaded JSON
-                val daily = response.getJSONArray("daily")
-                val weatherObject = daily.getJSONObject(0)
-                // date
-                val dtStringLoop = weatherObject.getString("dt")
-                val weatherLongLoop = dtStringLoop.toLong()
-                val formatterLoop =
-                        DateTimeFormatter.ofPattern("MM/dd")
-                val date = Instant.ofEpochSecond(weatherLongLoop).atZone(ZoneId.systemDefault())
-                        .toLocalDateTime().format(formatterLoop).toString()
-                println(date)
-                // temps
-                val dailyTemps = weatherObject.getJSONObject("temp")
-                val minTemp = dailyTemps.getDouble("min").roundToInt().toString()
-                val maxTemp = dailyTemps.getDouble("max").roundToInt().toString()
-                println(dailyTemps)
-                println(minTemp)
-                println(maxTemp)
-                // description // id
-                val dailyWeatherArray = weatherObject.getJSONArray("weather")
-                val dailyWeather = dailyWeatherArray.getJSONObject(0)
-                val description = dailyWeather.getString("main")
-                val icon = dailyWeather.getString("icon")
-                println(description)
-                println(icon)
+                for (i in 0..2) {
+                    val daily = response.getJSONArray("daily")
+                    val weatherObject = daily.getJSONObject(i)
 
-                // set views
-                views.setTextViewText(R.id.date0, date)
-                views.setTextViewText(R.id.description0, description)
-                views.setTextViewText(R.id.lowTemp0, minTemp)
-                views.setTextViewText(R.id.highTemp0, maxTemp)
+                    // date
+                    val dtStringLoop = weatherObject.getString("dt")
+                    val weatherLongLoop = dtStringLoop.toLong()
+                    val formatterLoop =
+                            DateTimeFormatter.ofPattern("MM/dd")
+                    val date = Instant.ofEpochSecond(weatherLongLoop).atZone(ZoneId.systemDefault())
+                            .toLocalDateTime().format(formatterLoop).toString()
+                    // temps
+                    val dailyTemps = weatherObject.getJSONObject("temp")
+                    val minTemp = dailyTemps.getDouble("min").roundToInt().toString()
+                    val maxTemp = dailyTemps.getDouble("max").roundToInt().toString()
+                    // description // id
+                    val dailyWeatherArray = weatherObject.getJSONArray("weather")
+                    val dailyWeather = dailyWeatherArray.getJSONObject(0)
+                    val description = dailyWeather.getString("main")
+                    val icon = dailyWeather.getString("icon")
+                    val pop = weatherObject.getDouble("pop").roundToInt().toString()
 
-                val awt: AppWidgetTarget = object : AppWidgetTarget(
-                        context.applicationContext,
-                        R.id.iconCondition0,
-                        views,
-                        appWidgetId
-                ) {}
+                    val dateView: Int
+                    val descriptionView: Int
+                    val lowTempView: Int
+                    val highTempView: Int
+                    val iconView: Int
+                    val popView: Int
 
-                val iconUrl = "$apiIcon$icon.png"
+                    when (i) {
+                        0 -> {
+                            dateView = R.id.date0
+                            descriptionView = R.id.description0
+                            lowTempView = R.id.lowTemp0
+                            highTempView = R.id.highTemp0
+                            iconView = R.id.iconCondition0
+                            popView = R.id.pop0
+                        }
+                        1 -> {
+                            dateView = R.id.date1
+                            descriptionView = R.id.description1
+                            lowTempView = R.id.lowTemp1
+                            highTempView = R.id.highTemp1
+                            iconView = R.id.iconCondition1
+                            popView = R.id.pop1
+                        }
+                        else -> {
+                            dateView = R.id.date2
+                            descriptionView = R.id.description2
+                            lowTempView = R.id.lowTemp2
+                            highTempView = R.id.highTemp2
+                            iconView = R.id.iconCondition2
+                            popView = R.id.pop2
+                        }
+                    }
 
-                Glide
-                        .with(context)
-                        .asBitmap()
-                        .load(iconUrl)
-                        .into(awt)
+                    // set views
+                    views.setTextViewText(dateView, date)
+                    views.setTextViewText(descriptionView, description)
+                    views.setTextViewText(lowTempView, "$minTemp°")
+                    views.setTextViewText(highTempView, "$maxTemp°")
+                    views.setTextViewText(popView, "$pop%")
 
+                    val awt: AppWidgetTarget = object : AppWidgetTarget(
+                            context.applicationContext,
+                            iconView,
+                            views,
+                            appWidgetId
+                    ) {}
+
+                    val iconUrl = "$apiIcon$icon.png"
+
+                    Glide
+                            .with(context)
+                            .asBitmap()
+                            .load(iconUrl)
+                            .into(awt)
+
+                }
                 appWidgetManager.updateAppWidget(appWidgetId, views)
 
             } catch (e: JSONException) {
