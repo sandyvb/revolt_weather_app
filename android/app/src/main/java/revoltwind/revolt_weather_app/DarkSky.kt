@@ -17,15 +17,16 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.AppWidgetTarget
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import org.json.JSONException
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class DarkClearSky : AppWidgetProvider() {
+class DarkSky : AppWidgetProvider() {
 
     private val apiLink: String = "https://api.openweathermap.org/data/2.5/weather?"
-    private var coordinates: String = "SOMEWHERE"
+    private var coordinates: String = "PARIS"
     private val apiIcon: String = "https://revoltwind.com/icons/"
     private val apiKey = "217da33042b65b3c9e4bd01ab0bdd02b"
     private val mSharedPrefFile: String = "com.revoltwind.appwidgets"
@@ -38,7 +39,6 @@ class DarkClearSky : AppWidgetProvider() {
             appWidgetManager: AppWidgetManager,
             appWidgetIds: IntArray
     ) {
-        // There may be multiple widgets active, so update all of them
         for (appWidgetId in appWidgetIds) {
             updateWeatherAppWidget(context, appWidgetManager, appWidgetId)
         }
@@ -48,16 +48,17 @@ class DarkClearSky : AppWidgetProvider() {
         super.onReceive(context, intent)
 
         // got a new action, check if it is refresh action
-        if (intent.action == "com.revoltwind.darkclearsky.REFRESH") {
+        if (intent.action == "com.revoltwind.darksky.REFRESH") {
             val appWidgetManager = AppWidgetManager.getInstance(context.applicationContext)
-            val views = RemoteViews(context.packageName, R.layout.dark_clear_sky)
+            val views = RemoteViews(context.packageName, R.layout.dark_sky)
             val appWidgetId = intent.extras!!.getInt("appWidgetId")
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
             getLastKnownLocation(context, views, appWidgetId, appWidgetManager)
         }
-        if (intent.action == "com.revoltwind.darkclearsky.CONVERT") {
+
+        if (intent.action == "com.revoltwind.darksky.CONVERT") {
             val appWidgetManager = AppWidgetManager.getInstance(context.applicationContext)
-            val views = RemoteViews(context.packageName, R.layout.dark_clear_sky)
+            val views = RemoteViews(context.packageName, R.layout.dark_sky)
             val appWidgetId = intent.extras!!.getInt("appWidgetId")
 
             // set and/or change preferred unit
@@ -78,7 +79,7 @@ class DarkClearSky : AppWidgetProvider() {
             appWidgetId: Int
     ) {
         // Construct the RemoteViews object
-        val views = RemoteViews(context.packageName, R.layout.dark_clear_sky)
+        val views = RemoteViews(context.packageName, R.layout.dark_sky)
 
         // find user's coords
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
@@ -89,14 +90,13 @@ class DarkClearSky : AppWidgetProvider() {
         val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
 
         // Get the layout for the App Widget and attach an on-click listeners
-        views.setOnClickPendingIntent(R.id.city, pendingIntent)
         views.setOnClickPendingIntent(R.id.temperature, pendingIntent)
         views.setOnClickPendingIntent(R.id.iconCondition, pendingIntent)
         views.setOnClickPendingIntent(R.id.revoltTextView, pendingIntent)
 
         // Create an Intent to refresh data
-        val refreshIntent = Intent(context, DarkClearSky::class.java)
-        refreshIntent.action = "com.revoltwind.darkclearsky.REFRESH"
+        val refreshIntent = Intent(context, DarkSky::class.java)
+        refreshIntent.action = "com.revoltwind.darksky.REFRESH"
         refreshIntent.putExtra("appWidgetId", appWidgetId)
         // Create pending intent for refresh
         val refreshPendingIntent = PendingIntent.getBroadcast(
@@ -106,8 +106,8 @@ class DarkClearSky : AppWidgetProvider() {
         views.setOnClickPendingIntent(R.id.updated, refreshPendingIntent)
 
         // Create an Intent to convert units
-        val convertIntent = Intent(context, DarkClearSky::class.java)
-        convertIntent.action = "com.revoltwind.darkclearsky.CONVERT"
+        val convertIntent = Intent(context, DarkSky::class.java)
+        convertIntent.action = "com.revoltwind.darksky.CONVERT"
         convertIntent.putExtra("appWidgetId", appWidgetId)
         // Create pending intent for convert
         val convertPendingIntent = PendingIntent.getBroadcast(
@@ -115,6 +115,7 @@ class DarkClearSky : AppWidgetProvider() {
         )
         // set onclick to convert image view
         views.setOnClickPendingIntent(R.id.convert_button, convertPendingIntent)
+        views.setOnClickPendingIntent(R.id.city, convertPendingIntent)
     }
 
     private fun getLastKnownLocation(
@@ -133,7 +134,9 @@ class DarkClearSky : AppWidgetProvider() {
         } else {
             fusedLocationClient.lastLocation.addOnSuccessListener {
                 if (it != null) {
+                    Log.i("coords", "location is: ${it.latitude}, ${it.longitude}")
                     coordinates = "lat=${it.latitude}&lon=${it.longitude}"
+                    Log.i("coords", coordinates)
                     loadWeatherForecast(coordinates, context, views, appWidgetId, appWidgetManager)
                 }
             }
@@ -152,9 +155,11 @@ class DarkClearSky : AppWidgetProvider() {
         val isMetric = prefs.getBoolean("$appWidgetId", false)
         val units = if (isMetric) "metric" else "imperial"
 
+        // owm url
         val url = "$apiLink$coordinates&APPID=$apiKey&units=$units"
 
-        // JSON object request with Volley
+        // get data
+        val queue = Volley.newRequestQueue(context)
         val jsonObjectRequest = JsonObjectRequest(
                 Request.Method.GET, url, null, { response ->
             try {
@@ -167,11 +172,7 @@ class DarkClearSky : AppWidgetProvider() {
                 val main = firstWeatherObject.getString("main").capitalize(Locale.ROOT)
                 // temperature
                 val tempString = mainJSONObject.getString("temp").toDouble().toInt()
-                val temperature = if (isMetric) {
-                    "$tempString°C"
-                } else {
-                    "$tempString°F"
-                }
+                val temperature = if (isMetric) "$tempString°C" else "$tempString°F"
                 // time
                 val weatherTime = response.getString("dt")
                 val weatherLong = weatherTime.toLong()
@@ -191,7 +192,7 @@ class DarkClearSky : AppWidgetProvider() {
                 val toggleIcon = if (isMetric) R.drawable.ic_toggle_on else R.drawable.ic_toggle_off_blue
                 views.setImageViewResource(R.id.convert_button, toggleIcon)
 
-                // AppWidgetTarget will be used with Glide - image target view
+                // image target view
                 val awt: AppWidgetTarget = object : AppWidgetTarget(
                         context.applicationContext,
                         R.id.iconCondition,
@@ -201,6 +202,7 @@ class DarkClearSky : AppWidgetProvider() {
 
                 val weatherIcon = firstWeatherObject.getString("icon")
                 val iconUrl = "$apiIcon$weatherIcon.png"
+                println(iconUrl)
 
                 Glide
                         .with(context)
@@ -208,18 +210,15 @@ class DarkClearSky : AppWidgetProvider() {
                         .load(iconUrl)
                         .into(awt)
 
-            } catch (e: Exception) {
+                // update the widget
+                appWidgetManager.updateAppWidget(appWidgetId, views)
+
+            } catch (e: JSONException) {
                 e.printStackTrace()
-                Log.i("WEATHER", "***** error: $e")
+                Log.i("city", "error: $e ")
             }
-        },
-                { error -> Log.i("ERROR", "Error: $error") })
-
-        // start loading data with Volley
-        val queue = Volley.newRequestQueue(context)
+        }
+        ) { }
         queue.add(jsonObjectRequest)
-
-        // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, views)
     }
 }

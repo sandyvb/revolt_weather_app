@@ -1,630 +1,617 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="110dp"
-    android:layout_height="110dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:background="@drawable/custom_shape"
     android:orientation="vertical"
     android:padding="10dp">
 
-    <TextView
-        android:id="@+id/city"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Test"
-        android:textColor="@color/white"/>
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/updated"
-        android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/city"
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:layout_weight="0.9974"
+            android:fontFamily="@font/redhat"
+            android:maxLines="1"
+            android:text="@string/city"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/convert_f"
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:layout_weight="0.08"
+            android:fontFamily="@font/redhat"
+            android:gravity="end"
+            android:text="@string/f"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/convert_button"
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:layout_weight="0.1"
+            android:background="@color/transparent"
+            android:contentDescription="@string/convert_units"
+            android:src="@drawable/ic_toggle_off" />
+
+        <TextView
+            android:id="@+id/convert_c"
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:layout_weight="0.08"
+            android:fontFamily="@font/redhat"
+            android:gravity="start"
+            android:text="@string/c"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/forecast_container"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Updated"
-        android:textColor="@color/white"/>
+        android:orientation="horizontal"
+        android:baselineAligned="false">
 
-<!--    <LinearLayout-->
-<!--        android:layout_width="fill_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginBottom="5dp"-->
-<!--        android:orientation="horizontal">-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="3dp"
+            android:layout_weight="0.142"
+            android:background="@drawable/custom_outline"
+            android:orientation="vertical"
+            android:padding="2dp">
 
-<!--        <TextView-->
-<!--            android:id="@+id/cityName"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="25dp"-->
-<!--            android:layout_weight="0.9974"-->
-<!--            android:fontFamily="@font/redhat"-->
-<!--            android:maxLines="1"-->
-<!--            android:text="@string/city"-->
-<!--            android:textColor="@color/white"-->
-<!--            android:textSize="18sp" />-->
+            <TextView
+                android:id="@+id/date0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:letterSpacing="0.04"
+                android:text="@string/_11_19"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
 
-<!--        <TextView-->
-<!--            android:id="@+id/convert_f"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="25dp"-->
-<!--            android:layout_weight="0.08"-->
-<!--            android:fontFamily="@font/redhat"-->
-<!--            android:gravity="end"-->
-<!--            android:text="°F"-->
-<!--            android:textColor="@color/white"-->
-<!--            android:textSize="16sp" />-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginVertical="2sp"
+                android:background="#C4CDE0" />
 
-<!--        <ImageView-->
-<!--            android:id="@+id/convert_button"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="25dp"-->
-<!--            android:layout_gravity="center"-->
-<!--            android:layout_weight="0.1"-->
-<!--            android:background="@color/transparent"-->
-<!--            android:contentDescription="@string/convert_units"-->
-<!--            android:src="@drawable/ic_toggle_off" />-->
+            <TextView
+                android:id="@+id/highTemp0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:letterSpacing="0.04"
+                android:text="@string/temperature"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
 
-<!--        <TextView-->
-<!--            android:id="@+id/convert_c"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="25dp"-->
-<!--            android:layout_weight="0.08"-->
-<!--            android:fontFamily="@font/redhat"-->
-<!--            android:gravity="start"-->
-<!--            android:text="°C"-->
-<!--            android:textColor="@color/white"-->
-<!--            android:textSize="16sp" />-->
-<!--    </LinearLayout>-->
+            <ImageView
+                android:id="@+id/iconCondition0"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/transparent"
+                android:contentDescription="@string/weather_icon"
+                android:scaleType="centerInside"
+                android:src="@drawable/test_icon" />
 
-<!--    <LinearLayout-->
-<!--        android:id="@+id/forecast"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:orientation="horizontal">-->
+            <TextView
+                android:id="@+id/lowTemp0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:letterSpacing="0.04"
+                android:text="@string/temperature"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
 
-<!--&lt;!&ndash;        <LinearLayout&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_width="0dp"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_marginEnd="3dp"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_weight="0.142"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:background="@drawable/custom_outline"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:orientation="vertical"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:padding="2dp">&ndash;&gt;-->
+            <TextView
+                android:id="@+id/description0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoSizeMaxTextSize="20sp"
+                android:autoSizeMinTextSize="10sp"
+                android:autoSizeStepGranularity="1sp"
+                android:autoSizeTextType="uniform"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="@string/main"
+                android:textColor="@color/white" />
+        </LinearLayout>
 
-<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/date0"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_marginTop="2dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:fontFamily="@font/oxygen"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:letterSpacing="0.04"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:text="11/19"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textColor="@color/white"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textSize="12sp" />&ndash;&gt;-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="3dp"
+            android:layout_weight="0.142"
+            android:background="@drawable/custom_outline"
+            android:orientation="vertical"
+            android:padding="2dp">
 
-<!--&lt;!&ndash;            <View&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="1dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_marginHorizontal="5dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_marginVertical="2sp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:background="#C4CDE0" />&ndash;&gt;-->
+            <TextView
+                android:id="@+id/date1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:letterSpacing="0.04"
+                android:text="@string/_11_19"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
 
-<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/highTemp0"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:fontFamily="@font/oxygen"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:letterSpacing="0.04"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:text="@string/temperature"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textColor="@color/white"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textSize="20sp" />&ndash;&gt;-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginVertical="2sp"
+                android:background="#C4CDE0" />
 
-<!--&lt;!&ndash;            <ImageView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/iconCondition0"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="40dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:background="@color/transparent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:contentDescription="@string/weather_icon"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:scaleType="centerInside"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:src="@drawable/test_icon" />&ndash;&gt;-->
+            <TextView
+                android:id="@+id/highTemp1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:letterSpacing="0.04"
+                android:text="@string/temperature"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
 
-<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/lowTemp0"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:fontFamily="@font/oxygen"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:letterSpacing="0.04"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:text="@string/temperature"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textColor="@color/white"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textSize="20sp" />&ndash;&gt;-->
+            <ImageView
+                android:id="@+id/iconCondition1"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/transparent"
+                android:contentDescription="@string/weather_icon"
+                android:scaleType="centerInside"
+                android:src="@drawable/test_icon" />
 
-<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/description0"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:autoSizeMaxTextSize="20sp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:autoSizeMinTextSize="10sp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:autoSizeStepGranularity="1sp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:autoSizeTextType="uniform"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:fontFamily="@font/oxygen"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:maxLines="1"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:text="@string/main"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textColor="@color/white" />&ndash;&gt;-->
-<!--&lt;!&ndash;        </LinearLayout>&ndash;&gt;-->
+            <TextView
+                android:id="@+id/lowTemp1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:letterSpacing="0.04"
+                android:text="@string/temperature"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
 
-<!--&lt;!&ndash;        <LinearLayout&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_width="0dp"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_marginEnd="3dp"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_weight="0.142"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:background="@drawable/custom_outline"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:orientation="vertical"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:padding="2dp">&ndash;&gt;-->
+            <TextView
+                android:id="@+id/description1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoSizeMaxTextSize="20sp"
+                android:autoSizeMinTextSize="10sp"
+                android:autoSizeStepGranularity="1sp"
+                android:autoSizeTextType="uniform"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="@string/main"
+                android:textColor="@color/white" />
+        </LinearLayout>
 
-<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/date1"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_marginTop="2dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:fontFamily="@font/oxygen"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:letterSpacing="0.04"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:text="11/19"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textColor="@color/white"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textSize="12sp" />&ndash;&gt;-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="3dp"
+            android:layout_weight="0.142"
+            android:background="@drawable/custom_outline"
+            android:orientation="vertical"
+            android:padding="2dp">
 
-<!--&lt;!&ndash;            <View&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="1dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_marginHorizontal="5dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_marginVertical="2sp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:background="#C4CDE0" />&ndash;&gt;-->
+            <TextView
+                android:id="@+id/date2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:letterSpacing="0.04"
+                android:text="@string/_11_19"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
 
-<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/highTemp1"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:fontFamily="@font/oxygen"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:letterSpacing="0.04"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:text="@string/temperature"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textColor="@color/white"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textSize="20sp" />&ndash;&gt;-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginVertical="2sp"
+                android:background="#C4CDE0" />
 
-<!--&lt;!&ndash;            <ImageView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/iconCondition1"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="40dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:background="@color/transparent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:contentDescription="@string/weather_icon"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:scaleType="centerInside"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:src="@drawable/test_icon" />&ndash;&gt;-->
+            <TextView
+                android:id="@+id/highTemp2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:letterSpacing="0.04"
+                android:text="@string/temperature"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
 
-<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/lowTemp1"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:fontFamily="@font/oxygen"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:letterSpacing="0.04"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:text="@string/temperature"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textColor="@color/white"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textSize="20sp" />&ndash;&gt;-->
+            <ImageView
+                android:id="@+id/iconCondition2"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/transparent"
+                android:contentDescription="@string/weather_icon"
+                android:scaleType="centerInside"
+                android:src="@drawable/test_icon" />
 
-<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/description1"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:autoSizeMaxTextSize="20sp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:autoSizeMinTextSize="10sp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:autoSizeStepGranularity="1sp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:autoSizeTextType="uniform"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:fontFamily="@font/oxygen"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:maxLines="1"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:text="@string/main"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textColor="@color/white" />&ndash;&gt;-->
-<!--&lt;!&ndash;        </LinearLayout>&ndash;&gt;-->
+            <TextView
+                android:id="@+id/lowTemp2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:letterSpacing="0.04"
+                android:text="@string/temperature"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
 
-<!--&lt;!&ndash;        <LinearLayout&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_width="0dp"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_marginEnd="3dp"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_weight="0.142"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:background="@drawable/custom_outline"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:orientation="vertical"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:padding="2dp">&ndash;&gt;-->
+            <TextView
+                android:id="@+id/description2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoSizeMaxTextSize="20sp"
+                android:autoSizeMinTextSize="10sp"
+                android:autoSizeStepGranularity="1sp"
+                android:autoSizeTextType="uniform"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="@string/main"
+                android:textColor="@color/white" />
+        </LinearLayout>
 
-<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/date2"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_marginTop="2dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:fontFamily="@font/oxygen"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:letterSpacing="0.04"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:text="11/19"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textColor="@color/white"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textSize="12sp" />&ndash;&gt;-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="3dp"
+            android:layout_weight="0.142"
+            android:background="@drawable/custom_outline"
+            android:orientation="vertical"
+            android:padding="2dp">
 
-<!--&lt;!&ndash;            <View&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="1dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_marginHorizontal="5dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_marginVertical="2sp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:background="#C4CDE0" />&ndash;&gt;-->
+            <TextView
+                android:id="@+id/date3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:letterSpacing="0.04"
+                android:text="@string/_11_19"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
 
-<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/highTemp2"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:fontFamily="@font/oxygen"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:letterSpacing="0.04"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:text="@string/temperature"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textColor="@color/white"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textSize="20sp" />&ndash;&gt;-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginVertical="2sp"
+                android:background="#C4CDE0" />
 
-<!--&lt;!&ndash;            <ImageView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/iconCondition2"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="40dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:background="@color/transparent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:contentDescription="@string/weather_icon"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:scaleType="centerInside"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:src="@drawable/test_icon" />&ndash;&gt;-->
+            <TextView
+                android:id="@+id/highTemp3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:letterSpacing="0.04"
+                android:text="@string/temperature"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
 
-<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/lowTemp2"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:fontFamily="@font/oxygen"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:letterSpacing="0.04"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:text="@string/temperature"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textColor="@color/white"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textSize="20sp" />&ndash;&gt;-->
+            <ImageView
+                android:id="@+id/iconCondition3"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/transparent"
+                android:contentDescription="@string/weather_icon"
+                android:scaleType="centerInside"
+                android:src="@drawable/test_icon" />
 
-<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/description2"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:autoSizeMaxTextSize="20sp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:autoSizeMinTextSize="10sp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:autoSizeStepGranularity="1sp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:autoSizeTextType="uniform"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:fontFamily="@font/oxygen"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:maxLines="1"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:text="@string/main"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textColor="@color/white" />&ndash;&gt;-->
-<!--&lt;!&ndash;        </LinearLayout>&ndash;&gt;-->
+            <TextView
+                android:id="@+id/lowTemp3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:letterSpacing="0.04"
+                android:text="@string/temperature"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
 
-<!--&lt;!&ndash;        <LinearLayout&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_width="0dp"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_marginEnd="3dp"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_weight="0.142"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:background="@drawable/custom_outline"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:orientation="vertical"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:padding="2dp">&ndash;&gt;-->
+            <TextView
+                android:id="@+id/description3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoSizeMaxTextSize="20sp"
+                android:autoSizeMinTextSize="10sp"
+                android:autoSizeStepGranularity="1sp"
+                android:autoSizeTextType="uniform"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="@string/main"
+                android:textColor="@color/white" />
+        </LinearLayout>
 
-<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/date3"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_marginTop="2dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:fontFamily="@font/oxygen"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:letterSpacing="0.04"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:text="11/19"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textColor="@color/white"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textSize="12sp" />&ndash;&gt;-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="3dp"
+            android:layout_weight="0.142"
+            android:background="@drawable/custom_outline"
+            android:orientation="vertical"
+            android:padding="2dp">
 
-<!--&lt;!&ndash;            <View&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="1dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_marginHorizontal="5dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_marginVertical="2sp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:background="#C4CDE0" />&ndash;&gt;-->
+            <TextView
+                android:id="@+id/date4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:letterSpacing="0.04"
+                android:text="@string/_11_19"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
 
-<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/highTemp3"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:fontFamily="@font/oxygen"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:letterSpacing="0.04"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:text="@string/temperature"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textColor="@color/white"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textSize="20sp" />&ndash;&gt;-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginVertical="2sp"
+                android:background="#C4CDE0" />
 
-<!--&lt;!&ndash;            <ImageView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/iconCondition3"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="40dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:background="@color/transparent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:contentDescription="@string/weather_icon"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:scaleType="centerInside"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:src="@drawable/test_icon" />&ndash;&gt;-->
+            <TextView
+                android:id="@+id/highTemp4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:letterSpacing="0.04"
+                android:text="@string/temperature"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
 
-<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/lowTemp3"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:fontFamily="@font/oxygen"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:letterSpacing="0.04"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:text="@string/temperature"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textColor="@color/white"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textSize="20sp" />&ndash;&gt;-->
+            <ImageView
+                android:id="@+id/iconCondition4"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/transparent"
+                android:contentDescription="@string/weather_icon"
+                android:scaleType="centerInside"
+                android:src="@drawable/test_icon" />
 
-<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/description3"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:autoSizeMaxTextSize="20sp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:autoSizeMinTextSize="10sp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:autoSizeStepGranularity="1sp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:autoSizeTextType="uniform"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:fontFamily="@font/oxygen"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:maxLines="1"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:text="@string/main"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textColor="@color/white" />&ndash;&gt;-->
-<!--&lt;!&ndash;        </LinearLayout>&ndash;&gt;-->
+            <TextView
+                android:id="@+id/lowTemp4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:letterSpacing="0.04"
+                android:text="@string/temperature"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
 
-<!--&lt;!&ndash;        <LinearLayout&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_width="0dp"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_marginEnd="3dp"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_weight="0.142"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:background="@drawable/custom_outline"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:orientation="vertical"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:padding="2dp">&ndash;&gt;-->
+            <TextView
+                android:id="@+id/description4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoSizeMaxTextSize="20sp"
+                android:autoSizeMinTextSize="10sp"
+                android:autoSizeStepGranularity="1sp"
+                android:autoSizeTextType="uniform"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="@string/main"
+                android:textColor="@color/white" />
+        </LinearLayout>
 
-<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/date4"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_marginTop="2dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:fontFamily="@font/oxygen"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:letterSpacing="0.04"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:text="11/19"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textColor="@color/white"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textSize="12sp" />&ndash;&gt;-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="3dp"
+            android:layout_weight="0.142"
+            android:background="@drawable/custom_outline"
+            android:orientation="vertical"
+            android:padding="2dp">
 
-<!--&lt;!&ndash;            <View&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="1dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_marginHorizontal="5dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_marginVertical="2sp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:background="#C4CDE0" />&ndash;&gt;-->
+            <TextView
+                android:id="@+id/date5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:letterSpacing="0.04"
+                android:text="@string/_11_19"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
 
-<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/highTemp4"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:fontFamily="@font/oxygen"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:letterSpacing="0.04"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:text="@string/temperature"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textColor="@color/white"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textSize="20sp" />&ndash;&gt;-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginVertical="2sp"
+                android:background="#C4CDE0" />
 
-<!--&lt;!&ndash;            <ImageView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/iconCondition4"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="40dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:background="@color/transparent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:contentDescription="@string/weather_icon"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:scaleType="centerInside"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:src="@drawable/test_icon" />&ndash;&gt;-->
+            <TextView
+                android:id="@+id/highTemp5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:letterSpacing="0.04"
+                android:text="@string/temperature"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
 
-<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/lowTemp4"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:fontFamily="@font/oxygen"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:letterSpacing="0.04"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:text="@string/temperature"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textColor="@color/white"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textSize="20sp" />&ndash;&gt;-->
+            <ImageView
+                android:id="@+id/iconCondition5"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/transparent"
+                android:contentDescription="@string/weather_icon"
+                android:scaleType="centerInside"
+                android:src="@drawable/test_icon" />
 
-<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/description4"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:autoSizeMaxTextSize="20sp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:autoSizeMinTextSize="10sp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:autoSizeStepGranularity="1sp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:autoSizeTextType="uniform"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:fontFamily="@font/oxygen"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:maxLines="1"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:text="@string/main"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textColor="@color/white" />&ndash;&gt;-->
-<!--&lt;!&ndash;        </LinearLayout>&ndash;&gt;-->
+            <TextView
+                android:id="@+id/lowTemp5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:letterSpacing="0.04"
+                android:text="@string/temperature"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
 
-<!--&lt;!&ndash;        <LinearLayout&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_width="0dp"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_marginEnd="3dp"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_weight="0.142"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:background="@drawable/custom_outline"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:orientation="vertical"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:padding="2dp">&ndash;&gt;-->
+            <TextView
+                android:id="@+id/description5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoSizeMaxTextSize="20sp"
+                android:autoSizeMinTextSize="10sp"
+                android:autoSizeStepGranularity="1sp"
+                android:autoSizeTextType="uniform"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="@string/main"
+                android:textColor="@color/white" />
+        </LinearLayout>
 
-<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/date5"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_marginTop="2dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:fontFamily="@font/oxygen"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:letterSpacing="0.04"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:text="11/19"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textColor="@color/white"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textSize="12sp" />&ndash;&gt;-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.142"
+            android:background="@drawable/custom_outline"
+            android:orientation="vertical"
+            android:padding="2dp">
 
-<!--&lt;!&ndash;            <View&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="1dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_marginHorizontal="5dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_marginVertical="2sp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:background="#C4CDE0" />&ndash;&gt;-->
+            <TextView
+                android:id="@+id/date6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:letterSpacing="0.04"
+                android:text="@string/_11_19"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
 
-<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/highTemp5"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:fontFamily="@font/oxygen"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:letterSpacing="0.04"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:text="@string/temperature"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textColor="@color/white"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textSize="20sp" />&ndash;&gt;-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginVertical="2sp"
+                android:background="#C4CDE0" />
 
-<!--&lt;!&ndash;            <ImageView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/iconCondition5"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="40dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:background="@color/transparent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:contentDescription="@string/weather_icon"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:scaleType="centerInside"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:src="@drawable/test_icon" />&ndash;&gt;-->
+            <TextView
+                android:id="@+id/highTemp6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:letterSpacing="0.04"
+                android:text="@string/temperature"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
 
-<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/lowTemp5"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:fontFamily="@font/oxygen"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:letterSpacing="0.04"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:text="@string/temperature"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textColor="@color/white"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textSize="20sp" />&ndash;&gt;-->
+            <ImageView
+                android:id="@+id/iconCondition6"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/transparent"
+                android:contentDescription="@string/weather_icon"
+                android:scaleType="centerInside"
+                android:src="@drawable/test_icon" />
 
-<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/description5"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:autoSizeMaxTextSize="20sp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:autoSizeMinTextSize="10sp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:autoSizeStepGranularity="1sp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:autoSizeTextType="uniform"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:fontFamily="@font/oxygen"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:maxLines="1"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:text="@string/main"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textColor="@color/white" />&ndash;&gt;-->
-<!--&lt;!&ndash;        </LinearLayout>&ndash;&gt;-->
+            <TextView
+                android:id="@+id/lowTemp6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:letterSpacing="0.04"
+                android:text="@string/temperature"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
 
-<!--&lt;!&ndash;        <LinearLayout&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_width="0dp"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_weight="0.142"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:background="@drawable/custom_outline"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:orientation="vertical"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:padding="2dp">&ndash;&gt;-->
+            <TextView
+                android:id="@+id/description6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoSizeMaxTextSize="20sp"
+                android:autoSizeMinTextSize="10sp"
+                android:autoSizeStepGranularity="1sp"
+                android:autoSizeTextType="uniform"
+                android:fontFamily="@font/oxygen"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="@string/main"
+                android:textColor="@color/white" />
+        </LinearLayout>
 
-<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/date6"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_marginTop="2dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:fontFamily="@font/oxygen"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:letterSpacing="0.04"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:text="11/19"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textColor="@color/white"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textSize="12sp" />&ndash;&gt;-->
+    </LinearLayout>
 
-<!--&lt;!&ndash;            <View&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="1dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_marginHorizontal="5dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_marginVertical="2sp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:background="#C4CDE0" />&ndash;&gt;-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
 
-<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/highTemp6"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:fontFamily="@font/oxygen"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:letterSpacing="0.04"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:text="@string/temperature"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textColor="@color/white"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textSize="20sp" />&ndash;&gt;-->
+        <TextView
+            android:id="@+id/revoltTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:drawableStart="@drawable/ic_bolt"
+            android:drawablePadding="3dp"
+            android:fontFamily="@font/redhat"
+            android:gravity="start"
+            android:text="@string/revoltwind_com"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
 
-<!--&lt;!&ndash;            <ImageView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/iconCondition6"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="40dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:background="@color/transparent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:contentDescription="@string/weather_icon"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:scaleType="centerInside"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:src="@drawable/test_icon" />&ndash;&gt;-->
-
-<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/lowTemp6"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:fontFamily="@font/oxygen"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:letterSpacing="0.04"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:text="@string/temperature"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textColor="@color/white"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textSize="20sp" />&ndash;&gt;-->
-
-<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/description6"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:autoSizeMaxTextSize="20sp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:autoSizeMinTextSize="10sp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:autoSizeStepGranularity="1sp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:autoSizeTextType="uniform"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:fontFamily="@font/oxygen"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:maxLines="1"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:text="@string/main"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:textColor="@color/white" />&ndash;&gt;-->
-<!--&lt;!&ndash;        </LinearLayout>&ndash;&gt;-->
-
-<!--    </LinearLayout>-->
-
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="5dp"-->
-<!--        android:orientation="horizontal">-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/revoltTextView"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_weight="0.5"-->
-<!--            android:drawableStart="@drawable/ic_bolt"-->
-<!--            android:drawablePadding="3dp"-->
-<!--            android:fontFamily="@font/redhat"-->
-<!--            android:gravity="left"-->
-<!--            android:text="@string/revoltwind_com"-->
-<!--            android:textColor="@color/white"-->
-<!--            android:textSize="14sp" />-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/updatedTextForecast"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_weight="0.5"-->
-<!--            android:drawableEnd="@drawable/ic_refresh"-->
-<!--            android:drawablePadding="3dp"-->
-<!--            android:fontFamily="@font/redhat"-->
-<!--            android:gravity="right"-->
-<!--            android:text="@string/last_updated"-->
-<!--            android:textColor="@color/white"-->
-<!--            android:textSize="14sp" />-->
-<!--    </LinearLayout>-->
+        <TextView
+            android:id="@+id/updated"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:drawableEnd="@drawable/ic_refresh"
+            android:drawablePadding="3dp"
+            android:fontFamily="@font/redhat"
+            android:gravity="end"
+            android:text="@string/last_updated"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </LinearLayout>
 
 </LinearLayout>

@@ -1,9 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="250dp"
-    android:layout_height="250dp"
+    android:layout_width="180dp"
+    android:layout_height="wrap_content"
     android:background="@drawable/custom_shape"
     android:orientation="vertical"
-    android:padding="15dp">
+    android:padding="12dp">
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -12,10 +12,10 @@
 
         <TextView
             android:id="@+id/city"
-            android:layout_width="190dp"
+            android:layout_width="127dp"
             android:layout_height="35dp"
-            android:autoSizeMaxTextSize="30sp"
-            android:autoSizeMinTextSize="15sp"
+            android:autoSizeMaxTextSize="24sp"
+            android:autoSizeMinTextSize="13sp"
             android:autoSizeStepGranularity="1sp"
             android:autoSizeTextType="uniform"
             android:fontFamily="@font/redhat"
@@ -25,8 +25,8 @@
 
         <ImageView
             android:id="@+id/convert_button"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_toStartOf="@id/city"
             android:background="@color/transparent"
@@ -40,50 +40,47 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/temperature"
+            android:id="@+id/wind_speed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/redhat"
             android:letterSpacing="0.04"
-            android:text="@string/temperature"
+            android:text="5"
             android:textColor="@color/white"
-            android:textSize="60sp" />
+            android:textSize="42sp" />
+
+        <TextView
+            android:id="@+id/speed_units"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/redhat"
+            android:letterSpacing="0.04"
+            android:layout_marginStart="5dp"
+            android:text="m/s"
+            android:textColor="@color/white"
+            android:textSize="25sp" />
 
         <ImageView
-            android:id="@+id/iconCondition"
-            android:padding="8dp"
-            android:layout_width="0dp"
+            android:id="@+id/wind_direction"
+            android:padding="10dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:background="@color/transparent"
-            android:contentDescription="@string/weather_icon"
+            android:contentDescription="@string/wind_direction_content_description"
             android:scaleType="fitEnd"
-            android:src="@drawable/test_icon" />
+            android:src="@drawable/arrow" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/description"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:autoSizeMaxTextSize="30sp"
-        android:autoSizeMinTextSize="20sp"
-        android:autoSizeStepGranularity="1sp"
-        android:autoSizeTextType="uniform"
-        android:fontFamily="@font/redhat"
-        android:maxLines="1"
-        android:text="@string/description"
-        android:textAlignment="textStart"
-        android:textColor="@color/white" />
 
     <TextView
         android:id="@+id/updated"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:autoSizeMaxTextSize="30sp"
-        android:autoSizeMinTextSize="20sp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:autoSizeMaxTextSize="17sp"
+        android:autoSizeMinTextSize="11sp"
         android:autoSizeStepGranularity="1sp"
         android:autoSizeTextType="uniform"
-        android:drawableEnd="@drawable/ic_refresh_30"
+        android:drawableEnd="@drawable/ic_refresh"
         android:drawablePadding="2sp"
         android:fontFamily="@font/redhat"
         android:maxLines="1"
@@ -93,15 +90,15 @@
     <TextView
         android:id="@+id/revoltTextView"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginTop="8dp"
-        android:drawableStart="@drawable/ic_bolt_30"
-        android:drawablePadding="4dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:drawableStart="@drawable/ic_bolt"
+        android:drawablePadding="3dp"
         android:fontFamily="@font/redhat"
         android:text="@string/revoltwind_com"
         android:textColor="@color/white"
-        android:autoSizeMaxTextSize="30sp"
-        android:autoSizeMinTextSize="20sp"
+        android:autoSizeMaxTextSize="18sp"
+        android:autoSizeMinTextSize="11sp"
         android:autoSizeStepGranularity="1sp"
         android:autoSizeTextType="uniform" />
 

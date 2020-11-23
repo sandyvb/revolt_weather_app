@@ -4,9 +4,6 @@
     android:initialLayout="@layout/big_sky"
     android:minWidth="250dp"
     android:minHeight="250dp"
-    android:minResizeWidth="180dp"
-    android:minResizeHeight="110dp"
-    android:previewImage="@drawable/example_appwidget_preview"
-    android:resizeMode="horizontal | vertical"
+    android:previewImage="@drawable/bigsky_preview"
     android:updatePeriodMillis="3600000"
     android:widgetCategory="home_screen" />

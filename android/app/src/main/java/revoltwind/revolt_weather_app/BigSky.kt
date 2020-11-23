@@ -20,11 +20,12 @@ import com.google.android.gms.location.LocationServices
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 class BigSky : AppWidgetProvider() {
 
     private val apiLink: String = "https://api.openweathermap.org/data/2.5/weather?"
-    private var coordinates: String = "SOMEWHERE"
+    private var coordinates: String = "PARIS"
     private val apiIcon: String = "https://revoltwind.com/icons/"
     private val apiKey = "217da33042b65b3c9e4bd01ab0bdd02b"
     private val mSharedPrefFile: String = "com.revoltwind.appwidgets"
@@ -37,7 +38,6 @@ class BigSky : AppWidgetProvider() {
             appWidgetManager: AppWidgetManager,
             appWidgetIds: IntArray
     ) {
-        // There may be multiple widgets active, so update all of them
         for (appWidgetId in appWidgetIds) {
             updateWeatherAppWidget(context, appWidgetManager, appWidgetId)
         }
@@ -46,7 +46,7 @@ class BigSky : AppWidgetProvider() {
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
 
-        // got a new action, check if it is refresh action
+        // check for refresh or unit conversion actions
         if (intent.action == "com.revoltwind.bigsky.REFRESH") {
             val appWidgetManager = AppWidgetManager.getInstance(context.applicationContext)
             val views = RemoteViews(context.packageName, R.layout.big_sky)
@@ -54,6 +54,7 @@ class BigSky : AppWidgetProvider() {
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
             getLastKnownLocation(context, views, appWidgetId, appWidgetManager)
         }
+
         if (intent.action == "com.revoltwind.bigsky.CONVERT") {
             val appWidgetManager = AppWidgetManager.getInstance(context.applicationContext)
             val views = RemoteViews(context.packageName, R.layout.big_sky)
@@ -86,9 +87,6 @@ class BigSky : AppWidgetProvider() {
         // Create an Intent to launch MainActivity
         val intent = Intent(context, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
-
-        // Get the layout for the App Widget and attach an on-click listeners
-        views.setOnClickPendingIntent(R.id.city, pendingIntent)
         views.setOnClickPendingIntent(R.id.temperature, pendingIntent)
         views.setOnClickPendingIntent(R.id.iconCondition, pendingIntent)
         views.setOnClickPendingIntent(R.id.revoltTextView, pendingIntent)
@@ -97,23 +95,21 @@ class BigSky : AppWidgetProvider() {
         val refreshIntent = Intent(context, BigSky::class.java)
         refreshIntent.action = "com.revoltwind.bigsky.REFRESH"
         refreshIntent.putExtra("appWidgetId", appWidgetId)
-        // Create pending intent for refresh
         val refreshPendingIntent = PendingIntent.getBroadcast(
                 context, 0, refreshIntent, PendingIntent.FLAG_UPDATE_CURRENT
         )
-        // set onclick to refresh image view
         views.setOnClickPendingIntent(R.id.updated, refreshPendingIntent)
 
         // Create an Intent to convert units
         val convertIntent = Intent(context, BigSky::class.java)
         convertIntent.action = "com.revoltwind.bigsky.CONVERT"
         convertIntent.putExtra("appWidgetId", appWidgetId)
-        // Create pending intent for convert
         val convertPendingIntent = PendingIntent.getBroadcast(
                 context, 0, convertIntent, PendingIntent.FLAG_UPDATE_CURRENT
         )
-        // set onclick to convert image view
         views.setOnClickPendingIntent(R.id.convert_button, convertPendingIntent)
+        views.setOnClickPendingIntent(R.id.city, convertPendingIntent)
+
     }
 
     private fun getLastKnownLocation(
@@ -150,10 +146,15 @@ class BigSky : AppWidgetProvider() {
         val prefs = context.getSharedPreferences(mSharedPrefFile, 0)
         val isMetric = prefs.getBoolean("$appWidgetId", false)
         val units = if (isMetric) "metric" else "imperial"
+        // set toggle button image
+        val toggleIcon = if (isMetric) R.drawable.ic_toggle_on else R.drawable.ic_toggle_off
+        views.setImageViewResource(R.id.convert_button, toggleIcon)
 
+        // owm url
         val url = "$apiLink$coordinates&APPID=$apiKey&units=$units"
 
-        // JSON object request with Volley
+        // get data
+        val queue = Volley.newRequestQueue(context)
         val jsonObjectRequest = JsonObjectRequest(
                 Request.Method.GET, url, null, { response ->
             try {
@@ -163,7 +164,7 @@ class BigSky : AppWidgetProvider() {
                 val firstWeatherObject = weatherArray.getJSONObject(0)
                 // city, condition
                 val yourCity = response.getString("name")
-                val description = firstWeatherObject.getString("description").capitalize()
+                val description = firstWeatherObject.getString("description").capitalize(Locale.ROOT)
                 // temperature
                 val tempString = mainJSONObject.getString("temp").toDouble().toInt()
                 val temperature = if (isMetric) {
@@ -186,11 +187,7 @@ class BigSky : AppWidgetProvider() {
                 views.setTextViewText(R.id.temperature, temperature)
                 views.setTextViewText(R.id.updated, updated)
 
-                // set toggle button image
-                val toggleIcon = if (isMetric) R.drawable.ic_toggle_on else R.drawable.ic_toggle_off
-                views.setImageViewResource(R.id.convert_button, toggleIcon)
-
-                // AppWidgetTarget will be used with Glide - image target view
+                // image target view
                 val awt: AppWidgetTarget = object : AppWidgetTarget(
                         context.applicationContext,
                         R.id.iconCondition,
@@ -207,18 +204,14 @@ class BigSky : AppWidgetProvider() {
                         .load(iconUrl)
                         .into(awt)
 
+                // update widget
+                appWidgetManager.updateAppWidget(appWidgetId, views)
+
             } catch (e: Exception) {
                 e.printStackTrace()
-                Log.i("WEATHER", "***** error: $e")
             }
-        },
-                { error -> Log.i("ERROR", "Error: $error") })
-
-        // start loading data with Volley
-        val queue = Volley.newRequestQueue(context)
+        }
+        ) {}
         queue.add(jsonObjectRequest)
-
-        // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, views)
     }
 }

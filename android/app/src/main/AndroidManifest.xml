@@ -17,7 +17,21 @@
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="REVOLT Weather">
-        <receiver android:name=".Forecast"
+        <receiver
+            android:name=".Wind"
+            android:label="Wind">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.revoltwind.wind.REFRESH" />
+                <action android:name="com.revoltwind.wind.CONVERT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/wind_info" />
+        </receiver>
+        <receiver
+            android:name=".Forecast"
             android:label="7 Day Forecast">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -30,21 +44,21 @@
                 android:resource="@xml/forecast_info" />
         </receiver>
         <receiver
-            android:name=".DarkClearSky"
-            android:label="Clear Sky (blue)">
+            android:name=".DarkSky"
+            android:label="Dark Sky">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.revoltwind.darkclearsky.REFRESH" />
-                <action android:name="com.revoltwind.darkclearsky.CONVERT" />
+                <action android:name="com.revoltwind.darksky.REFRESH" />
+                <action android:name="com.revoltwind.darksky.CONVERT" />
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/dark_clear_sky_info" />
+                android:resource="@xml/dark_sky_info" />
         </receiver>
         <receiver
             android:name=".ClearSky"
-            android:label="Clear Sky (white)">
+            android:label="Clear Sky">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.revoltwind.clearsky.REFRESH" />
@@ -70,7 +84,7 @@
         </receiver>
         <receiver
             android:name=".AppWidget"
-            android:label="REVOLT Weather">
+            android:label="Simple">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.revoltwind.appwidget.REFRESH" />

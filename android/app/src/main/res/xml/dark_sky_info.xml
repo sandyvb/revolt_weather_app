@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:initialKeyguardLayout="@layout/clear_sky"
-    android:initialLayout="@layout/clear_sky"
+    android:initialKeyguardLayout="@layout/dark_sky"
+    android:initialLayout="@layout/dark_sky"
     android:minWidth="110dp"
     android:minHeight="180dp"
-    android:previewImage="@drawable/clearsky_preview"
+    android:previewImage="@drawable/darksky_preview"
     android:updatePeriodMillis="3600000"
     android:widgetCategory="home_screen" />

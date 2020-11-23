@@ -13,5 +13,11 @@
 
     <string name="wi_owm_200">&#xf01e;</string>
     <string name="revoltwind_com">REVOLTwind.com</string>
+    <string name="wind_direction_content_description">wind direction</string>
+    <string name="go_dark">Go dark</string>
+    <string name="go_light">Go light</string>
+    <string name="_11_19">11/19</string>
+    <string name="c">°C</string>
+    <string name="f">°F</string>
 
 </resources>
