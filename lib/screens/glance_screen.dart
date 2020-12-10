@@ -210,53 +210,53 @@ class GlanceScreen extends StatelessWidget {
                   // DIVIDER
                   gradientDivider(padding: EdgeInsets.fromLTRB(25.0, 0, 20.0, 10.0)),
                   // TODAY / TOMORROW / NEXT DAY
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        // TODAY
-                        Obx(
-                          () => glanceBox(
-                            day: 'TODAY',
-                            highTemp: cf.daily[0]['temp']['max'],
-                            lowTemp: cf.daily[0]['temp']['min'],
-                            iconId: cf.currentWeatherId.value,
-                            main: cf.currentWeatherMain.value,
-                            pop: (cf.daily[0]['pop'] * 100).toInt(),
-                            windAngle: cf.currentWindDeg.value,
-                            windSpeed: cf.currentWindSpeed.value.round(),
-                          ),
-                        ),
-                        // TOMORROW
-                        Obx(
-                          () => glanceBox(
-                            day: '${cf.getWeekDay(cf.daily[1]['dt'])}',
-                            highTemp: cf.daily[1]['temp']['max'],
-                            lowTemp: cf.daily[1]['temp']['min'],
-                            iconId: cf.daily[1]['weather'][0]['id'],
-                            main: cf.daily[1]['weather'][0]['main'],
-                            pop: (cf.daily[1]['pop'] * 100).toInt(),
-                            windAngle: cf.daily[1]['wind_deg'],
-                            windSpeed: cf.daily[1]['wind_speed'],
-                          ),
-                        ),
-                        // THE NEXT DAY
-                        Obx(
-                          () => glanceBox(
-                            day: '${cf.getWeekDay(cf.daily[2]['dt'])}',
-                            highTemp: cf.daily[2]['temp']['max'],
-                            lowTemp: cf.daily[2]['temp']['min'],
-                            iconId: cf.daily[2]['weather'][0]['id'],
-                            main: cf.daily[2]['weather'][0]['main'],
-                            pop: (cf.daily[2]['pop'] * 100).toInt(),
-                            windAngle: cf.daily[2]['wind_deg'],
-                            windSpeed: cf.daily[2]['wind_speed'],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  //     children: [
+                  //       // TODAY
+                  //       Obx(
+                  //         () => glanceBox(
+                  //           day: 'TODAY',
+                  //           highTemp: cf.daily[0]['temp']['max'],
+                  //           lowTemp: cf.daily[0]['temp']['min'],
+                  //           iconId: cf.currentWeatherId.value,
+                  //           main: cf.currentWeatherMain.value,
+                  //           pop: (cf.daily[0]['pop'] * 100).toInt(),
+                  //           windAngle: cf.currentWindDeg.value,
+                  //           windSpeed: cf.currentWindSpeed.value.round(),
+                  //         ),
+                  //       ),
+                  //       // TOMORROW
+                  //       Obx(
+                  //         () => glanceBox(
+                  //           day: '${cf.getWeekDay(cf.daily[1]['dt'])}',
+                  //           highTemp: cf.daily[1]['temp']['max'],
+                  //           lowTemp: cf.daily[1]['temp']['min'],
+                  //           iconId: cf.daily[1]['weather'][0]['id'],
+                  //           main: cf.daily[1]['weather'][0]['main'],
+                  //           pop: (cf.daily[1]['pop'] * 100).toInt(),
+                  //           windAngle: cf.daily[1]['wind_deg'],
+                  //           windSpeed: cf.daily[1]['wind_speed'],
+                  //         ),
+                  //       ),
+                  //       // THE NEXT DAY
+                  //       Obx(
+                  //         () => glanceBox(
+                  //           day: '${cf.getWeekDay(cf.daily[2]['dt'])}',
+                  //           highTemp: cf.daily[2]['temp']['max'],
+                  //           lowTemp: cf.daily[2]['temp']['min'],
+                  //           iconId: cf.daily[2]['weather'][0]['id'],
+                  //           main: cf.daily[2]['weather'][0]['main'],
+                  //           pop: (cf.daily[2]['pop'] * 100).toInt(),
+                  //           windAngle: cf.daily[2]['wind_deg'],
+                  //           windSpeed: cf.daily[2]['wind_speed'],
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                   // MAP
                   Container(
                     height: 400.0,

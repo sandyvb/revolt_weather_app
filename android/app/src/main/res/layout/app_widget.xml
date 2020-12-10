@@ -1,6 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="180dp"
-    android:layout_height="180dp"
+    android:layout_height="wrap_content"
     android:background="@drawable/custom_shape"
     android:orientation="vertical"
     android:padding="12dp">

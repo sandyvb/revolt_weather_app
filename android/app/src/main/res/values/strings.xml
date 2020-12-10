@@ -10,7 +10,6 @@
     <string name="last_updated">Updated 11/17 11:20 AM</string>
     <string name="weather_icon">weather icon</string>
     <string name="convert_units">metric or imperial units</string>
-
     <string name="wi_owm_200">&#xf01e;</string>
     <string name="revoltwind_com">REVOLTwind.com</string>
     <string name="wind_direction_content_description">wind direction</string>
@@ -21,5 +20,6 @@
     <string name="f">°F</string>
     <string name="dummy_number">5</string>
     <string name="units">m/s</string>
+    <string name="pop">0%</string>
 
 </resources>

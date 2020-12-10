@@ -13,7 +13,8 @@
 
         <TextView
             android:id="@+id/city"
-            android:layout_width="170dp"
+            android:layout_width="0dp"
+            android:layout_weight="0.75"
             android:layout_height="wrap_content"
             android:fontFamily="@font/redhat"
             android:maxLines="2"
@@ -57,12 +58,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginVertical="10dp"
-        android:baselineAligned="false"
+        android:baselineAligned="true"
         android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="0.33"
             android:layout_marginEnd="3dp"
             android:background="@drawable/custom_outline"
@@ -78,7 +79,7 @@
                 android:gravity="center"
                 android:letterSpacing="0.04"
                 android:text="@string/_11_19"
-                android:textColor="#ccc"
+                android:textColor="@color/white"
                 android:textSize="12sp" />
 
             <TextView
@@ -117,10 +118,7 @@
                 android:id="@+id/description0"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:autoSizeMaxTextSize="20sp"
-                android:autoSizeMinTextSize="10sp"
-                android:autoSizeStepGranularity="1sp"
-                android:autoSizeTextType="uniform"
+                android:textSize="14sp"
                 android:fontFamily="@font/oxygen"
                 android:gravity="center"
                 android:maxLines="1"
@@ -141,7 +139,7 @@
         </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="0.33"
             android:layout_marginEnd="3dp"
             android:background="@drawable/custom_outline"
@@ -157,7 +155,7 @@
                 android:gravity="center"
                 android:letterSpacing="0.04"
                 android:text="@string/_11_19"
-                android:textColor="#ccc"
+                android:textColor="@color/white"
                 android:textSize="12sp" />
 
             <TextView
@@ -196,10 +194,7 @@
                 android:id="@+id/description1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:autoSizeMaxTextSize="20sp"
-                android:autoSizeMinTextSize="10sp"
-                android:autoSizeStepGranularity="1sp"
-                android:autoSizeTextType="uniform"
+               android:textSize="14sp"
                 android:fontFamily="@font/oxygen"
                 android:gravity="center"
                 android:maxLines="1"
@@ -220,7 +215,7 @@
         </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="0.33"
             android:background="@drawable/custom_outline"
             android:orientation="vertical"
@@ -235,7 +230,7 @@
                 android:gravity="center"
                 android:letterSpacing="0.04"
                 android:text="@string/_11_19"
-                android:textColor="#ccc"
+                android:textColor="@color/white"
                 android:textSize="12sp" />
 
             <TextView
@@ -274,10 +269,7 @@
                 android:id="@+id/description2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:autoSizeMaxTextSize="20sp"
-                android:autoSizeMinTextSize="10sp"
-                android:autoSizeStepGranularity="1sp"
-                android:autoSizeTextType="uniform"
+               android:textSize="14sp"
                 android:fontFamily="@font/oxygen"
                 android:gravity="center"
                 android:maxLines="1"

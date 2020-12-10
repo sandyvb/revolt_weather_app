@@ -99,7 +99,7 @@ Widget getIconString(String code, {double size = 27.0, Color color = kLighterBlu
   } else if (code == 'altitude') {
     return Icon(MaterialCommunityIcons.slope_uphill, size: size, color: color);
   } else {
-    return Icon(WeatherIcons.wi_na, size: size, color: color);
+    return Icon(FontAwesome.smile_o, size: size, color: color);
   }
 }
 

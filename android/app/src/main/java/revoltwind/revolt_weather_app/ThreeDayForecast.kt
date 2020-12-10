@@ -212,7 +212,7 @@ class ThreeDayForecast : AppWidgetProvider() {
                     val dailyWeather = dailyWeatherArray.getJSONObject(0)
                     val description = dailyWeather.getString("main")
                     val icon = dailyWeather.getString("icon")
-                    val pop = weatherObject.getDouble("pop").roundToInt().toString()
+                    val pop = (weatherObject.getDouble("pop") * 100).roundToInt()
 
                     val dateView: Int
                     val descriptionView: Int

@@ -12,7 +12,7 @@ class ControllerMap extends GetxController {
   final ControllerUpdate cu = Get.find();
   final ControllerForecast cf = Get.find();
 
-  var mapLayer = 'wind'.obs;
+  var mapLayer = 'precipitation'.obs;
   var min = '0'.obs;
   var max = '5.5in'.obs;
   var fullscreen = false.obs;
@@ -167,9 +167,11 @@ class ControllerMap extends GetxController {
     } else if (mapLayer.value == 'wind') {
       legendText.value = '$city the wind speed is ${cf.currentWindSpeed.value.toInt()} ${c.speedUnits.value}.  ${cf.gustingWind()}';
     } else if (mapLayer.value == 'precipitation') {
-      legendText.value = '$city, there has been ${cf.currentRain.value.toStringAsFixed(1)} ${c.precipUnits.value} of rain in the last hour';
+      String precip = c.isMetric.value ? cf.currentRain1h.value.toStringAsFixed(2) : (cf.currentRain1h.value / 25.4).toStringAsFixed(2);
+      legendText.value = '$city, there has been $precip ${c.precipUnits.value} of rain in the last hour';
     } else if (mapLayer.value == 'snow') {
-      legendText.value = '$city, there has been ${cf.currentSnow.value.toStringAsFixed(1)} ${c.precipUnits.value} of snow in the last hour';
+      String precip = c.isMetric.value ? cf.currentSnow1h.value.toStringAsFixed(2) : (cf.currentSnow1h.value / 25.4).toStringAsFixed(2);
+      legendText.value = '$city, there has been $precip ${c.precipUnits.value} of snow in the last hour';
     } else if (mapLayer.value == 'pressure') {
       legendText.value = '$city the pressure is ${cf.currentPressureHg.value} inHg';
     } else if (mapLayer.value == 'temp') {

@@ -164,6 +164,7 @@ class Wind : AppWidgetProvider() {
                     views.setViewVisibility(R.id.revoltTextView, View.VISIBLE)
                     views.setViewVisibility(R.id.city, View.VISIBLE)
                     views.setViewVisibility(R.id.convert_button, View.VISIBLE)
+                    views.setTextViewTextSize(R.id.wind_speed, TypedValue.COMPLEX_UNIT_SP, 42F)
                 }
             }
             appWidgetManager?.updateAppWidget(appWidgetId, views)

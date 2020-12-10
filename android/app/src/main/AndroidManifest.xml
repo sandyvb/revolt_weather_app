@@ -19,7 +19,7 @@
         android:label="REVOLT Weather">
         <receiver
             android:name=".ThreeDayForecast"
-            android:label="Forecast">
+            android:label="3-day Forecast">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.revoltwind.forecast.REFRESH" />
@@ -29,6 +29,19 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/three_day_forecast_info" />
+        </receiver>
+        <receiver
+            android:name=".Forecast"
+            android:label="5-day Forecast">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.revoltwind.forecast5.REFRESH" />
+                <action android:name="com.revoltwind.forecast5.CONVERT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/forecast_info" />
         </receiver>
         <receiver
             android:name=".Wind"

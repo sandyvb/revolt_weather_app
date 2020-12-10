@@ -12,7 +12,10 @@ class Location {
       latitude = position.latitude;
       longitude = position.longitude;
     } catch (e) {
-      print('from location.dart: $e');
+      print('from location.dart. Error: $e');
+      // if no location data available default to paris
+      latitude = 48.8566;
+      longitude = 2.3522;
     }
   }
 }

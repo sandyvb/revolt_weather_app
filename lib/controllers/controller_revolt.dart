@@ -9,8 +9,11 @@ class ControllerRevolt extends GetxController {
   final ControllerUpdate cu = Get.find();
 
   // FOR THE RW-X TURBINE
-  final String viewUrl = 'https://www.fatfreecartpro.com/i/z3z7?card';
-  final String buyUrl = 'https://www.fatfreecartpro.com/i/z3z7?cc';
+  // final String viewUrl = 'https://www.fatfreecartpro.com/i/z3z7?card';
+  // final String buyUrl = 'https://www.fatfreecartpro.com/i/z3z7?cc';
+  // FOR THE RW-1 TURBINE
+  final String buyUrl = 'https://www.fatfreecartpro.com/i/z3xd?cc';
+  final String viewUrl = 'https://www.fatfreecartpro.com/i/z3xd?card';
   var url = 'url'.obs;
 
   // GIF - CONTAINER AND STYLING

@@ -3,13 +3,13 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
+import 'package:latlong/latlong.dart' as latLng;
 import 'package:revolt_weather_app/components/get_icon.dart';
 import 'package:revolt_weather_app/controllers/controller.dart';
 import 'package:revolt_weather_app/controllers/controller_forecast.dart';
 import 'package:revolt_weather_app/controllers/controller_map.dart';
 import 'package:revolt_weather_app/controllers/controller_update.dart';
 import 'package:revolt_weather_app/screens/map_screen.dart';
-import 'package:latlong/latlong.dart' as latLng;
 import 'package:revolt_weather_app/services/weather.dart';
 import 'package:revolt_weather_app/utilities/constants.dart';
 
@@ -20,6 +20,7 @@ class MapComponent extends StatelessWidget {
   final ControllerForecast cf = Get.find();
 
   final String _mapURL = 'https://tile.openweathermap.org/map';
+
   // final String _rainViewerMapURL = 'https://tilecache.rainviewer.com/v2';
 
   final MapController _mapController = MapController();
@@ -32,11 +33,11 @@ class MapComponent extends StatelessWidget {
         leading: InkWell(
           child: Padding(
             padding: const EdgeInsets.only(left: 10.0),
-            child: Obx(() => getIconString('wind', color: cmap.mapLayer.value == 'wind' ? Colors.white : kLighterBlue)),
+            child: Obx(() => getIconInt(501, color: cmap.mapLayer.value == 'precipitation' ? Colors.white : kLighterBlue.withOpacity(0.25))),
           ),
           onTap: () {
             cmap.getSnackbar();
-            cmap.mapLayer.value = 'wind';
+            cmap.mapLayer.value = 'precipitation';
             cmap.updateLegend();
           },
         ),
@@ -50,25 +51,28 @@ class MapComponent extends StatelessWidget {
                 children: [
                   // TEMPERATURE
                   InkWell(
-                    child: Obx(() => getIconString('thermometer', color: cmap.mapLayer.value == 'temp' ? Colors.white : kLighterBlue)),
+                    child: Obx(() => getIconString('thermometer', color: cmap.mapLayer.value == 'temp' ? Colors.white : kLighterBlue.withOpacity(0.25))),
                     onTap: () {
                       cmap.getSnackbar();
                       cmap.mapLayer.value = 'temp';
                       cmap.updateLegend();
                     },
                   ),
-                  // PRECIPITATION
+                  // WIND
                   InkWell(
-                    child: Obx(() => getIconInt(501, color: cmap.mapLayer.value == 'precipitation' ? Colors.white : kLighterBlue)),
+                    child: Obx(() => Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: getIconString('wind', color: cmap.mapLayer.value == 'wind' ? Colors.white : kLighterBlue.withOpacity(0.25)),
+                        )),
                     onTap: () {
                       cmap.getSnackbar();
-                      cmap.mapLayer.value = 'precipitation';
+                      cmap.mapLayer.value = 'wind';
                       cmap.updateLegend();
                     },
                   ),
                   // CLOUDS
                   InkWell(
-                    child: Obx(() => getIconInt(802, color: cmap.mapLayer.value == 'clouds' ? Colors.white : kLighterBlue)),
+                    child: Obx(() => getIconInt(802, color: cmap.mapLayer.value == 'clouds' ? Colors.white : kLighterBlue.withOpacity(0.25))),
                     onTap: () {
                       cmap.getSnackbar();
                       cmap.mapLayer.value = 'clouds';
@@ -77,7 +81,7 @@ class MapComponent extends StatelessWidget {
                   ),
                   // PRESSURE
                   InkWell(
-                    child: Obx(() => getIconString('pressure', color: cmap.mapLayer.value == 'pressure' ? Colors.white : kLighterBlue)),
+                    child: Obx(() => getIconString('pressure', color: cmap.mapLayer.value == 'pressure' ? Colors.white : kLighterBlue.withOpacity(0.25))),
                     onTap: () {
                       cmap.getSnackbar();
                       cmap.mapLayer.value = 'pressure';
@@ -86,7 +90,7 @@ class MapComponent extends StatelessWidget {
                   ),
                   // SNOW
                   InkWell(
-                    child: Obx(() => getIconString('cold', color: cmap.mapLayer.value == 'snow' ? Colors.white : kLighterBlue)),
+                    child: Obx(() => getIconString('cold', color: cmap.mapLayer.value == 'snow' ? Colors.white : kLighterBlue.withOpacity(0.25))),
                     onTap: () {
                       cmap.getSnackbar();
                       cmap.mapLayer.value = 'snow';

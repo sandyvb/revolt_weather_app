@@ -7,7 +7,10 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
+import android.view.View
 import android.widget.RemoteViews
 import androidx.core.app.ActivityCompat
 import com.android.volley.Request
@@ -218,5 +221,33 @@ class AppWidget : AppWidgetProvider() {
         }
         ) {}
         queue.add(jsonObjectRequest)
+    }
+
+    // resize widget
+    override fun onAppWidgetOptionsChanged(context: Context?, appWidgetManager: AppWidgetManager?, appWidgetId: Int, newOptions: Bundle?) {
+        if (context != null) {
+            val views = RemoteViews(context.packageName, R.layout.app_widget)
+            val minHeight = newOptions?.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
+            val maxHeight = newOptions?.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT)
+
+            if (maxHeight != null && minHeight != null) {
+                if (maxHeight in 0..180 || minHeight in 0..180) {
+                    views.setViewVisibility(R.id.city, View.GONE)
+                    views.setViewVisibility(R.id.convert_button, View.GONE)
+                    views.setViewVisibility(R.id.revoltTextView, View.GONE)
+                    views.setViewVisibility(R.id.description, View.GONE)
+                    views.setTextViewTextSize(R.id.temperature, TypedValue.COMPLEX_UNIT_SP, 35F)
+                }
+
+                if (maxHeight > 180 || minHeight > 180) {
+                    views.setViewVisibility(R.id.revoltTextView, View.VISIBLE)
+                    views.setViewVisibility(R.id.city, View.VISIBLE)
+                    views.setViewVisibility(R.id.convert_button, View.VISIBLE)
+                    views.setViewVisibility(R.id.description, View.VISIBLE)
+                    views.setTextViewTextSize(R.id.temperature, TypedValue.COMPLEX_UNIT_SP, 42F)
+                }
+            }
+            appWidgetManager?.updateAppWidget(appWidgetId, views)
+        }
     }
 }
