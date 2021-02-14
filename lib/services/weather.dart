@@ -8,11 +8,11 @@ import 'package:revolt_weather_app/services/location.dart';
 import 'networking.dart';
 
 // API KEY FOR OWM
-const apiKey = '217da33042b65b3c9e4bd01ab0bdd02b';
+const apiKey = 'x';
 // UPDATE UI URL
 const openWeatherMapURL = 'https://api.openweathermap.org/data/2.5/weather';
 // MAP URL
-const OWMapURL = 'https://tile.openweathermap.org/map/clouds_new/4/15/15.png?appid=217da33042b65b3c9e4bd01ab0bdd02b';
+const OWMapURL = 'https://tile.openweathermap.org/map/clouds_new/4/15/15.png?appid=x';
 // UPDATE FORECAST URL
 const forecastURL = 'https://api.openweathermap.org/data/2.5/onecall';
 // ALTITUDE URL
